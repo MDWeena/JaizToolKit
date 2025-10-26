@@ -4,7 +4,7 @@ import React from 'react'
 const starred = () => {
   return (
     <View>
-      <Text>starred</Text>
+      <Text className='text-red-900' style={{ textTransform: 'uppercase' }}>starred</Text>
     </View>
   )
 }
