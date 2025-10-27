@@ -3,6 +3,7 @@ import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { useRouter } from 'expo-router';
 import React, { useCallback } from 'react';
 import { Image, TouchableOpacity, View, Text } from 'react-native';
+import { Button } from '@/components/ui/button';
 
 const LogoutBottomSheet = () => {
   const { hideBottomSheet } = useBottomSheet();
@@ -17,30 +18,36 @@ const LogoutBottomSheet = () => {
 
   return (
     <>
-      <View className="items-center w-3/5 mx-auto mb-6">
-        <Octicons name="alert-fill" size={24} color="red" />
-        <Text className="text-2xl text-center text-gray-600">
+      <View className="items-center w-4/5 mx-auto mb-20">
+        <View className='p-5 mb-6 border rounded-xl border-error/20 bg-error/10'>
+          <Octicons name="alert-fill" size={24} color="red" />
+        </View>
+        <Text className="text-2xl font-semibold text-center text-grey-900">
+          Logout?
+        </Text>
+        <Text className="text-base text-center text-grey-600">
           Are you sure you want to logout?
         </Text>
       </View>
       <View className="gap-4">
-        <TouchableOpacity
-          className="items-center px-6 py-4 rounded-lg bg-primary active:bg-red-600"
+        <Button
+         size="lg"
           onPress={handleLogout}
         >
-          <Text  className="text-base !text-white">
+          <Text className="text-base font-semibold text-primary-foreground">
             Logout
           </Text>
-        </TouchableOpacity>
+        </Button>
 
-        <TouchableOpacity
-          className="items-center px-6 py-4 rounded-lg bg-primary/20"
+        <Button
+          variant="outline"
+          size="lg"
           onPress={hideBottomSheet}
         >
-          <Text className="text-base !text-primary">
+          <Text className="text-base font-semibold text-grey-900">
             Cancel
           </Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     </>
   );

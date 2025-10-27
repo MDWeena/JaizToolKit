@@ -34,34 +34,10 @@ export const Header: React.FC<HeaderProps> = ({
   userNameClassName = "",
   userIdClassName = "",
 }) => {
-  const renderContent = () => {
-    if (userName) {
-      return (
-        <>
-          <Text className={cn(userNameClassName)}>Hello, {userName}</Text>
-          <Text className={cn("text-sm text-text", userIdClassName)}>
-            Finacle ID: {userId}
-          </Text>
-        </>
-      );
-    }
-
-    return (
-      <>
-        <Text className={cn("text-text", userNameClassName)}>
-          {title}
-        </Text>
-        {subtitle && (
-          <Text className={cn("text-sm text-text", userIdClassName)}>
-            {subtitle}
-          </Text>
-        )}
-      </>
-    );
-  };
-
   const { colorScheme } = useTheme();
-  const bellColor = Colors[colorScheme]?.background;
+  
+  const mainText = userName ? `Hello, ${userName}` : title;
+  const secondaryText = userName ? `Finacle ID: ${userId}` : subtitle;
 
   return (
     <View className='flex-row items-center justify-between mb-5'>
@@ -72,14 +48,23 @@ export const Header: React.FC<HeaderProps> = ({
             className='mr-3 rounded-full h-14 w-14'
           />
         )}
-        <View className='gap-1'>{renderContent()}</View>
+        <View className='gap-1'>
+          <Text className={cn("text-3xl text-grey-900 font-semibold", userNameClassName)}>
+            {mainText}
+          </Text>
+          {secondaryText && (
+            <Text className={cn("text-sm text-grey-600", userIdClassName)}>
+              {secondaryText}
+            </Text>
+          )}
+        </View>
       </View>
       {showNotification && (
         <TouchableOpacity
           className='self-start p-2 rounded-full bg-primary'
           onPress={onNotificationPress}
         >
-          <Feather name='bell' size={24} color={bellColor} />
+          <Feather name='bell' size={24} color={Colors[colorScheme]?.background} />
         </TouchableOpacity>
       )}
     </View>

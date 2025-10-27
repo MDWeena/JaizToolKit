@@ -51,7 +51,7 @@ const TextField: FC<Props> = ({
       )}
       <View
         className={cn(
-          'relative bg-black rounded-[12px] overflow-hidden',
+          'relative bg-grey-200 rounded-[12px] overflow-hidden',
           inputFocused && 'border border-primary',
           inputPrefix ? 'pl-16' : 'pl-4',
           inputSuffix ? 'pr-16' : 'pr-4',
