@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import { View, useColorScheme as useSystemColorScheme } from "react-native";
 import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { themes } from "../utils/color-theme";
+import { themes } from "@/lib/theme";
 import { StatusBar } from "expo-status-bar";
 
 const THEME_STORAGE_KEY = '@app_theme_preference';
