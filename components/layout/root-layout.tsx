@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -6,8 +6,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import "react-native-reanimated";
 import "@/app/global.css";
+import "react-native-reanimated";
 
 import { BottomSheetProvider } from "@/contexts/BottomSheetContext";
 
@@ -51,7 +51,7 @@ function RootLayoutNav() {
       <ThemeProvider>
         <BottomSheetProvider>
           <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
             {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
           </Stack>
         </BottomSheetProvider>

@@ -12,8 +12,14 @@ import React, {
   useState,
 } from "react";
 
+type CornerRadiusOption = "small" | "large" | number;
+
+interface ShowOptions {
+  cornerRadius?: CornerRadiusOption;
+}
+
 interface BottomSheetContextType {
-  showBottomSheet: (component: ReactNode) => void;
+  showBottomSheet: (component: ReactNode, options?: ShowOptions) => void;
   hideBottomSheet: () => void;
 }
 
@@ -39,11 +45,16 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["25%", "50%"], []);
   const [bottomSheetComponent, setBottomSheetComponent] = useState<ReactNode>();
+  const [options, setOptions] = useState<ShowOptions>({});
 
-  const showBottomSheet = useCallback((component: ReactNode): void => {
-    setBottomSheetComponent(component);
-    bottomSheetRef.current?.expand();
-  }, []);
+  const showBottomSheet = useCallback(
+    (component: ReactNode, showOptions?: ShowOptions): void => {
+      setOptions(showOptions ?? { cornerRadius: "large" });
+      setBottomSheetComponent(component);
+      bottomSheetRef.current?.expand();
+    },
+    []
+  );
 
   const hideBottomSheet = useCallback((): void => {
     setBottomSheetComponent(undefined);
@@ -57,7 +68,6 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
     }),
     [showBottomSheet, hideBottomSheet]
   );
-
   return (
     <BottomSheetContext.Provider value={contextValue}>
       {children}
@@ -66,12 +76,13 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
-        style={{ borderRadius: 300 }}
         enablePanDownToClose={true}
         backgroundStyle={{
           backgroundColor: "#ffffff",
-          borderTopLeftRadius: 50,
-          borderTopRightRadius: 50,
+          borderTopLeftRadius:
+            options.cornerRadius === "large" ? 50 : undefined,
+          borderTopRightRadius:
+            options.cornerRadius === "large" ? 50 : undefined,
         }}
         handleIndicatorStyle={{ backgroundColor: "#d1d5db" }}
         containerStyle={{
@@ -85,14 +96,11 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
             {...props}
             appearsOnIndex={0}
             disappearsOnIndex={-1}
-            pressBehavior='close'
+            pressBehavior="close"
           />
         )}
       >
-        <BottomSheetView
-          style={{ borderRadius: 300 }}
-          className='flex-1 px-6 py-4 !rounded-3xl'
-        >
+        <BottomSheetView className="flex-1 px-6 py-4">
           {bottomSheetComponent}
         </BottomSheetView>
       </BottomSheet>
