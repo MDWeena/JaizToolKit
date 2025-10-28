@@ -33,7 +33,7 @@ const ListTileComponent: React.FC<ListTileProps> = ({
   title,
   subtitle,
   leading,
-  trailing = <Feather name='chevron-right' size={26} color='#D94E05' />,
+  trailing = <Feather name='chevron-right' size={26} color='#004081' />,
   accessories = [],
   titleClassName,
   subtitleClassName,
@@ -65,7 +65,7 @@ const ListTileComponent: React.FC<ListTileProps> = ({
   return (
     <Pressable
       className={cn(
-        "flex-row items-center justify-between gap-3 p-5 mb-5 bg-white border shadow-sm rounded-xl shadow-black/5 border-gray",
+        "flex-row items-center justify-between gap-3 p-5 mb-5",
         disabled && "opacity-50",
         containerClassName
       )}

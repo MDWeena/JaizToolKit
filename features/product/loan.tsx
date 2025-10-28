@@ -1,13 +1,17 @@
 import React from "react";
-import { FlatList, ScrollView, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { AutoSlider } from "@/features/home/components/auto-slider";
+import { FlatList, Pressable, ScrollView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { Href, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Header, Card, SearchBar, SearchNotFound } from "@/components/shared";
-import { categoriesData } from "@/constants/data";
-import Images from "@/constants/Images";
+import {
+  Header,
+  ListTile,
+  SearchBar,
+  SearchNotFound,
+} from "@/components/shared";
+import { loansData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
 
 export interface Category {
@@ -16,10 +20,9 @@ export interface Category {
   icon: React.ReactNode;
   route: string;
   keywords?: string[];
-  class?: string;
 }
 
-const HomeScreen = () => {
+const LoanScreen = () => {
   const router = useRouter();
   const {
     searchQuery,
@@ -27,19 +30,21 @@ const HomeScreen = () => {
     filteredItems: filteredCategories,
     hasQuery,
     hasResults,
-  } = useSearch(categoriesData);
+  } = useSearch(loansData);
 
   return (
     <SafeAreaView className='flex-1 bg-background'>
       <StatusBar style='auto' />
       <ScrollView className='flex-1 px-5'>
+        <Pressable
+          hitSlop={20}
+          onPress={() => router.canGoBack() && router.dismissAll()}
+        >
+          <Ionicons name='arrow-back' size={25} />
+        </Pressable>
+
         {/* Header Section */}
-        <Header
-          profileImage={Images.profileImagePlaceholder}
-          userName='Michel'
-          userId='64bhfhfb'
-          showNotification
-        />
+        <Header title='Loan' />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -48,29 +53,20 @@ const HomeScreen = () => {
 
         <FlatList<Category>
           data={filteredCategories}
-          ListHeaderComponent={
-            hasQuery && !hasResults ? (
-              <></>
-            ) : (
-              <Text className='my-4 text-xl font-medium'>Categories</Text>
-            )
-          }
           renderItem={({ item }) => (
-            <Card
-              className={`${item.class} items-start`}
-              icon={item.icon}
-              text={item.text}
+            <ListTile
+              leading={item.icon}
+              title={item.text}
               onPress={() => router.push(item.route as Href)}
             />
           )}
           keyExtractor={(item) => item.id.toString()}
-          numColumns={2}
-          columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           maxToRenderPerBatch={10}
           windowSize={10}
+          className='rounded-lg bg-grey-0'
           initialNumToRender={6}
           ListEmptyComponent={
             hasQuery && !hasResults ? (
@@ -81,16 +77,9 @@ const HomeScreen = () => {
             ) : null
           }
         />
-
-        {hasQuery ? null : (
-          <>
-            <Text className='my-4 text-xl font-medium'>Updates</Text>
-            <AutoSlider height={120} />
-          </>
-        )}
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default HomeScreen;
+export default LoanScreen;

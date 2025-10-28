@@ -12,10 +12,11 @@ import React, {
   useState,
 } from "react";
 
-type CornerRadiusOption = "small" | "large" | number;
+type CornerRadiusOption = "large" | "medium" | "small";
 
 interface ShowOptions {
   cornerRadius?: CornerRadiusOption;
+  snapPoints?: string[];
 }
 
 interface BottomSheetContextType {
@@ -43,13 +44,19 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
   children,
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["25%", "50%"], []);
+  const [snapPoints, setSnapPoints] = useState<string[]>(["25%", "50%"]);
   const [bottomSheetComponent, setBottomSheetComponent] = useState<ReactNode>();
   const [options, setOptions] = useState<ShowOptions>({});
 
   const showBottomSheet = useCallback(
     (component: ReactNode, showOptions?: ShowOptions): void => {
-      setOptions(showOptions ?? { cornerRadius: "large" });
+      const opts = showOptions ?? { cornerRadius: "large" };
+      setOptions(opts);
+      if (opts.snapPoints) {
+        setSnapPoints(opts.snapPoints);
+      } else {
+        setSnapPoints(["25%", "50%"]); // Default
+      }
       setBottomSheetComponent(component);
       bottomSheetRef.current?.expand();
     },
@@ -80,9 +87,9 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
         backgroundStyle={{
           backgroundColor: "#ffffff",
           borderTopLeftRadius:
-            options.cornerRadius === "large" ? 50 : undefined,
+            options.cornerRadius === "large" ? 50 : options.cornerRadius === "medium" ? 30 : undefined,
           borderTopRightRadius:
-            options.cornerRadius === "large" ? 50 : undefined,
+            options.cornerRadius === "large" ? 50 : options.cornerRadius === "medium" ? 30 : undefined,
         }}
         handleIndicatorStyle={{ backgroundColor: "#d1d5db" }}
         containerStyle={{

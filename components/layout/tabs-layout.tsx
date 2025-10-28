@@ -1,16 +1,16 @@
-import React from "react";
-import { Tabs } from "expo-router";
-import { Platform } from "react-native";
-import { useTheme } from "@/contexts/ThemeContext";
-import Colors from "@/constants/Colors";
-import { useBottomSheet } from "@/contexts/BottomSheetContext";
-import LogoutBottomSheet from "@/features/logout";
 import {
+  FavoriteIcon,
   HomeIcon,
   LogoutIcon,
   SettingsIcon,
-  FavoriteIcon,
 } from "@/assets/images/svgs/tab-icons";
+import Colors from "@/constants/Colors";
+import { useBottomSheet } from "@/contexts/BottomSheetContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import LogoutBottomSheet from "@/features/logout";
+import { Tabs } from "expo-router";
+import React from "react";
+import { Platform } from "react-native";
 
 export default function TabLayout() {
   const { colorScheme } = useTheme();
@@ -49,12 +49,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <HomeIcon width={28} height={28} fill={color} />
           ),
+          popToTopOnBlur: true
         }}
       />
       <Tabs.Screen
         name='starred'
         options={{
-          title: "Starred",
+          title: "Favorite",
           tabBarIcon: ({ color }) => (
             <FavoriteIcon width={28} height={28} fill={color} />
           ),

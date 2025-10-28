@@ -9,7 +9,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "@/app/global.css";
 import "react-native-reanimated";
 
+import { ToastProvider } from "@/components/shared/toast";
 import { BottomSheetProvider } from "@/contexts/BottomSheetContext";
+import { StarredProvider } from "@/contexts/StarredContext";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -49,12 +51,16 @@ function RootLayoutNav() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>
-        <BottomSheetProvider>
-          <Stack>
-            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-            {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
-          </Stack>
-        </BottomSheetProvider>
+        <ToastProvider>
+          <BottomSheetProvider>
+            <StarredProvider>
+              <Stack>
+                <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+                <Stack.Screen name="(app)" options={{  headerShown: false }} />
+              </Stack>
+            </StarredProvider>
+          </BottomSheetProvider>
+        </ToastProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

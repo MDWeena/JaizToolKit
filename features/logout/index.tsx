@@ -1,8 +1,9 @@
-import Octicons from '@expo/vector-icons/Octicons';
-import { useBottomSheet } from '@/contexts/BottomSheetContext';
-import { useRouter } from 'expo-router';
 import React, { useCallback } from 'react';
-import { Image, TouchableOpacity, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
+import { useRouter } from 'expo-router';
+import Octicons from '@expo/vector-icons/Octicons';
+
+import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { Button } from '@/components/ui/button';
 
 const LogoutBottomSheet = () => {
