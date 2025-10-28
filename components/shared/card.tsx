@@ -1,16 +1,16 @@
-import React from 'react';
-import { Dimensions, Pressable, Text, View } from 'react-native';
+import React from "react";
+import { Dimensions, Pressable, Text, View } from "react-native";
 
-import { cn } from '@/lib';
+import { cn } from "@/lib/utils";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 // Define props interface for ReusableCard
 interface ReusableCardProps {
   onPress: () => void;
   icon?: React.ReactNode;
   text?: string;
-  direction?: 'row' | 'column';
+  className?: string;
 }
 
 // Reusable Card Component
@@ -18,28 +18,18 @@ export const Card: React.FC<ReusableCardProps> = ({
   onPress,
   icon,
   text,
-  direction = 'column',
+  className,
 }) => {
   return (
     <Pressable
-      className="items-center justify-center gap-3 py-8 mb-5 bg-white border shadow-sm rounded-xl shadow-black/5 border-gray"
-      style={{
-        width: (width - 60) / 2,
-        flexDirection: direction || 'column',
-      }}
+      className={cn(
+        "flex-col flex-1 items-center justify-center gap-3 p-8 mb-3 bg-white border rounded-xl border-primary",
+        className
+      )}
       onPress={onPress}
     >
-      <>
-        <View>{icon}</View>
-        <Text
-          className={cn(
-            '!text-sm text-fauxBlack',
-            direction === 'column' && 'text-base'
-          )}
-        >
-          {text}
-        </Text>
-      </>
+      <View>{icon}</View>
+      <Text>{text}</Text>
     </Pressable>
   );
 };

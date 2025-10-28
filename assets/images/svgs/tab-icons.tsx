@@ -1,7 +1,7 @@
 import * as React from "react"
 import Svg, { SvgProps, Path } from "react-native-svg"
 export const HomeIcon = (props: SvgProps) => (
-  <Svg
+   <Svg
     {...props}
     width={24}
     height={24}
@@ -9,7 +9,7 @@ export const HomeIcon = (props: SvgProps) => (
   >
     <Path
       fill={props.fill || "#D94E05"}
-      d="m12.832 2.793 9 9c.63.63.184 1.707-.707 1.707h-1v6a3 3 0 0 1-3 3h-1v-7a3 3 0 0 0-2.824-2.995l-.176-.005h-2a3 3 0 0 0-3 3v7h-1a3 3 0 0 1-3-3v-6h-1c-.89 0-1.337-1.077-.707-1.707l9-9a1 1 0 0 1 1.414 0Zm.293 11.707a1 1 0 0 1 1 1v7h-4v-7a1 1 0 0 1 .883-.993l.117-.007h2Z"
+      d="M21 11.25v9a.75.75 0 0 1-.75.75H15a.75.75 0 0 1-.75-.75v-4.876a.375.375 0 0 0-.375-.375h-3.75a.375.375 0 0 0-.375.375v4.875A.75.75 0 0 1 9 21H3.75a.75.75 0 0 1-.75-.75v-9c0-.397.158-.779.44-1.06l7.5-7.5a1.5 1.5 0 0 1 2.12 0l7.5 7.5a1.5 1.5 0 0 1 .44 1.06Z"
     />
   </Svg>
 )
