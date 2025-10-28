@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 import { useTheme } from "@/contexts/ThemeContext";
 import Colors from "@/constants/Colors";
 import { useBottomSheet } from "@/contexts/BottomSheetContext";
-import LogoutBottomSheet from "@/feaatures/logout";
+import LogoutBottomSheet from "@/features/logout";
 import {
   HomeIcon,
   LogoutIcon,
@@ -42,10 +42,10 @@ export default function TabLayout() {
         }),
       }}
     >
-      <Tabs.Screen
-        name='home'
+     <Tabs.Screen
+        name="(home)"
         options={{
-          title: "Home",
+          title: 'Home',
           tabBarIcon: ({ color }) => (
             <HomeIcon width={28} height={28} fill={color} />
           ),
