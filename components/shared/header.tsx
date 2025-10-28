@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
   const secondaryText = userName ? `Finacle ID: ${userId}` : subtitle;
 
   return (
-    <View className='flex-row items-center justify-between mb-5'>
+    <View className='flex-row items-center justify-between mb-4'>
       <View className='flex-row items-center'>
         {profileImage && (
           <Image

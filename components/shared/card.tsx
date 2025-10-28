@@ -23,7 +23,7 @@ export const Card: React.FC<ReusableCardProps> = ({
   return (
     <Pressable
       className={cn(
-        "flex-col flex-1 items-center justify-center gap-3 p-8 mb-3 bg-white border rounded-xl border-primary",
+        "flex-col flex-1 items-center justify-center gap-3 p-7 mb-3 bg-white border rounded-xl border-primary",
         className
       )}
       onPress={onPress}

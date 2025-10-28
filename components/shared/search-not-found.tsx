@@ -1,7 +1,7 @@
-import Images from "@/constants/Images";
 import React from "react";
-import { Image, Text, View } from "react-native";
-import {Button} from "@/components/ui/button";
+import { Text, View } from "react-native";
+import { Button } from "@/components/ui/button";
+import ErrorIcon from "@/assets/images/svgs/warning";
 
 interface SearchNotFoundProps {
   searchQuery?: string;
@@ -26,17 +26,11 @@ export const SearchNotFound: React.FC<SearchNotFoundProps> = ({
       )}
 
       <View className='items-center'>
-        <Image
-          source={Images.profileImagePlaceholder}
-          className='mb-4'
-          accessibilityLabel='Search not found icon'
-        />
+        <ErrorIcon />
 
-        <Text className='mb-4 !text-2xl font-medium text-center'>
+        <Text className='mb-4 text-2xl font-medium text-center'>
           Search{" "}
-          <Text className='!text-2xl font-bold !text-midGray'>
-            not found
-          </Text>
+          <Text className='text-2xl font-bold'>not found</Text>
         </Text>
 
         <View className='w-4/5 mt-2'>
@@ -49,7 +43,7 @@ export const SearchNotFound: React.FC<SearchNotFoundProps> = ({
         className='mt-20'
         onPress={() => setSearchQuery && setSearchQuery("")}
       >
-        Back to Home
+        <Text className='text-primary-foreground'>Back to Home</Text>
       </Button>
     </>
   );

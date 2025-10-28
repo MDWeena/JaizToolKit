@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import { ScrollView, Text, View, FlatList } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Href, useRouter } from "expo-router";
-import { Header } from "@/components/shared/header";
-import Images from "@/constants/Images";
-import { SearchBar } from "@/components/shared/search-bar";
-import { categoriesData } from "@/constants/data";
-import { useSearch } from "@/hooks/useSearch";
-import { SearchNotFound } from "@/components/shared/search-not-found";
+import { AutoSlider } from "@/components/shared/auto-slider";
 import { Card } from "@/components/shared/card";
+import { Header } from "@/components/shared/header";
+import { SearchBar } from "@/components/shared/search-bar";
+import { SearchNotFound } from "@/components/shared/search-not-found";
+import { categoriesData } from "@/constants/data";
+import Images from "@/constants/Images";
+import { useSearch } from "@/hooks/useSearch";
+import { Href, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { FlatList, ScrollView, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export interface Category {
   id: number;
@@ -53,7 +54,7 @@ const HomeScreen = () => {
             hasQuery && !hasResults ? (
               <></>
             ) : (
-              <Text className='mb-5 leading-tight'>Categories</Text>
+              <Text className='mb-4 text-xl font-medium'>Categories</Text>
             )
           }
           renderItem={({ item }) => (
@@ -83,52 +84,14 @@ const HomeScreen = () => {
           }
         />
 
-        {/* {hasQuery ? null : (
+        {hasQuery ? null : (
           <>
-            <Text className='mb-5 !leading-tight'>
+            <Text className='mb-4 text-xl font-medium'>
               Updates
             </Text>
-            <View className='mb-5'>
-              <FlatList<Slider>
-                ref={flatListRef}
-                data={slidersData}
-                renderItem={renderSliderItem}
-                keyExtractor={(item) => item.id.toString()}
-                horizontal
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                onMomentumScrollEnd={handleScroll}
-                scrollEventThrottle={16}
-                getItemLayout={(data, index) => ({
-                  length: SLIDER_WIDTH,
-                  offset: SLIDER_WIDTH * index,
-                  index,
-                })}
-                removeClippedSubviews={true}
-                maxToRenderPerBatch={3}
-                windowSize={5}
-                initialNumToRender={3}
-                contentContainerStyle={{ paddingHorizontal: 0 }}
-                className='mb-3'
-              />
-
-              <FlatList<IndicatorData>
-                data={indicatorData}
-                renderItem={renderIndicator}
-                keyExtractor={(item) => item.id.toString()}
-                horizontal
-                scrollEnabled={false}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexGrow: 1,
-                }}
-                style={{ alignSelf: "center" }}
-              />
-            </View>
+            <AutoSlider height={150} />
           </>
-        )} */}
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -15,7 +15,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   return (
     <TextField
-      className='mb-5'
+      className='mb-4'
       ignoreFocus
       inputPrefix={
         <Feather name='search' size={25} color='#888' className='mr-3' />
