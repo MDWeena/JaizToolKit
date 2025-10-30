@@ -1,23 +1,15 @@
 import React from "react";
 import { FlatList, ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AutoSlider } from "@/features/home/components/auto-slider";
 import { Href, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { Header, Card, SearchBar, SearchNotFound } from "@/components/shared";
+import { AutoSlider } from "@/features/home/components/auto-slider";
+import { Card, Header, SearchBar, SearchNotFound } from "@/components/shared";
 import { categoriesData } from "@/constants/data";
 import Images from "@/constants/Images";
 import { useSearch } from "@/hooks/useSearch";
-
-export interface Category {
-  id: number;
-  text: string;
-  icon: React.ReactNode;
-  route: string;
-  keywords?: string[];
-  class?: string;
-}
+import { PageItem } from "@/types/page";
 
 const HomeScreen = () => {
   const router = useRouter();
@@ -46,7 +38,7 @@ const HomeScreen = () => {
           placeholder='Search'
         />
 
-        <FlatList<Category>
+        <FlatList<PageItem>
           data={filteredCategories}
           ListHeaderComponent={
             hasQuery && !hasResults ? (

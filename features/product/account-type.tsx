@@ -8,15 +8,8 @@ import { StatusBar } from "expo-status-bar";
 import { Header, ListTile, SearchBar, SearchNotFound } from "@/components/shared";
 import { accountTypeData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
+import { PageItem } from "@/types/page";
 
-export interface Category {
-  id: number;
-  text: string;
-  icon: React.ReactNode;
-  route: string;
-  keywords?: string[];
-  class?: string;
-}
 
 const AccountTypeScreen = () => {
   const router = useRouter();
@@ -50,7 +43,7 @@ const AccountTypeScreen = () => {
           placeholder='Search'
         />
 
-        <FlatList<Category>
+        <FlatList<PageItem>
           data={filteredCategories}
           renderItem={({ item }) => (
             <ListTile

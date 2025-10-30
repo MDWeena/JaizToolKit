@@ -1,9 +1,9 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Href, useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { FlatList, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { Href, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 import {
   Header,
@@ -16,14 +16,8 @@ import { productsData } from "@/constants/data";
 import { useBottomSheet } from "@/contexts/BottomSheetContext";
 import { useStarred } from "@/contexts/StarredContext";
 import { useSearch } from "@/hooks/useSearch";
+import { PageItem } from "@/types/page";
 
-export interface Category {
-  id: number;
-  text: string;
-  icon: React.ReactNode;
-  route: string;
-  keywords?: string[];
-}
 
 const ProductScreen = () => {
   const router = useRouter();
@@ -38,7 +32,7 @@ const ProductScreen = () => {
   const { isStarred, toggleStar } = useStarred();
   const { showToast } = useToast();
 
-  const handleProductStarSheet = (item: Category) => {
+  const handleProductStarSheet = (item: PageItem) => {
     showBottomSheet(
       <View>
         <View className='items-center pb-4 mb-4 border-b border-b-secondary-foreground/10'>
@@ -103,7 +97,7 @@ const ProductScreen = () => {
           placeholder='Search'
         />
 
-        <FlatList<Category>
+        <FlatList<PageItem>
           data={filteredCategories}
           renderItem={({ item }) => (
             <ListTile

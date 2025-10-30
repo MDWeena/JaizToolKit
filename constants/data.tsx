@@ -14,8 +14,9 @@ import {
   TargetIcon,
   UserIcon,
 } from "@/assets/images/svgs/product-icons";
+import { PageItem, PageSection } from "@/types/page";
 
-export const categoriesData = [
+export const categoriesData: PageItem[] = [
   {
     id: 1,
     icon: <AccountIcon width={44} height={44} />,
@@ -50,7 +51,7 @@ export const categoriesData = [
   },
 ];
 
-export const productsData = [
+export const productsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
@@ -88,7 +89,7 @@ export const productsData = [
   },
 ];
 
-export const accountTypeData = [
+export const accountTypeData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
@@ -105,7 +106,7 @@ export const accountTypeData = [
   },
 ];
 
-export const individualAccountsData = [
+export const individualAccountsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
@@ -150,7 +151,7 @@ export const individualAccountsData = [
   },
 ];
 
-export const corporateAccountsData = [
+export const corporateAccountsData: PageItem[] = [
   {
     id: 1,
     icon: <CorporateIcon width={44} height={44} />,
@@ -167,7 +168,7 @@ export const corporateAccountsData = [
   },
 ];
 
-export const teenAccountData = [
+export const teenAccountData: PageSection[] = [
   {
     id: 1,
     section: "Description",
@@ -210,7 +211,7 @@ export const teenAccountData = [
   },
 ];
 
-export const loansData = [
+export const loansData: PageItem[] = [
   {
     id: 1,
     icon: <LoanIcon width={44} height={44} />,
@@ -269,7 +270,7 @@ export const loansData = [
   },
 ];
 
-export const cardsData = [
+export const cardsData: PageItem[] = [
   {
     id: 1,
     icon: <CardIcon width={44} height={44} />,
@@ -300,7 +301,7 @@ export const cardsData = [
   },
 ];
 
-export const bankingChannelsData = [
+export const bankingChannelsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
@@ -331,7 +332,7 @@ export const bankingChannelsData = [
   },
 ];
 
-export const otherProductsData = [
+export const otherProductsData: PageItem[] = [
   {
     id: 4,
     icon: <PieIcon width={44} height={44} />,

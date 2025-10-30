@@ -13,14 +13,8 @@ import {
 } from "@/components/shared";
 import { cardsData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
+import { PageItem } from "@/types/page";
 
-export interface Category {
-  id: number;
-  text: string;
-  icon: React.ReactNode;
-  route: string;
-  keywords?: string[];
-}
 
 const CardScreen = () => {
   const router = useRouter();
@@ -51,7 +45,7 @@ const CardScreen = () => {
           placeholder='Search'
         />
 
-        <FlatList<Category>
+        <FlatList<PageItem>
           data={filteredCategories}
           renderItem={({ item }) => (
             <ListTile

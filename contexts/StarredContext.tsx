@@ -1,12 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PageItem } from "@/types/page";
 
-interface StarredItem {
-  id: number;
-  text: string;
-  route: string;
-
-}
+type StarredItem = Pick<PageItem, "id" | "text" | "route">;
 
 interface StarredContextType {
   starredItems: StarredItem[];
