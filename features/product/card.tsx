@@ -51,7 +51,7 @@ const CardScreen = () => {
             <ListTile
               leading={item.icon}
               title={item.text}
-              onPress={() => router.push(item.route as Href)}
+              onPress={() => router.navigate(item.route as Href)}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

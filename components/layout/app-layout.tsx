@@ -26,13 +26,17 @@
 //     />
 //   );
 // }
-import { Ionicons } from '@expo/vector-icons';
-import { Slot, Stack, useRouter } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 
 export default function AppLayout() {
   const router = useRouter();
 
   return (
-    <Slot />
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: 'default',
+      }}
+    />
   );
 }

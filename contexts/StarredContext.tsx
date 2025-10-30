@@ -1,6 +1,6 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PageItem } from "@/types/page";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 type StarredItem = Pick<PageItem, "id" | "text" | "route">;
 
@@ -19,6 +19,7 @@ const STORAGE_KEY = "@starred_items";
 export const StarredProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [starredItems, setStarredItems] = useState<StarredItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Load starred items on mount
   useEffect(() => {
@@ -38,12 +39,17 @@ export const StarredProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
   };
 
-  const saveStarredItems = async (items: StarredItem[]) => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch (error) {
-      console.error("Error saving starred items:", error);
+  const saveStarredItems = (items: StarredItem[]) => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
     }
+    saveTimeoutRef.current = setTimeout(async () => {
+      try {
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      } catch (error) {
+        console.error("Error saving starred items:", error);
+      }
+    }, 200);
   };
 
   const isStarred = (id: number): boolean => {

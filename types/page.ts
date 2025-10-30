@@ -1,10 +1,11 @@
+import type { Href } from "expo-router";
 import React from "react";
 
 export interface PageItem {
   id: number;
   text: string;
   icon: React.ReactNode;
-  route: string;
+  route: Href;
   keywords?: string[];
   class?: string;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { FlatList, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -32,7 +32,7 @@ const ProductScreen = () => {
   const { isStarred, toggleStar } = useStarred();
   const { showToast } = useToast();
 
-  const handleProductStarSheet = (item: PageItem) => {
+  const handleProductStarSheet = useCallback((item: PageItem) => {
     showBottomSheet(
       <View>
         <View className='items-center pb-4 mb-4 border-b border-b-secondary-foreground/10'>
@@ -76,7 +76,7 @@ const ProductScreen = () => {
         snapPoints: ["20%", "10%"],
       }
     );
-  };
+  }, [hideBottomSheet, isStarred, router, showBottomSheet, showToast, toggleStar]);
 
   return (
     <SafeAreaView className='flex-1 bg-background'>

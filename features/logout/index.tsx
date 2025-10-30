@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import Octicons from '@expo/vector-icons/Octicons';
 
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { Button } from '@/components/ui/button';
+import { WarningIcon } from '@/assets/images/svgs/warning';
 
 const LogoutBottomSheet = () => {
   const { hideBottomSheet } = useBottomSheet();
@@ -21,7 +21,7 @@ const LogoutBottomSheet = () => {
     <>
       <View className="items-center w-4/5 mx-auto mb-20">
         <View className='p-5 mb-6 border rounded-xl border-error/20 bg-error/10'>
-          <Octicons name="alert-fill" size={24} color="red" />
+          <WarningIcon />
         </View>
         <Text className="text-2xl font-semibold text-center text-grey-900">
           Logout?
