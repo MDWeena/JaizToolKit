@@ -5,16 +5,27 @@ import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header, ListTile, SearchBar, SearchNotFound } from '@/components/ui';
+import {
+  Header,
+  ListTile,
+  SearchBar,
+  SearchNotFound,
+} from '@/components/shared';
 import { serviceRequestData } from '@/constants/data';
 import { useSearch } from '@/hooks/useSearch';
-import { ServiceRequest, ServiceRequestItemProps } from '@/types';
+
+type ServiceRequest = (typeof serviceRequestData)[0];
+
+type ServiceRequestItemProps = {
+  item: ServiceRequest;
+  onPress: (route: string) => void;
+};
 
 const ServiceRequestItem = React.memo<ServiceRequestItemProps>(
   ({ item, onPress }) => (
     <ListTile
-      icon={item.icon}
-      text={item.text}
+      leading={item.icon}
+      title={item.text}
       onPress={() => onPress(item.route)}
     />
   )
@@ -50,7 +61,7 @@ export default function ServiceRequestScreen() {
           placeholder="Search..."
         />
 
-        <View className="mb-5">
+        <View className="mb-5 bg-white rounded-lg">
           <FlatList<ServiceRequest>
             data={filteredItems}
             renderItem={renderServiceItem}
@@ -61,13 +72,9 @@ export default function ServiceRequestScreen() {
             maxToRenderPerBatch={10}
             windowSize={10}
             initialNumToRender={8}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={{}}
             ListEmptyComponent={
-              hasQuery ? (
-                <SearchNotFound
-                  searchQuery={searchQuery}
-                />
-              ) : null
+              hasQuery ? <SearchNotFound searchQuery={searchQuery} /> : null
             }
           />
         </View>

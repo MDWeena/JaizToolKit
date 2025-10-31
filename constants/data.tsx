@@ -31,6 +31,11 @@ import {
   ServiceRequestIcon,
   TransactionsIcon,
 } from '@/assets/images/svgs/rm';
+import {
+  CardHotlist,
+  PasswordResetIcon,
+  RequestTrackerIcon,
+} from '@/assets/images/svgs/service-requests';
 import { PageItem, PageSection } from '@/types/page';
 
 export const categoriesData: PageItem[] = [
@@ -471,5 +476,32 @@ export const accounts: PageItem[] = [
     route: '/accounts/verify' as const,
     keywords: ['verify account', 'account'],
     class: 'border-white',
+  },
+];
+
+export const serviceRequestData = [
+  {
+    id: 1,
+    icon: <RequestTrackerIcon width={30} height={30} />,
+    text: 'Request Tracker',
+    description: 'Track customer requests',
+    route: '/functions/rm/service-requests/request-tracker',
+    keywords: ['tracker', 'request', 'request tracker', 'customer request'],
+  },
+  {
+    id: 2,
+    icon: <PasswordResetIcon width={30} height={30} />,
+    text: 'GAPS Password Reset',
+    description: 'Reset GAPS password',
+    route: '/functions/rm/service-requests/login-request',
+    keywords: ['GAPS', 'password', 'reset'],
+  },
+  {
+    id: 3,
+    icon: <CardHotlist width={30} height={30} />,
+    text: 'Card Hotlist',
+    description: 'Block customer cards',
+    route: '/functions/rm/service-requests/card-hotlist',
+    keywords: ['card', 'hotlist', 'block', 'customer'],
   },
 ];

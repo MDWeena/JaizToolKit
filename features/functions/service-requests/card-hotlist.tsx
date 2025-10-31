@@ -1,11 +1,11 @@
-import Button from '@/components/common/button';
-import CustomSelect from '@/components/common/inputs/custom-select';
-import TextField from '@/components/common/inputs/text-field';
+import { Header } from '@/components/shared';
+import { Button } from '@/components/ui/button';
+import CustomSelect from '@/components/ui/custom-select';
+import { TextField } from '@/components/ui/input';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Header } from '../../Header';
 
 const CardHotlistScreen = () => {
   return (
@@ -50,9 +50,7 @@ const CardHotlistScreen = () => {
           placeholder="Select Reason"
         />
 
-        <Button className="!mt-12" fullWidth>
-          Hotlist Card
-        </Button>
+        <Button className="!mt-12">Hotlist Card</Button>
       </ScrollView>
     </SafeAreaView>
   );

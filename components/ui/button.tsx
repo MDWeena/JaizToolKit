@@ -5,6 +5,7 @@ import {
   Pressable,
   type PressableStateCallbackType,
   type PressableProps as RNPressableProps,
+  Text,
   View,
   type ViewStyle,
 } from 'react-native';
@@ -83,7 +84,13 @@ const Button = React.forwardRef<View, ButtonProps>(
               state.pressed || isPressed ? 'opacity-80' : ''
             }`}
           >
-            {typeof children === 'function' ? children(state) : children}
+            {typeof children === 'string' ? (
+              <Text className="text-white font-[500]">{children}</Text>
+            ) : typeof children === 'function' ? (
+              children(state)
+            ) : (
+              children
+            )}
           </View>
         )}
       </Pressable>

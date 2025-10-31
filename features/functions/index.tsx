@@ -75,7 +75,7 @@ const FunctionsScreen = () => {
             maxToRenderPerBatch={8}
             windowSize={10}
             initialNumToRender={6}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={{}}
           />
         </View>
       </ScrollView>

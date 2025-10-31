@@ -4,17 +4,12 @@ import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Button from '@/components/common/button';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/common/button/tabs';
-import TextField from '@/components/common/inputs/text-field';
-import { ThemedText } from '@/components/common/text';
-import { Header } from '@/components/ui';
+import { Header } from '@/components/shared';
+import { Button } from '@/components/ui/button';
+import { TextField } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
 import { cn } from '@/lib/utils';
+import { Text } from 'react-native';
 
 export default function LienScreen() {
   const router = useRouter();
@@ -42,24 +37,24 @@ export default function LienScreen() {
         >
           <TabsList className="flex-row w-full bg-white">
             <TabsTrigger value="lien" className="flex-1">
-              <ThemedText
+              <Text
                 className={cn(
                   '!text-primary !font-medium',
                   activeTab === 'lien' ? '!text-primary' : '!text-darkGray'
                 )}
               >
                 Lien
-              </ThemedText>
+              </Text>
             </TabsTrigger>
             <TabsTrigger value="freeze" className="flex-1">
-              <ThemedText
+              <Text
                 className={cn(
                   '!text-primary !font-medium',
                   activeTab === 'freeze' ? '!text-primary' : '!text-darkGray'
                 )}
               >
                 Freeze
-              </ThemedText>
+              </Text>
             </TabsTrigger>
           </TabsList>
           <TabsContent value="lien">
@@ -79,11 +74,9 @@ export default function LienScreen() {
               }}
             />
             <Button
-              onClick={handleVerify}
-              size="large"
+              onPress={handleVerify}
               className="mt-12 !min-w-full"
               disabled={isLoading}
-              loading={false}
             >
               Search
             </Button>
@@ -105,11 +98,9 @@ export default function LienScreen() {
               }}
             />
             <Button
-              onClick={handleVerify}
-              size="large"
+              onPress={handleVerify}
               className="mt-12 !min-w-full"
               disabled={isLoading}
-              loading={false}
             >
               Search
             </Button>
