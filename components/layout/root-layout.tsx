@@ -1,5 +1,5 @@
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Feather from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -12,6 +12,7 @@ import 'react-native-reanimated';
 import { ToastProvider } from '@/components/shared/toast';
 import { BottomSheetProvider } from '@/contexts/BottomSheetContext';
 import { StarredProvider } from '@/contexts/StarredContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -26,7 +27,8 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
+    ...Ionicons.font,
+    ...Feather.font,
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -54,7 +56,7 @@ function RootLayoutNav() {
         <ToastProvider>
           <BottomSheetProvider>
             <StarredProvider>
-              <Stack initialRouteName="(auth)">
+              <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="(app)" options={{ headerShown: false }} />
                 <Stack.Screen name="(auth)" options={{ headerShown: false }} />

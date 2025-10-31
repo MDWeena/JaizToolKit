@@ -1,8 +1,8 @@
-import Octicons from '@expo/vector-icons/Octicons';
 import { useRouter } from 'expo-router';
 import React, { useCallback } from 'react';
 import { Text, View } from 'react-native';
 
+import { WarningIcon } from '@/assets/images/svgs/warning';
 import { Button } from '@/components/ui/button';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
 
@@ -20,7 +20,7 @@ const LogoutBottomSheet = () => {
     <>
       <View className="items-center w-4/5 mx-auto mb-20">
         <View className="p-5 mb-6 border rounded-xl border-error/20 bg-error/10">
-          <Octicons name="alert-fill" size={24} color="red" />
+          <WarningIcon />
         </View>
         <Text className="text-2xl font-semibold text-center text-grey-900">
           Logout?

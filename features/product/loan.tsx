@@ -1,9 +1,9 @@
 import React from "react";
 import { FlatList, Pressable, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Href, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   Header,
@@ -13,14 +13,8 @@ import {
 } from "@/components/shared";
 import { loansData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
+import { PageItem } from "@/types/page";
 
-export interface Category {
-  id: number;
-  text: string;
-  icon: React.ReactNode;
-  route: string;
-  keywords?: string[];
-}
 
 const LoanScreen = () => {
   const router = useRouter();
@@ -51,13 +45,13 @@ const LoanScreen = () => {
           placeholder='Search'
         />
 
-        <FlatList<Category>
+        <FlatList<PageItem>
           data={filteredCategories}
           renderItem={({ item }) => (
             <ListTile
               leading={item.icon}
               title={item.text}
-              onPress={() => router.push(item.route as Href)}
+              onPress={() => router.navigate(item.route as Href)}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

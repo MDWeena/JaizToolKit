@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Href, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FlatList, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -16,14 +16,7 @@ import { productsData } from '@/constants/data';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { useStarred } from '@/contexts/StarredContext';
 import { useSearch } from '@/hooks/useSearch';
-
-export interface Category {
-  id: number;
-  text: string;
-  icon: React.ReactNode;
-  route: string;
-  keywords?: string[];
-}
+import { PageItem } from '@/types/page';
 
 const ProductScreen = () => {
   const router = useRouter();
@@ -38,51 +31,56 @@ const ProductScreen = () => {
   const { isStarred, toggleStar } = useStarred();
   const { showToast } = useToast();
 
-  const handleProductStarSheet = (item: Category) => {
-    showBottomSheet(
-      <View>
-        <View className="items-center pb-4 mb-4 border-b border-b-secondary-foreground/10">
-          <Text className="text-xl font-semibold text-grey-900">
-            {item.text}
-          </Text>
-        </View>
-        <ListTile
-          containerClassName="border border-secondary-foreground/10 rounded-xl"
-          title={isStarred(item.id) ? 'Remove from Starred' : 'Add to Starred'}
-          onPress={() => {
-            const starredItem = {
-              id: item.id,
-              text: item.text,
-              route: item.route,
-            };
-            toggleStar(starredItem as any).then(() => {
-              hideBottomSheet();
-              // Show toast after adding to starred
-              if (!isStarred(item.id)) {
-                showToast({
-                  message: 'Added to Starred',
-                  linkText: 'See List',
-                  onLinkPress: () => router.push('/(tabs)/starred'),
-                  position: 'bottom',
-                });
-              }
-            });
-          }}
-          trailing={
-            <Ionicons
-              name={isStarred(item.id) ? 'star' : 'star-outline'}
-              size={20}
-              color={isStarred(item.id) ? '#FFA500' : '#9CA3AF'}
-            />
-          }
-        />
-      </View>,
-      {
-        cornerRadius: 'medium',
-        snapPoints: ['20%', '10%'],
-      }
-    );
-  };
+  const handleProductStarSheet = useCallback(
+    (item: PageItem) => {
+      showBottomSheet(
+        <View>
+          <View className="items-center pb-4 mb-4 border-b border-b-secondary-foreground/10">
+            <Text className="text-xl font-semibold text-grey-900">
+              {item.text}
+            </Text>
+          </View>
+          <ListTile
+            containerClassName="border border-secondary-foreground/10 rounded-xl"
+            title={
+              isStarred(item.id) ? 'Remove from Starred' : 'Add to Starred'
+            }
+            onPress={() => {
+              const starredItem = {
+                id: item.id,
+                text: item.text,
+                route: item.route,
+              };
+              toggleStar(starredItem as any).then(() => {
+                hideBottomSheet();
+                // Show toast after adding to starred
+                if (!isStarred(item.id)) {
+                  showToast({
+                    message: 'Added to Starred',
+                    linkText: 'See List',
+                    onLinkPress: () => router.push('/(tabs)/starred'),
+                    position: 'bottom',
+                  });
+                }
+              });
+            }}
+            trailing={
+              <Ionicons
+                name={isStarred(item.id) ? 'star' : 'star-outline'}
+                size={20}
+                color={isStarred(item.id) ? '#FFA500' : '#9CA3AF'}
+              />
+            }
+          />
+        </View>,
+        {
+          cornerRadius: 'medium',
+          snapPoints: ['20%', '10%'],
+        }
+      );
+    },
+    [hideBottomSheet, isStarred, router, showBottomSheet, showToast, toggleStar]
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -103,7 +101,7 @@ const ProductScreen = () => {
           placeholder="Search"
         />
 
-        <FlatList<Category>
+        <FlatList<PageItem>
           data={filteredCategories}
           renderItem={({ item }) => (
             <ListTile

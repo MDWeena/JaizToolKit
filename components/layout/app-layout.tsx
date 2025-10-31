@@ -26,10 +26,15 @@
 //     />
 //   );
 // }
-import { Slot, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 
 export default function AppLayout() {
-  const router = useRouter();
-
-  return <Slot />;
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: 'default',
+      }}
+    />
+  );
 }

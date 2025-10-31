@@ -1,20 +1,27 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-interface SearchableItem {
+export interface SearchableItem {
   text: string;
   keywords?: string[];
 }
 
-interface UseSearchOptions {
-  searchFields?: (keyof SearchableItem)[];
+interface UseSearchOptions<T extends SearchableItem> {
+  searchFields?: (keyof T & keyof SearchableItem)[];
   caseSensitive?: boolean;
 }
 
 export function useSearch<T extends SearchableItem>(
   items: T[],
-  options: UseSearchOptions = {}
+  options: UseSearchOptions<T> = {}
 ) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  // Debounce the raw search query to avoid filtering on every keystroke
+  useEffect(() => {
+    const handle = setTimeout(() => setDebouncedQuery(searchQuery), 200);
+    return () => clearTimeout(handle);
+  }, [searchQuery]);
   
   const {
     searchFields = ['text', 'keywords'],
@@ -22,11 +29,11 @@ export function useSearch<T extends SearchableItem>(
   } = options;
 
   const filteredItems = useMemo(() => {
-    if (!searchQuery.trim()) return items;
+    if (!debouncedQuery.trim()) return items;
     
     const query = caseSensitive 
-      ? searchQuery.trim() 
-      : searchQuery.toLowerCase().trim();
+      ? debouncedQuery.trim() 
+      : debouncedQuery.toLowerCase().trim();
 
     return items.filter((item) => {
       return searchFields.some(field => {
@@ -45,13 +52,13 @@ export function useSearch<T extends SearchableItem>(
         return false;
       });
     });
-  }, [items, searchQuery, searchFields, caseSensitive]);
+  }, [items, debouncedQuery, searchFields, caseSensitive]);
 
   return {
     searchQuery,
     setSearchQuery,
     filteredItems,
     hasResults: filteredItems.length > 0,
-    hasQuery: searchQuery.trim().length > 0,
+    hasQuery: debouncedQuery.trim().length > 0,
   };
 }

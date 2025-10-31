@@ -1,4 +1,8 @@
 import {
+  OpenAccountIcon,
+  VerifyAccountIcon,
+} from '@/assets/images/svgs/account';
+import {
   AccountIcon,
   FunctionIcon,
   ProductIcon,
@@ -27,8 +31,9 @@ import {
   ServiceRequestIcon,
   TransactionsIcon,
 } from '@/assets/images/svgs/rm';
+import { PageItem, PageSection } from '@/types/page';
 
-export const categoriesData = [
+export const categoriesData: PageItem[] = [
   {
     id: 1,
     icon: <AccountIcon width={44} height={44} />,
@@ -63,7 +68,7 @@ export const categoriesData = [
   },
 ];
 
-export const productsData = [
+export const productsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
@@ -101,7 +106,7 @@ export const productsData = [
   },
 ];
 
-export const accountTypeData = [
+export const accountTypeData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
@@ -118,33 +123,33 @@ export const accountTypeData = [
   },
 ];
 
-export const individualAccountsData = [
+export const individualAccountsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
+    route: '/products/account-type/individual' as const,
     text: 'Jaiz Instant Account',
-    route: '/(tabs)/(home)/(accounts)/jaiz-instant-account' as const,
     keywords: ['jaiz instant', 'instant account', 'jaiz'],
   },
   {
     id: 2,
     icon: <UserIcon width={44} height={44} />,
+    route: '/products/account-type/individual' as const,
     text: 'eAccount',
-    route: '/(tabs)/(home)/(accounts)/eaccount' as const,
     keywords: ['eaccount', 'electronic account'],
   },
   {
     id: 3,
     icon: <UserIcon width={44} height={44} />,
+    route: '/products/account-type/individual' as const,
     text: 'Jaiz Target',
-    route: '/(tabs)/(home)/(accounts)/jaiz-target' as const,
     keywords: ['jaiz target', 'target account'],
   },
   {
     id: 4,
     icon: <UserIcon width={44} height={44} />,
+    route: '/products/account-type/individual' as const,
     text: 'Jaiz EasySavers Account',
-    route: '/(tabs)/(home)/(accounts)/jaiz-easysavers-account' as const,
     keywords: ['easysavers', 'easy savers', 'jaiz'],
   },
   {
@@ -158,29 +163,29 @@ export const individualAccountsData = [
     id: 6,
     icon: <UserIcon width={44} height={44} />,
     text: 'Jaiz eSavers',
-    route: '/(tabs)/(home)/(accounts)/jaiz-esavers' as const,
+    route: '/products/account-type/individual' as const,
     keywords: ['esavers', 'jaiz esavers', 'savers'],
   },
 ];
 
-export const corporateAccountsData = [
+export const corporateAccountsData: PageItem[] = [
   {
     id: 1,
     icon: <CorporateIcon width={44} height={44} />,
     text: 'Jaiz Max',
-    route: '/products/account-type/corporate/jaiz-max' as const,
+    route: '/products/account-type/corporate' as const,
     keywords: ['corporate', 'account', 'jaiz max'],
   },
   {
     id: 2,
     icon: <CorporateIcon width={44} height={44} />,
     text: 'Jaiz Business',
-    route: '/products/account-type/corporate/jaiz-business' as const,
+    route: '/products/account-type/corporate' as const,
     keywords: ['corporate', 'account', 'jaiz business'],
   },
 ];
 
-export const teenAccountData = [
+export const teenAccountData: PageSection[] = [
   {
     id: 1,
     section: 'Description',
@@ -223,128 +228,128 @@ export const teenAccountData = [
   },
 ];
 
-export const loansData = [
+export const loansData: PageItem[] = [
   {
     id: 1,
     icon: <LoanIcon width={44} height={44} />,
     text: 'Jaiz Salary Advance',
-    route: '/(tabs)/(home)/(loans)/jaiz-salary-advance' as const,
+    route: '/products/loan' as const,
     keywords: ['salary advance', 'jaiz'],
   },
   {
     id: 2,
     icon: <LoanIcon width={44} height={44} />,
     text: 'Max Advance',
-    route: '/(tabs)/(home)/(loans)/max-advance' as const,
+    route: '/products/loan' as const,
     keywords: ['max advance', 'advance'],
   },
   {
     id: 3,
     icon: <LoanIcon width={44} height={44} />,
     text: 'MaxPlus',
-    route: '/(tabs)/(home)/(loans)/maxplus' as const,
+    route: '/products/loan' as const,
     keywords: ['maxplus', 'max plus'],
   },
   {
     id: 4,
     icon: <LoanIcon width={44} height={44} />,
     text: 'Jaiz Auto',
-    route: '/(tabs)/(home)/(loans)/jaiz-auto' as const,
+    route: '/products/loan' as const,
     keywords: ['auto', 'jaiz auto'],
   },
   {
     id: 5,
     icon: <LoanIcon width={44} height={44} />,
     text: 'Jaiz Mortgage',
-    route: '/(tabs)/(home)/(loans)/jaiz-mortgage' as const,
+    route: '/products/loan' as const,
     keywords: ['mortgage', 'jaiz mortgage'],
   },
   {
     id: 6,
     icon: <LoanIcon width={44} height={44} />,
     text: 'School Fees Advance',
-    route: '/(tabs)/(home)/(loans)/school-fees-advance' as const,
+    route: '/products/loan' as const,
     keywords: ['school fees advance', 'school fees'],
   },
   {
     id: 7,
     icon: <LoanIcon width={44} height={44} />,
     text: 'CBN MSME Development Fund',
-    route: '/(tabs)/(home)/(loans)/cbn-msme-development-fund' as const,
+    route: '/products/loan' as const,
     keywords: ['cbn msme', 'development fund', 'msme'],
   },
   {
     id: 8,
     icon: <LoanIcon width={44} height={44} />,
     text: 'CBN SME Credit Guarantee Scheme',
-    route: '/(tabs)/(home)/(loans)/cbn-sme-credit-guarantee-scheme' as const,
+    route: '/products/loan' as const,
     keywords: ['cbn sme', 'credit guarantee', 'scheme'],
   },
 ];
 
-export const cardsData = [
+export const cardsData: PageItem[] = [
   {
     id: 1,
     icon: <CardIcon width={44} height={44} />,
     text: 'Prepaid Utility Card',
-    route: '/(tabs)/(home)/(cards)/prepaid-utility-card' as const,
+    route: '/products/card' as const,
     keywords: ['prepaid utility card', 'utility card', 'prepaid'],
   },
   {
     id: 2,
     icon: <CardIcon width={44} height={44} />,
     text: 'Prepaid Virtual Card',
-    route: '/(tabs)/(home)/(cards)/prepaid-virtual-card' as const,
+    route: '/products/card' as const,
     keywords: ['prepaid virtual card', 'virtual card', 'prepaid'],
   },
   {
     id: 3,
     icon: <UserIcon width={44} height={44} />,
     text: 'One Time Password',
-    route: '/(tabs)/(home)/(cards)/one-time-password' as const,
+    route: '/products/card' as const,
     keywords: ['one time password', 'otp', 'password'],
   },
   {
     id: 4,
     icon: <UserIcon width={44} height={44} />,
     text: 'Card-Less Withdrawal',
-    route: '/(tabs)/(home)/(cards)/card-less-withdrawal' as const,
+    route: '/products/card' as const,
     keywords: ['card-less withdrawal', 'cardless', 'withdrawal'],
   },
 ];
 
-export const bankingChannelsData = [
+export const bankingChannelsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
     text: 'Jaiz Bank App',
-    route: '/' as const,
+    route: '/products/banking-channel' as const,
     keywords: ['jaiz bank', 'banking app'],
   },
   {
     id: 2,
     icon: <UserIcon width={44} height={44} />,
     text: 'Internet Banking',
-    route: '/' as const,
+    route: '/products/banking-channel' as const,
     keywords: ['internet banking', 'online banking'],
   },
   {
     id: 3,
     icon: <UserIcon width={44} height={44} />,
     text: 'USSD Bank',
-    route: '/' as const,
+    route: '/products/banking-channel' as const,
     keywords: ['ussd', 'banking', 'mobile banking'],
   },
   {
     id: 4,
     icon: <UserIcon width={44} height={44} />,
     text: 'SMS Banking',
-    route: '/' as const,
+    route: '/products/banking-channel' as const,
     keywords: ['sms banking', 'text banking', 'mobile banking'],
   },
 ];
 
-export const otherProductsData = [
+export const otherProductsData: PageItem[] = [
   {
     id: 4,
     icon: <PieIcon width={44} height={44} />,
@@ -447,5 +452,24 @@ export const rmData = [
     description: 'Includes Tracker, reset, hotlist...',
     route: '/functions/rm/service-requests' as const,
     keywords: ['service', 'request', 'tracker', 'reset', 'hotlist'],
+  },
+];
+
+export const accounts: PageItem[] = [
+  {
+    id: 1,
+    icon: <OpenAccountIcon width={44} height={44} />,
+    text: 'Open Account',
+    route: '/accounts/open/officer-details' as const,
+    keywords: ['open account', 'account'],
+    class: 'border-white',
+  },
+  {
+    id: 2,
+    icon: <VerifyAccountIcon width={44} height={44} />,
+    text: 'Verify Account',
+    route: '/accounts/verify' as const,
+    keywords: ['verify account', 'account'],
+    class: 'border-white',
   },
 ];
