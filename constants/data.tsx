@@ -1,3 +1,4 @@
+import { OpenAccountIcon, VerifyAccountIcon } from "@/assets/images/svgs/account";
 import {
   AccountIcon,
   FunctionIcon,
@@ -341,3 +342,22 @@ export const otherProductsData: PageItem[] = [
     keywords: ["pos terminals", "point of sale", "mobile banking"],
   },
 ];
+
+export const accounts: PageItem[] = [
+  {
+    id: 1,
+    icon: <OpenAccountIcon width={44} height={44} />,
+    text: "Open Account",
+    route: "/accounts/open/officer-details" as const,
+    keywords: ["open account", "account"],
+    class: "border-white"
+  },
+  {
+    id: 2,
+    icon: <VerifyAccountIcon width={44} height={44} />,
+    text: "Verify Account",
+    route: "/accounts/verify" as const,
+    keywords: ["verify account", "account"],
+    class: "border-white",
+  }
+]

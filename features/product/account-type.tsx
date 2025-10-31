@@ -25,18 +25,17 @@ const AccountTypeScreen = () => {
     <SafeAreaView className='flex-1 bg-background'>
       <StatusBar style='auto' />
       <ScrollView className='flex-1 px-5'>
-
-          <Pressable
-            hitSlop={20}
-            onPress={() =>
-              router.canGoBack() && router.dismissAll()
-            }
-          >
-            <Ionicons name="arrow-back" size={25} />
-          </Pressable>
+        <Pressable
+          hitSlop={20}
+          onPress={() =>
+            router.canGoBack() && router.dismissAll()
+          }
+        >
+          <Ionicons name="arrow-back" size={25} />
+        </Pressable>
 
         {/* Header Section */}
-        <Header title='Product Information' />
+        <Header title='Account Type' />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
