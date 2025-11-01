@@ -36,7 +36,7 @@ const HomeScreen = () => {
         {/* Header Section */}
         <Header
           profileImage={Images.profileImagePlaceholder}
-          userName='Michel'
+          userName='Michael'
           userId='64bhfhfb'
           showNotification
         />

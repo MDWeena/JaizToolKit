@@ -37,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   const { colorScheme } = useTheme();
   
   const mainText = userName ? `Hello, ${userName}` : title;
-  const secondaryText = userName ? `Finacle ID: ${userId}` : subtitle;
+  const secondaryText = userName ? `User ID: ${userId}` : subtitle;
 
   return (
     <View className='flex-row items-center justify-between mb-4'>

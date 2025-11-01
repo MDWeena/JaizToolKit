@@ -49,7 +49,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, paddingTop: 20 }}>
       <ThemeProvider>
         <ToastProvider>
           <BottomSheetProvider>
