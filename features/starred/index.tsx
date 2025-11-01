@@ -92,11 +92,12 @@ const StarredScreen = () => {
       }
 
       return (
-        <View className="relative">
+        <View className="relative ">
           <Card
             icon={item.icon}
             text={item.text}
             onPress={() => onItemPress(item.route as Href | undefined)}
+            className="flex-1"
           />
           {isEditMode && (
             <Pressable
@@ -195,7 +196,7 @@ const StarredScreen = () => {
             key="grid-view"
             data={starredItemsWithIcons}
             numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
+            // columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
             renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}
             scrollEnabled={false}
