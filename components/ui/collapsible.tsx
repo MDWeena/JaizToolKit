@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { cn } from "@/lib/utils";
 import { Feather } from "@expo/vector-icons";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 // Enable layout animation for Android
 // if (Platform.OS === "android") {

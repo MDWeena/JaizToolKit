@@ -8,15 +8,8 @@ import { StatusBar } from "expo-status-bar";
 import { Header, ListTile, SearchBar, SearchNotFound } from "@/components/shared";
 import { accountTypeData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
+import { PageItem } from "@/types/page";
 
-export interface Category {
-  id: number;
-  text: string;
-  icon: React.ReactNode;
-  route: string;
-  keywords?: string[];
-  class?: string;
-}
 
 const AccountTypeScreen = () => {
   const router = useRouter();
@@ -32,31 +25,30 @@ const AccountTypeScreen = () => {
     <SafeAreaView className='flex-1 bg-background'>
       <StatusBar style='auto' />
       <ScrollView className='flex-1 px-5'>
-
-          <Pressable
-            hitSlop={20}
-            onPress={() =>
-              router.canGoBack() && router.dismissAll()
-            }
-          >
-            <Ionicons name="arrow-back" size={25} />
-          </Pressable>
+        <Pressable
+          hitSlop={20}
+          onPress={() =>
+            router.canGoBack() && router.dismissAll()
+          }
+        >
+          <Ionicons name="arrow-back" size={25} />
+        </Pressable>
 
         {/* Header Section */}
-        <Header title='Product Information' />
+        <Header title='Account Type' />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
           placeholder='Search'
         />
 
-        <FlatList<Category>
+        <FlatList<PageItem>
           data={filteredCategories}
           renderItem={({ item }) => (
             <ListTile
               leading={item.icon}
               title={item.text}
-              onPress={() => router.push(item.route as Href)}
+              onPress={() => router.navigate(item.route as Href)}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

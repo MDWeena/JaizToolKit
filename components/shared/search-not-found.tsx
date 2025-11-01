@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { Button } from "@/components/ui/button";
-import ErrorIcon from "@/assets/images/svgs/warning";
+import { ErrorIcon } from "@/assets/images/svgs/warning";
 
 interface SearchNotFoundProps {
   searchQuery?: string;

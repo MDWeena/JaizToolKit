@@ -1,6 +1,6 @@
-import Images from "@/constants/Images";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, FlatList, Image, View, ViewToken, useWindowDimensions } from "react-native";
+import Images from "@/constants/Images";
 
 type SliderItem = {
   id: string;

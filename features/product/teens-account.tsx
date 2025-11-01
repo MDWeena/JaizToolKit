@@ -1,9 +1,9 @@
 import React from "react";
 import { FlatList, Pressable, ScrollView, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Header } from "@/components/shared/header";
 import {
@@ -12,13 +12,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { teenAccountData } from "@/constants/data";
+import { PageSection } from "@/types/page";
 
-interface TeenAccount {
-  id: number;
-  section: string;
-  content: string[];
-  icon: React.ReactNode;
-}
 
 const TeensAccountsScreen = () => {
   const router = useRouter();
@@ -35,7 +30,7 @@ const TeensAccountsScreen = () => {
 
         {/* Header Section */}
         <Header title='Teens Account' />
-        <FlatList<TeenAccount>
+        <FlatList<PageSection>
           data={teenAccountData}
           renderItem={({ item }) => (
             <Collapsible className='mb-3'>

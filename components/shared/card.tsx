@@ -1,9 +1,9 @@
-import React from "react";
-import { Dimensions, Pressable, Text, View } from "react-native";
+import React from 'react';
+import { Dimensions, Pressable, Text, View } from 'react-native';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 
 // Define props interface for ReusableCard
 interface ReusableCardProps {
@@ -23,13 +23,13 @@ export const Card: React.FC<ReusableCardProps> = ({
   return (
     <Pressable
       className={cn(
-        "flex-col flex-1 items-center justify-center gap-3 p-7 mb-3 bg-white border rounded-xl border-primary",
+        'flex-col flex-1 justify-between gap-3 p-7 bg-white rounded-xl mb-[1rem] min-h-[155px]',
         className
       )}
       onPress={onPress}
     >
       <View>{icon}</View>
-      <Text>{text}</Text>
+      <Text className="text-[1.1rem]">{text}</Text>
     </Pressable>
   );
 };
