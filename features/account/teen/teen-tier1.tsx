@@ -23,10 +23,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
   KeyboardAvoidingView,
-  Platform,
   Pressable,
   Text,
-  View,
+  View
 } from "react-native";
 
 const Tier1Screen = () => {
@@ -80,7 +79,7 @@ const Tier1Screen = () => {
               <StepperStep step={3} />
               <StepperStep step={4} />
             </StepperSteps>
-            <Header title="Tier 1 Account" />
+            <Header title="Tier 1 - Teen Account" />
 
             <StepperContent>
               <StepperStepContent className="gap-6" step={1}>
@@ -315,7 +314,11 @@ const Tier1Screen = () => {
                 <Button
                   size={"lg"}
                   className="my-4"
-                  onPress={() => console.log("Submitting Teen Account Form")}
+                  onPress={() => {
+                    // Simulate form submission
+                    console.log("Submitting Teen Account Form");
+                    router.push("/(app)/accounts/open/success");
+                  }}
                 >
                   Submit
                 </Button>

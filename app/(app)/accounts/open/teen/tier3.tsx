@@ -1,1 +1,1 @@
-export { default } from '@/features/account/teen/teen-tier1'
+export { default } from '@/features/account/teen/teen-tier3';

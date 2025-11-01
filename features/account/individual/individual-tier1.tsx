@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { Header } from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
 import CustomSelect, { SelectOption } from "@/components/ui/custom-select";
 import DatePicker from "@/components/ui/date-picker";
 import FileInput from "@/components/ui/file-input";
-import OtpField from "@/components/ui/otp-field";
+import Agreement from "@/components/ui/form-agreement";
 import { TextField } from "@/components/ui/input";
+import OtpField from "@/components/ui/otp-field";
 import {
   Stepper,
   StepperContent,
@@ -17,17 +18,16 @@ import {
   StepperStepContent,
   StepperSteps,
 } from "@/components/ui/stepper";
-import { Header } from "@/components/shared/header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import {
   KeyboardAvoidingView,
   Platform,
-  View,
-  Text,
   Pressable,
+  Text,
+  View,
 } from "react-native";
-import Agreement from "@/components/ui/form-agreement";
-import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 const Tier1Screen = () => {
   const router = useRouter();
@@ -256,7 +256,11 @@ const Tier1Screen = () => {
                 />
                 <Button
                   className="my-4"
-                  onPress={() => console.log("Submitting SKS Account Form")}
+                  onPress={() => {
+                    // Simulate form submission
+                    console.log("Submitting SKS Account Form");
+                    router.push("/(app)/accounts/open/success");
+                  }}
                 >
                   Submit
                 </Button>
