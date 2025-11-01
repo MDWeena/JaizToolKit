@@ -3,12 +3,16 @@ import Images from '@/constants/Images';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { useBiometrics } from '@/hooks/useBiometrics';
 import { AuthenticationType } from 'expo-local-authentication';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 
 type BiometricsState = 'enable' | 'failed' | 'successful';
 
-const BiometricsBottomSheet = () => {
+interface Props {
+  onSuccess(): void;
+}
+
+const BiometricsBottomSheet: FC<Props> = ({ onSuccess }) => {
   const [state, setState] = useState<BiometricsState>('enable');
   const { hideBottomSheet } = useBottomSheet();
   const { authMethods, bioAuth } = useBiometrics();
@@ -52,7 +56,11 @@ const BiometricsBottomSheet = () => {
       </View>
       <View className="gap-4">
         <Button
-          onPress={state === 'successful' ? hideBottomSheet : enable}
+          onPress={
+            state === 'successful'
+              ? () => (hideBottomSheet(), onSuccess())
+              : enable
+          }
           size="lg"
         >
           <Text className="text-base font-semibold text-primary-foreground">
