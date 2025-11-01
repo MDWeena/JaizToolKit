@@ -1,13 +1,13 @@
 import { cn } from '@/lib/utils';
 import React, { FC, ReactNode, RefObject, useState } from 'react';
 import {
-  Platform,
-  Text,
-  TextInput,
-  TextInputProps,
-  TextProps,
-  View,
-  ViewProps,
+    Platform,
+    Text,
+    TextInput,
+    TextInputProps,
+    TextProps,
+    View,
+    ViewProps,
 } from 'react-native';
 
 interface Props extends ViewProps {
@@ -44,7 +44,7 @@ const TextField: FC<Props> = ({
       {label && (
         <Text
           {...LabelProps}
-          className={cn('font-[500] mb-2', LabelProps?.className)}
+          className={cn('font-interMedium mb-2', LabelProps?.className)}
         >
           {label}
         </Text>
@@ -75,7 +75,7 @@ const TextField: FC<Props> = ({
           onBlur={() => setInputFocused(false)}
           autoCapitalize={'none'}
           className={cn(
-            'py-3 transparent text-[1.2rem] placeholder:text-gray',
+            'py-3 transparent text-[1.2rem] font-inter placeholder:text-gray',
             props.multiline && 'min-h-[120px]',
             Platform.OS === 'ios' && 'py-4',
             InputProps?.className

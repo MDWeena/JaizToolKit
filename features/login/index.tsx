@@ -2,6 +2,7 @@ import { FaceIdIcon } from '@/assets/images/svgs/login-icons';
 import Logo from '@/assets/images/svgs/logo';
 import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/input';
+import { Text } from '@/components/ui/Text';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { useBiometrics } from '@/hooks/useBiometrics';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,7 +13,6 @@ import { Controller, useForm } from 'react-hook-form';
 import {
   Dimensions,
   Pressable,
-  Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -76,7 +76,7 @@ const LoginScreen = () => {
       >
         <Logo />
 
-        <Text className="!mt-3 text-[1.5rem] font-[500] text-center">
+        <Text className="!mt-3 text-[1.5rem] font-interMedium text-center">
           Welcome!
         </Text>
         <Text className="mt-3 text-center font-light text-[1.2rem] text-[#2F3036CC] mb-8">

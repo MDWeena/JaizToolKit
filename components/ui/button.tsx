@@ -2,12 +2,12 @@ import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import {
-  Pressable,
-  type PressableStateCallbackType,
-  type PressableProps as RNPressableProps,
-  Text,
-  View,
-  type ViewStyle,
+    Pressable,
+    type PressableStateCallbackType,
+    type PressableProps as RNPressableProps,
+    Text,
+    View,
+    type ViewStyle,
 } from 'react-native';
 
 export const buttonVariants = cva(
@@ -85,7 +85,7 @@ const Button = React.forwardRef<View, ButtonProps>(
             }`}
           >
             {typeof children === 'string' ? (
-              <Text className="text-white font-[500]">{children}</Text>
+              <Text className="text-white font-interMedium">{children}</Text>
             ) : typeof children === 'function' ? (
               children(state)
             ) : (

@@ -44,6 +44,29 @@ module.exports = {
           DEFAULT: "rgb(var(--color-success) / <alpha-value>)",
         },
       },
+            fontFamily: {
+        inter: ["Inter-Regular", "Inter"], // optionally override `sans`
+        interBold: ["Inter-Bold", "Inter"], // optionally override `sans`
+        interMedium: ["Inter-Medium", "Inter"], // optionally override `sans`
+        interLight: ["Inter-Light", "Inter"], // optionally override `sans`
+        interThin: ["Inter-Thin", "Inter"], // optionally override `sans`
+        interExtraLight: ["Inter-ExtraLight", "Inter"], // optionally override `sans`
+        interExtraBold: ["Inter-ExtraBold", "Inter"], // optionally override `sans`
+        interBlack: ["Inter-Black", "Inter"], // optionally override `sans`
+        interSemiBold: ["Inter-SemiBold", "Inter"], // optionally override `sans`
+        interItalic: ["Inter-Italic", "Inter"], // optionally override `sans`
+        interMediumItalic: ["Inter-MediumItalic", "Inter"], // optionally override `sans`
+        interBoldItalic: ["Inter-BoldItalic", "Inter"], // optionally override `sans`
+        interLightItalic: ["Inter-LightItalic", "Inter"], // optionally override `sans`
+        interThinItalic: ["Inter-ThinItalic", "Inter"], // optionally override `sans`
+        interExtraLightItalic: ["Inter-ExtraLightItalic", "Inter"], // optionally override `sans`
+        interExtraBoldItalic: ["Inter-ExtraBoldItalic", "Inter"], // optionally override `sans`
+        interBlackItalic: ["Inter-BlackItalic", "Inter"], // optionally override `sans`
+        interSemiBoldItalic: ["Inter-SemiBoldItalic", "Inter"], // optionally override `sans`
+        interVariable: ["Inter-Variable", "Inter"], // optionally override `sans`
+        interVariableItalic: ["Inter-VariableItalic", "Inter"], // optionally override `sans`
+        sans: ["Inter-Regular", "Inter"], // optionally override `sans`
+      },
     },
   },
   plugins: [
