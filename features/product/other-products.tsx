@@ -13,14 +13,8 @@ import {
 } from "@/components/shared";
 import { bankingChannelsData, cardsData, otherProductsData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
+import { PageItem } from "@/types/page";
 
-export interface Category {
-  id: number;
-  text: string;
-  icon: React.ReactNode;
-  route: string;
-  keywords?: string[];
-}
 
 const OtherProductsScreen = () => {
   const router = useRouter();
@@ -44,20 +38,20 @@ const OtherProductsScreen = () => {
         </Pressable>
 
         {/* Header Section */}
-        <Header title='Banking Channel' />
+        <Header title='Other Products' />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
           placeholder='Search'
         />
 
-        <FlatList<Category>
+        <FlatList<PageItem>
           data={filteredCategories}
           renderItem={({ item }) => (
             <ListTile
               leading={item.icon}
               title={item.text}
-              onPress={() => router.push(item.route as Href)}
+              onPress={() => router.navigate(item.route as Href)}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

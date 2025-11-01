@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import React, { FC, ReactNode, RefObject, useState } from 'react';
 import {
   Platform,
@@ -51,7 +51,7 @@ const TextField: FC<Props> = ({
       )}
       <View
         className={cn(
-          'relative bg-grey-200 rounded-[12px] overflow-hidden',
+          'relative bg-[#E1E1E4] rounded-[12px] overflow-hidden',
           inputFocused && 'border border-primary',
           inputPrefix ? 'pl-16' : 'pl-4',
           inputSuffix ? 'pr-16' : 'pr-4',
@@ -110,6 +110,6 @@ const TextField: FC<Props> = ({
   );
 };
 
-TextField.displayName = "TextField";
+TextField.displayName = 'TextField';
 
 export { TextField };
