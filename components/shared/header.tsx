@@ -6,10 +6,10 @@ import React from 'react';
 import {
   Image,
   ImageSourcePropType,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Text } from '../ui/Text';
 
 interface HeaderProps {
   profileImage?: ImageSourcePropType;

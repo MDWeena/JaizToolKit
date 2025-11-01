@@ -1,7 +1,8 @@
 import { Href, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback } from 'react';
-import { FlatList, ScrollView, Text } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Card, Header, SearchBar, SearchNotFound } from '@/components/shared';
