@@ -82,6 +82,7 @@ export const Toast: React.FC<ToastProps> = ({
 
 interface ToastContextType {
   showToast: (props: Omit<ToastProps, "onDismiss">) => void;
+  dismissToast: () => void;
 }
 
 const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
@@ -110,7 +111,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   };
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={{ showToast, dismissToast }}>
       {children}
       {toast && (
         <Toast

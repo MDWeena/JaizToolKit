@@ -29,7 +29,7 @@ const ProductScreen = () => {
   } = useSearch(productsData);
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
   const { isStarred, toggleStar } = useStarred();
-  const { showToast } = useToast();
+  const { showToast, dismissToast } = useToast();
 
   const handleProductStarSheet = useCallback(
     (item: PageItem) => {
@@ -58,7 +58,7 @@ const ProductScreen = () => {
                   showToast({
                     message: 'Added to Starred',
                     linkText: 'See List',
-                    onLinkPress: () => router.push('/(tabs)/starred'),
+                    onLinkPress: () => {router.push('/(tabs)/starred'); dismissToast();},
                     position: 'bottom',
                   });
                 }
