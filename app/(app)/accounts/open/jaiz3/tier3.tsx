@@ -1,0 +1,1 @@
+export { default } from '@/features/account/jaiz3/jaiz3-tier3';
