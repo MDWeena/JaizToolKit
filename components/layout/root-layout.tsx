@@ -13,16 +13,20 @@ import { ToastProvider } from '@/components/shared/toast';
 import { BottomSheetProvider } from '@/contexts/BottomSheetContext';
 import { StarredProvider } from '@/contexts/StarredContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { useAuthStore } from '@/store/auth.store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: '(auth)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+export const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -50,21 +54,38 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const { user } = useAuthStore();
+
+  const isAuthenticated = !!user;
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider>
-        <ToastProvider>
-          <BottomSheetProvider>
-            <StarredProvider>
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="(app)" options={{ headerShown: false }} />
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              </Stack>
-            </StarredProvider>
-          </BottomSheetProvider>
-        </ToastProvider>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <ToastProvider>
+            <BottomSheetProvider>
+              <StarredProvider>
+                <Stack initialRouteName="(auth)">
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Protected guard={isAuthenticated}>
+                    <Stack.Screen
+                      name="(tabs)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(app)"
+                      options={{ headerShown: false }}
+                    />
+                  </Stack.Protected>
+                </Stack>
+              </StarredProvider>
+            </BottomSheetProvider>
+          </ToastProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
     </GestureHandlerRootView>
   );
 }
