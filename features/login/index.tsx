@@ -1,10 +1,14 @@
 import { FaceIdIcon } from '@/assets/images/svgs/login-icons';
 import Logo from '@/assets/images/svgs/logo';
+import { useToast } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/input';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { useBiometrics } from '@/hooks/useBiometrics';
+import { login } from '@/services/auth.service';
+import { useAuthStore } from '@/store/auth.store';
 import { Ionicons } from '@expo/vector-icons';
+import { useMutation } from '@tanstack/react-query';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -22,7 +26,7 @@ import BiometricsBottomSheet from './components/biometrics-bottom-sheet';
 const { height } = Dimensions.get('screen');
 
 type Inputs = {
-  email: string;
+  staffId: string;
   password: string;
 };
 
@@ -30,34 +34,52 @@ const LoginScreen = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { authMethods, bioAuth, isConfigured } = useBiometrics();
+  const { setUser } = useAuthStore();
   const { showBottomSheet } = useBottomSheet();
   const [hasOpenedBiometricsConfigSheet, setHasOpenedBiometricsConfigSheet] =
     useState(false);
+  const { showToast } = useToast();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
-    defaultValues: {
-      email: 'adejaredaniel12@gmail.com',
-      password: 'brainiac12',
+    defaultValues: {},
+  });
+
+  const onSuccess = () => {
+    router.push('/(tabs)/(home)');
+  };
+
+  const { mutateAsync: _login, isPending: loggingIn } = useMutation({
+    mutationKey: ['auth', 'login'],
+    mutationFn: login,
+    onSuccess(data) {
+      setUser({ ...data.data.user, accessToken: data.data.token });
+      showToast({
+        message: 'Logged in successfully!',
+        linkText: '',
+        onLinkPress: () => {},
+      });
+      if (!isConfigured && !hasOpenedBiometricsConfigSheet) {
+        setHasOpenedBiometricsConfigSheet(true);
+        showBottomSheet(<BiometricsBottomSheet onSuccess={onSuccess} />);
+        return;
+      }
+      onSuccess();
+    },
+    onError(error) {
+      showToast({
+        message: error?.message,
+        linkText: '',
+        onLinkPress: () => {},
+      });
     },
   });
 
   const onSubmit = (e: Inputs) => {
-    console.log({ e });
-
-    if (!isConfigured && !hasOpenedBiometricsConfigSheet) {
-      setHasOpenedBiometricsConfigSheet(true);
-      showBottomSheet(<BiometricsBottomSheet />);
-      return;
-    }
-    onSuccess();
-  };
-
-  const onSuccess = () => {
-    router.push('/(tabs)/(home)');
+    _login({ staffid: e.staffId, password: e.password });
   };
 
   const onBiometricClick = async () => {
@@ -84,16 +106,12 @@ const LoginScreen = () => {
         </Text>
 
         <Controller
-          name="email"
+          name="staffId"
           control={control}
           rules={{
             required: {
               value: true,
               message: 'This field is required',
-            },
-            pattern: {
-              value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-              message: 'Enter a valid email address',
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => {
@@ -104,13 +122,12 @@ const LoginScreen = () => {
                   <Ionicons name="mail-outline" color={'#00000040'} size={25} />
                 }
                 InputProps={{
-                  placeholder: 'Email',
-                  keyboardType: 'email-address',
+                  placeholder: 'Staff ID',
                   value: value,
                   onChangeText: onChange,
                   onBlur: onBlur,
                 }}
-                helperText={errors?.email?.message}
+                helperText={errors?.staffId?.message}
               />
             );
           }}
@@ -163,7 +180,11 @@ const LoginScreen = () => {
           )}
         />
 
-        <Button onPress={handleSubmit(onSubmit)} className="mt-24 !min-w-full">
+        <Button
+          loading={loggingIn}
+          onPress={(e) => !loggingIn && handleSubmit(onSubmit)(e)}
+          className="mt-24 !min-w-full"
+        >
           <Text className="text-white font-bold">Log In</Text>
         </Button>
 

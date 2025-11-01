@@ -5,12 +5,15 @@ import { Text, View } from 'react-native';
 import { WarningIcon } from '@/assets/images/svgs/warning';
 import { Button } from '@/components/ui/button';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
+import { useAuthStore } from '@/store/auth.store';
 
 const LogoutBottomSheet = () => {
   const { hideBottomSheet } = useBottomSheet();
+  const { clearUser } = useAuthStore();
   const router = useRouter();
 
   const handleLogout = useCallback((): void => {
+    clearUser();
     hideBottomSheet();
     // Perform logout logic here
     router.dismissTo('/(auth)/login');
