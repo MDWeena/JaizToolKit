@@ -28,7 +28,6 @@ const Tier3Screen = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [isChecked, setChecked] = useState(false);
   const [birthDate, setBirthDate] = useState<Date>();
-  const [kidBirthDate, setKidBirthDate] = useState<Date>();
   const [customerType, setCustomerType] = React.useState("existing");
 
   // Set maximum date to today
@@ -71,9 +70,10 @@ const Tier3Screen = () => {
               <StepperStep step={1} />
               <StepperStep step={2} />
               <StepperStep step={3} />
+              <StepperStep step={4} />
             </StepperSteps>
             {/* Header Section */}
-            <Header title="Tier 3 - Teen Account" />
+            <Header title="Tier 3 - Jaiz 3 Account" />
 
             <StepperContent>
               <StepperStepContent className="gap-6" step={1}>
@@ -96,73 +96,39 @@ const Tier3Screen = () => {
 
                 <TextField
                   InputProps={{
-                    placeholder: "Enter Validation ID",
+                    placeholder: "NIN",
+                  }}
+                />
+                <TextField
+                  InputProps={{
+                    placeholder: "BVN",
                   }}
                 />
 
                 <DatePicker
-                  value={kidBirthDate}
-                  onChange={setKidBirthDate}
-                  placeholder="Kid's Date of Birth"
+                  value={birthDate}
+                  onChange={setBirthDate}
+                  placeholder="Date of Birth"
                   maximumDate={maxDate}
                   minimumDate={minDate}
                 />
 
                 <TextField
                   InputProps={{
-                    placeholder: "Kid's First Name",
+                    placeholder: "First Name",
                   }}
                 />
 
                 <TextField
                   InputProps={{
-                    placeholder: "Kid's Middle Name",
+                    placeholder: "Middle Name",
                   }}
                 />
 
                 <TextField
                   InputProps={{
-                    placeholder: "Kid's Last Name",
+                    placeholder: "Last Name",
                   }}
-                />
-
-                <TextField
-                  InputProps={{
-                    placeholder: "Kid's NIN",
-                  }}
-                />
-
-                <CustomSelect
-                  options={genderOptions}
-                  placeholder="Kids Gender"
-                />
-
-                <CustomSelect
-                  options={[
-                    { value: "lagos", label: "Lagos" },
-                    { value: "abuja", label: "Abuja" },
-                    { value: "kano", label: "Kano" },
-                    { value: "ibadan", label: "Ibadan" },
-                    { value: "port-harcourt", label: "Port Harcourt" },
-                    { value: "enugu", label: "Enugu" },
-                    { value: "oyo", label: "Oyo" },
-                    { value: "kaduna", label: "Kaduna" },
-                  ]}
-                  placeholder="Kid's State of Origin"
-                />
-
-                <CustomSelect
-                  options={[
-                    { value: "lagos", label: "Lagos" },
-                    { value: "abuja", label: "Abuja" },
-                    { value: "kano", label: "Kano" },
-                    { value: "ibadan", label: "Ibadan" },
-                    { value: "port-harcourt", label: "Port Harcourt" },
-                    { value: "enugu", label: "Enugu" },
-                    { value: "oyo", label: "Oyo" },
-                    { value: "kaduna", label: "Kaduna" },
-                  ]}
-                  placeholder="Kid's LGA of Origin"
                 />
 
                 <Button size={"lg"} onPress={() => setActiveStep(2)}>
@@ -171,102 +137,95 @@ const Tier3Screen = () => {
               </StepperStepContent>
 
               <StepperStepContent className="gap-6" step={2}>
-                <Tabs
-                  value={customerType}
-                  onValueChange={setCustomerType}
-                  className="gap-6"
-                >
-                  <TabsList className="flex-row w-full">
-                    <TabsTrigger value="existing" className="flex-1">
-                      <Text>Existing Customer</Text>
-                    </TabsTrigger>
-                    <TabsTrigger value="new" className="flex-1">
-                      <Text>New Customer</Text>
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="existing" className="mt-0">
-                    <TextField
-                      InputProps={{
-                        placeholder: "Parent's Phone No./Account No.",
-                        keyboardType: "phone-pad",
-                      }}
-                    />
-                  </TabsContent>
-                  <TabsContent value="new" className="mt-0">
-                    <TextField
-                      InputProps={{
-                        placeholder: "Parent's Phone Number",
-                        keyboardType: "phone-pad",
-                      }}
-                    />
-                  </TabsContent>
-                  <TabsContent value="new" className="mt-0">
-                    <TextField
-                      InputProps={{
-                        placeholder: "Parent's BVN",
-                      }}
-                    />
-                  </TabsContent>
-                  <TextField
-                    InputProps={{
-                      placeholder: "Parent's Full Name",
-                    }}
-                  />
-                  <TabsContent value="new" className="mt-0">
-                    <TextField
-                      InputProps={{
-                        placeholder: "Parent's NIN",
-                      }}
-                    />
-                  </TabsContent>
-                  <TextField
-                    InputProps={{
-                      placeholder: "Parent's Address",
-                      multiline: true,
-                      numberOfLines: 3,
-                    }}
-                  />
-                  <CustomSelect
-                    options={[
-                      { value: "lagos", label: "Lagos" },
-                      { value: "abuja", label: "Abuja" },
-                      { value: "kano", label: "Kano" },
-                      { value: "ibadan", label: "Ibadan" },
-                      { value: "port-harcourt", label: "Port Harcourt" },
-                      { value: "enugu", label: "Enugu" },
-                      { value: "oyo", label: "Oyo" },
-                      { value: "kaduna", label: "Kaduna" },
-                    ]}
-                    placeholder="Parent's State of Residence"
-                  />
-                  <CustomSelect
-                    options={[
-                      { value: "lagos", label: "Lagos" },
-                      { value: "abuja", label: "Abuja" },
-                      { value: "kano", label: "Kano" },
-                      { value: "ibadan", label: "Ibadan" },
-                      { value: "port-harcourt", label: "Port Harcourt" },
-                      { value: "enugu", label: "Enugu" },
-                      { value: "oyo", label: "Oyo" },
-                      { value: "kaduna", label: "Kaduna" },
-                    ]}
-                    placeholder="LGA of Residence"
-                  />
-                  <CustomSelect
-                    options={[
-                      { value: "lagos", label: "Lagos" },
-                      { value: "abuja", label: "Abuja" },
-                      { value: "kano", label: "Kano" },
-                      { value: "ibadan", label: "Ibadan" },
-                      { value: "port-harcourt", label: "Port Harcourt" },
-                      { value: "enugu", label: "Enugu" },
-                      { value: "oyo", label: "Oyo" },
-                      { value: "kaduna", label: "Kaduna" },
-                    ]}
-                    placeholder="City of Residence"
-                  />
-                </Tabs>
+                <CustomSelect options={genderOptions} placeholder="Gender" />
+                <TextField
+                  InputProps={{
+                    placeholder: "Mother's Maiden Name",
+                  }}
+                />
+                <TextField
+                  InputProps={{
+                    placeholder: "Next of Kin",
+                  }}
+                />
+                <TextField
+                  InputProps={{
+                    placeholder: "Next of Kin Mobile Number",
+                    keyboardType: "phone-pad",
+                  }}
+                />
+                <CustomSelect
+                  options={[
+                    { value: "lagos", label: "Lagos" },
+                    { value: "abuja", label: "Abuja" },
+                    { value: "kano", label: "Kano" },
+                    { value: "ibadan", label: "Ibadan" },
+                    { value: "port-harcourt", label: "Port Harcourt" },
+                    { value: "enugu", label: "Enugu" },
+                    { value: "oyo", label: "Oyo" },
+                    { value: "kaduna", label: "Kaduna" },
+                  ]}
+                  placeholder="State of Origin"
+                />
+                <CustomSelect
+                  options={[
+                    { value: "lagos", label: "Lagos" },
+                    { value: "abuja", label: "Abuja" },
+                    { value: "kano", label: "Kano" },
+                    { value: "ibadan", label: "Ibadan" },
+                    { value: "port-harcourt", label: "Port Harcourt" },
+                    { value: "enugu", label: "Enugu" },
+                    { value: "oyo", label: "Oyo" },
+                    { value: "kaduna", label: "Kaduna" },
+                  ]}
+                  placeholder="LGA of Origin"
+                />
+                <TextField
+                  InputProps={{
+                    placeholder: "Residential Address",
+                    multiline: true,
+                    numberOfLines: 3,
+                  }}
+                />
+                <CustomSelect
+                  options={[
+                    { value: "lagos", label: "Lagos" },
+                    { value: "abuja", label: "Abuja" },
+                    { value: "kano", label: "Kano" },
+                    { value: "ibadan", label: "Ibadan" },
+                    { value: "port-harcourt", label: "Port Harcourt" },
+                    { value: "enugu", label: "Enugu" },
+                    { value: "oyo", label: "Oyo" },
+                    { value: "kaduna", label: "Kaduna" },
+                  ]}
+                  placeholder="State of Residence"
+                />
+                <CustomSelect
+                  options={[
+                    { value: "lagos", label: "Lagos" },
+                    { value: "abuja", label: "Abuja" },
+                    { value: "kano", label: "Kano" },
+                    { value: "ibadan", label: "Ibadan" },
+                    { value: "port-harcourt", label: "Port Harcourt" },
+                    { value: "enugu", label: "Enugu" },
+                    { value: "oyo", label: "Oyo" },
+                    { value: "kaduna", label: "Kaduna" },
+                  ]}
+                  placeholder="LGA of Residence"
+                />
+                <CustomSelect
+                  options={[
+                    { value: "lagos", label: "Lagos" },
+                    { value: "abuja", label: "Abuja" },
+                    { value: "kano", label: "Kano" },
+                    { value: "ibadan", label: "Ibadan" },
+                    { value: "port-harcourt", label: "Port Harcourt" },
+                    { value: "enugu", label: "Enugu" },
+                    { value: "oyo", label: "Oyo" },
+                    { value: "kaduna", label: "Kaduna" },
+                  ]}
+                  placeholder="City of Residence"
+                />
 
                 <Button size={"lg"} onPress={() => setActiveStep(3)}>
                   Next
@@ -274,6 +233,55 @@ const Tier3Screen = () => {
               </StepperStepContent>
 
               <StepperStepContent className="gap-6" step={3}>
+                <CustomSelect
+                  options={[
+                    { label: "University of Lagos", value: "unilag" },
+                    { label: "University of Ibadan", value: "ui" },
+                    { label: "Ahmadu Bello University", value: "abu" },
+                    { label: "University of Nigeria", value: "unn" },
+                    { label: "Obafemi Awolowo University", value: "oau" },
+                    { label: "Lagos State University", value: "lasu" },
+                  ]}
+                  placeholder="Select school"
+                />
+                <CustomSelect
+                  options={[
+                    { label: "Faculty of Engineering", value: "engineering" },
+                    { label: "Faculty of Science", value: "science" },
+                    { label: "Faculty of Arts", value: "arts" },
+                    { label: "Faculty of Law", value: "law" },
+                    { label: "Faculty of Medicine", value: "medicine" },
+                    {
+                      label: "Faculty of Social Sciences",
+                      value: "social-sciences",
+                    },
+                    { label: "Faculty of Education", value: "education" },
+                    { label: "Faculty of Business", value: "business" },
+                  ]}
+                  placeholder="Select Faculty"
+                />
+                <CustomSelect
+                  options={[
+                    { label: "100 Level", value: "100" },
+                    { label: "200 Level", value: "200" },
+                    { label: "300 Level", value: "300" },
+                    { label: "400 Level", value: "400" },
+                    { label: "500 Level", value: "500" },
+                  ]}
+                  placeholder="Select Level"
+                />
+                <TextField
+                  InputProps={{
+                    placeholder: "Year of Graduation",
+                    keyboardType: "numeric",
+                  }}
+                />
+
+                <Button size={"lg"} onPress={() => setActiveStep(4)}>
+                  Next
+                </Button>
+              </StepperStepContent>
+              <StepperStepContent className="gap-6" step={4}>
                 <CustomSelect
                   label="Fund Account Instantly"
                   options={[
@@ -295,60 +303,29 @@ const Tier3Screen = () => {
                   }}
                 />
                 <FileInput
-                  label="Kid's Birth Certificate"
+                  label="Passport Photograph"
                   onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
+                  maxFileSize={1048576}
                   acceptedTypes={["pdf", "jpg", "png"]}
                 />
                 <FileInput
-                  label="Kid's Passport Photograph"
+                  label="Signature"
                   onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
+                  maxFileSize={1048576}
                   acceptedTypes={["pdf", "jpg", "png"]}
                 />
                 <FileInput
-                  label="Parent's Passport Photograph"
+                  label="School ID"
                   onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
+                  maxFileSize={1048576}
                   acceptedTypes={["pdf", "jpg", "png"]}
                 />
                 <FileInput
-                  label="Parent's Signature"
+                  label="Other ID"
                   onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
+                  maxFileSize={1048576}
                   acceptedTypes={["pdf", "jpg", "png"]}
                 />
-                <FileInput
-                  label="Parent's ID"
-                  onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
-                  acceptedTypes={["pdf", "jpg", "png"]}
-                />
-                <FileInput
-                  label="Parent's Utility Bill"
-                  onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
-                  acceptedTypes={["pdf", "jpg", "png"]}
-                />
-                <FileInput
-                  label="KYC"
-                  onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
-                  acceptedTypes={["pdf", "jpg", "png"]}
-                />
-                <FileInput
-                  label="EDD"
-                  onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
-                  acceptedTypes={["pdf", "jpg", "png"]}
-                />
-                <FileInput
-                  label="Risk Assessment form"
-                  onFileSelect={(files) => console.log(files)}
-                  maxFileSize={2097152}
-                  acceptedTypes={["pdf", "jpg", "png"]}
-                />
-
                 <Button
                   size={"lg"}
                   className="my-4"

@@ -100,6 +100,7 @@ export const StepperStep: React.FC<StepperStepProps> = ({
     if (totalSteps <= 2) return "w-28";
     if (totalSteps === 3) return "w-28";
     if (totalSteps === 4) return "w-24";
+    if (totalSteps === 5) return "w-12";
     return "w-28";
   };
 

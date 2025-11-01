@@ -586,13 +586,6 @@ export const Jaiz3AccountData: PageItem[] = [
   {
     id: 2,
     icon: <PieIcon width={44} height={44} />,
-    route: "/accounts/open/jaiz3/tier2" as const,
-    text: "Tier 2 - Jaiz 3 Account",
-    keywords: ["Tier 2", "jaiz 3", "account"],
-  },
-  {
-    id: 3,
-    icon: <PieIcon width={44} height={44} />,
     route: "/accounts/open/jaiz3/tier3" as const,
     text: "Tier 3 - Jaiz 3 Account",
     keywords: ["Tier 3", "jaiz 3", "account"],
