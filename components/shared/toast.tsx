@@ -61,7 +61,7 @@ export const Toast: React.FC<ToastProps> = ({
         zIndex: 9999,
       }}
     >
-      <View className="p-4 bg-white shadow-lg rounded-2xl">
+      <View className="p-4 bg-gray-200 shadow-lg rounded-2xl">
         <View className="flex-row items-center gap-3">
           <View className="flex-1">
             <Text className="text-sm text-gray-600">{message}</Text>

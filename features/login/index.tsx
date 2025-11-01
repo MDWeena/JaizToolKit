@@ -1,29 +1,29 @@
-import { FaceIdIcon } from '@/assets/images/svgs/login-icons';
-import Logo from '@/assets/images/svgs/logo';
-import { useToast } from '@/components/shared';
-import { Button } from '@/components/ui/button';
-import { TextField } from '@/components/ui/input';
-import { useBottomSheet } from '@/contexts/BottomSheetContext';
-import { useBiometrics } from '@/hooks/useBiometrics';
-import { login } from '@/services/auth.service';
-import { useAuthStore } from '@/store/auth.store';
-import { Ionicons } from '@expo/vector-icons';
-import { useMutation } from '@tanstack/react-query';
-import * as LocalAuthentication from 'expo-local-authentication';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { FaceIdIcon } from "@/assets/images/svgs/login-icons";
+import Logo from "@/assets/images/svgs/logo";
+import { useToast } from "@/components/shared";
+import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/ui/input";
+import { Text } from "@/components/ui/Text";
+import { useBottomSheet } from "@/contexts/BottomSheetContext";
+import { useBiometrics } from "@/hooks/useBiometrics";
+import { login } from "@/services/auth.service";
+import { useAuthStore } from "@/store/auth.store";
+import { Ionicons } from "@expo/vector-icons";
+import { useMutation } from "@tanstack/react-query";
+import * as LocalAuthentication from "expo-local-authentication";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   Dimensions,
   Pressable,
-  Text,
   TouchableWithoutFeedback,
   View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import BiometricsBottomSheet from './components/biometrics-bottom-sheet';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import BiometricsBottomSheet from "./components/biometrics-bottom-sheet";
 
-const { height } = Dimensions.get('screen');
+const { height } = Dimensions.get("screen");
 
 type Inputs = {
   staffId: string;
@@ -32,12 +32,13 @@ type Inputs = {
 
 const LoginScreen = () => {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [hasOpenedBiometricsConfigSheet, setHasOpenedBiometricsConfigSheet] =
+    useState(false);
+
   const { authMethods, bioAuth, isConfigured } = useBiometrics();
   const { setUser } = useAuthStore();
   const { showBottomSheet } = useBottomSheet();
-  const [hasOpenedBiometricsConfigSheet, setHasOpenedBiometricsConfigSheet] =
-    useState(false);
   const { showToast } = useToast();
 
   const {
@@ -45,49 +46,74 @@ const LoginScreen = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
-    defaultValues: {},
+    defaultValues: {
+      staffId: "",
+      password: "",
+    },
   });
 
   const onSuccess = () => {
-    router.push('/(tabs)/(home)');
+    router.push("/(tabs)/(home)");
   };
 
   const { mutateAsync: _login, isPending: loggingIn } = useMutation({
-    mutationKey: ['auth', 'login'],
+    mutationKey: ["auth", "login"],
     mutationFn: login,
-    onSuccess(data) {
-      setUser({ ...data.data.user, accessToken: data.data.token });
+    onSuccess(response) {
+      if (!response?.success) {
+        showToast({
+          message: response?.message ?? "Login failed. Please try again.",
+          linkText: "",
+          onLinkPress: () => {},
+        });
+        return;
+      }
+
+      const payload = response?.data?.data;
+      if (!payload?.user || !payload?.token) {
+        showToast({
+          message: "Unable to complete login.",
+          linkText: "",
+          onLinkPress: () => {},
+        });
+        return;
+      }
+
+      setUser({ ...payload.user, accessToken: payload.token });
+
       showToast({
-        message: 'Logged in successfully!',
-        linkText: '',
+        message: "Logged in successfully!",
+        linkText: "",
         onLinkPress: () => {},
       });
+
       if (!isConfigured && !hasOpenedBiometricsConfigSheet) {
         setHasOpenedBiometricsConfigSheet(true);
         showBottomSheet(<BiometricsBottomSheet onSuccess={onSuccess} />);
         return;
       }
+
       onSuccess();
     },
-    onError(error) {
+    onError(error: any) {
+      const message =
+        error?.message ||
+        "Unable to log in at the moment. Please check your internet connection.";
       showToast({
-        message: error?.message,
-        linkText: '',
+        message,
+        linkText: "",
         onLinkPress: () => {},
       });
     },
   });
 
-  const onSubmit = (e: Inputs) => {
-    _login({ staffid: e.staffId, password: e.password });
+  const onSubmit = async (formData: Inputs) => {
+    await _login({ staffid: formData.staffId, password: formData.password });
   };
 
   const onBiometricClick = async () => {
     const result = await bioAuth();
-
-    if (result.success) {
-      onSuccess();
-    }
+    if (result.success) onSuccess();
   };
 
   return (
@@ -96,63 +122,57 @@ const LoginScreen = () => {
         className="flex items-center justify-center flex-1 z-1"
         style={{ height }}
       >
+        {/* Logo and heading */}
         <Logo />
-
-        <Text className="!mt-3 text-[1.5rem] font-[500] text-center">
+        <Text className="!mt-3 text-[1.5rem] font-interMedium text-center">
           Welcome!
         </Text>
         <Text className="mt-3 text-center font-light text-[1.2rem] text-[#2F3036CC] mb-8">
           Kindly login with your system credentials
         </Text>
 
+        {/* Staff ID Field */}
         <Controller
           name="staffId"
           control={control}
           rules={{
-            required: {
-              value: true,
-              message: 'This field is required',
-            },
+            required: { value: true, message: "This field is required" },
           }}
-          render={({ field: { onChange, onBlur, value } }) => {
-            return (
-              <TextField
-                className="!mt-5 w-full"
-                inputPrefix={
-                  <Ionicons name="mail-outline" color={'#00000040'} size={25} />
-                }
-                InputProps={{
-                  placeholder: 'Staff ID',
-                  value: value,
-                  onChangeText: onChange,
-                  onBlur: onBlur,
-                }}
-                helperText={errors?.staffId?.message}
-              />
-            );
-          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              className="!mt-5 w-full"
+              inputPrefix={
+                <Ionicons name="mail-outline" color={"#00000040"} size={25} />
+              }
+              InputProps={{
+                placeholder: "Staff ID",
+                value: value ?? "",
+                onChangeText: onChange,
+                onBlur: onBlur,
+              }}
+              helperText={errors?.staffId?.message}
+            />
+          )}
         />
 
+        {/* Password Field */}
         <Controller
+          name="password"
           control={control}
           rules={{
-            required: {
-              value: true,
-              message: 'this field is required',
-            },
+            required: { value: true, message: "This field is required" },
             minLength: {
               value: 8,
-              message: 'password must not be less than 8 characters',
+              message: "Password must not be less than 8 characters",
             },
           }}
-          name="password"
           render={({ field: { onChange, onBlur, value } }) => (
             <TextField
               className="!mt-5 w-full"
               inputPrefix={
                 <Ionicons
                   name="lock-closed-outline"
-                  color={'#00000040'}
+                  color={"#00000040"}
                   size={25}
                 />
               }
@@ -161,39 +181,42 @@ const LoginScreen = () => {
                   onPress={() => setShowPassword((prev) => !prev)}
                 >
                   <Ionicons
-                    name={showPassword ? 'eye' : 'eye-off-outline'}
-                    color={'#00000040'}
+                    name={showPassword ? "eye" : "eye-off-outline"}
+                    color={"#00000040"}
                     size={25}
                   />
                 </TouchableWithoutFeedback>
               }
               InputProps={{
-                placeholder: 'Password',
-                value: value,
+                placeholder: "Password",
+                value: value ?? "",
                 onChangeText: onChange,
-                onBlur,
-                keyboardType: 'visible-password',
-                secureTextEntry: showPassword ? false : true,
+                onBlur: onBlur,
+                keyboardType: "visible-password",
+                secureTextEntry: !showPassword,
               }}
               helperText={errors?.password?.message}
             />
           )}
         />
 
+        {/* Login Button */}
         <Button
           loading={loggingIn}
           onPress={(e) => !loggingIn && handleSubmit(onSubmit)(e)}
           className="mt-24 !min-w-full"
+          size={"lg"}
         >
           <Text className="text-white font-bold">Log In</Text>
         </Button>
 
-        {isConfigured && authMethods?.length != 0 && (
+        {/* Biometrics Login */}
+        {isConfigured && authMethods?.length > 0 && (
           <>
             <View className="my-6 flex items-center gap-3 flex-row">
-              <View className="h-[.8px] flex-1 bg-gray-300"></View>
+              <View className="h-[.8px] flex-1 bg-gray-300" />
               <Text className="text-gray-500">or Login with</Text>
-              <View className="h-[.8px] flex-1 bg-gray-300"></View>
+              <View className="h-[.8px] flex-1 bg-gray-300" />
             </View>
 
             <View className="flex-row items-center justify-center gap-4">
@@ -201,7 +224,7 @@ const LoginScreen = () => {
                 LocalAuthentication.AuthenticationType.FINGERPRINT
               ) && (
                 <View>
-                  <Pressable onPress={() => onBiometricClick()}>
+                  <Pressable onPress={onBiometricClick}>
                     <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
                       <Ionicons name="finger-print-outline" size={25} />
                     </View>
@@ -211,11 +234,12 @@ const LoginScreen = () => {
                   </Text>
                 </View>
               )}
+
               {authMethods.includes(
                 LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
               ) && (
                 <View>
-                  <Pressable onPress={() => onBiometricClick()}>
+                  <Pressable onPress={onBiometricClick}>
                     <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
                       <FaceIdIcon />
                     </View>

@@ -2,12 +2,12 @@ import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import {
-  Pressable,
-  type PressableStateCallbackType,
-  type PressableProps as RNPressableProps,
-  Text,
-  View,
-  type ViewStyle,
+    Pressable,
+    type PressableStateCallbackType,
+    type PressableProps as RNPressableProps,
+    Text,
+    View,
+    type ViewStyle,
 } from 'react-native';
 
 import { FontAwesome } from '@expo/vector-icons';
@@ -28,7 +28,7 @@ export const buttonVariants = cva(
       size: {
         default: 'h-12 px-4',
         sm: 'h-10 px-3',
-        lg: 'h-14 px-6',
+        lg: 'h-16 px-6',
         icon: 'h-12 w-12',
       },
       selected: {

@@ -44,7 +44,7 @@ const BiometricsBottomSheet: FC<Props> = ({ onSuccess }) => {
             }
           />
         </View>
-        <Text className="text-2xl font-[500] text-center text-grey-900 mt-6">
+        <Text className="text-2xl font-interMedium text-center text-grey-900 mt-6">
           {state === 'enable' ? (
             <>Enable {idText}</>
           ) : state === 'failed' ? (

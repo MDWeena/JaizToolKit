@@ -27,8 +27,16 @@ export const login = async (body: LoginData) => {
       body
     );
 
-    return response?.data;
+    return {
+      success: true,
+      data: response.data,
+    };
   } catch (error: any) {
-    throw new Error(error?.response?.data?.message);
+    console.log('[Login Error]', error);
+
+    return {
+      success: false,
+      message: error?.message ?? 'Unable to complete login.',
+    };
   }
 };

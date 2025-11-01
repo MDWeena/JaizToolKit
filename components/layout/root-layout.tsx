@@ -59,7 +59,7 @@ function RootLayoutNav() {
   const isAuthenticated = !!user;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, paddingTop: 20 }}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <ToastProvider>

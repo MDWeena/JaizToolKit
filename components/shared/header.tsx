@@ -6,10 +6,10 @@ import React from 'react';
 import {
   Image,
   ImageSourcePropType,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Text } from '../ui/Text';
 
 interface HeaderProps {
   profileImage?: ImageSourcePropType;
@@ -37,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   const { colorScheme } = useTheme();
 
   const mainText = userName ? `Hello, ${userName}` : title;
-  const secondaryText = userName ? `Finacle ID: ${userId}` : subtitle;
+  const secondaryText = userName ? `User ID: ${userId}` : subtitle;
 
   return (
     <View className="flex-row items-center gap-4 justify-between mb-4">
