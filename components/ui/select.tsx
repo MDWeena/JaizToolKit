@@ -144,9 +144,9 @@ const Select = React.forwardRef<View, SelectProps>(
         >
           <Text
             className={cn(
-              'text-base flex-1',
-              !selectedValue && 'text-gray',
-              'text-gray-400'
+              'text-xl px-2 flex-1',
+              !selectedValue && 'text-grey-900',
+              'text-grey-600'
             )}
             numberOfLines={1}
           >
@@ -226,7 +226,7 @@ const SelectItem = React.forwardRef<typeof Pressable, SelectItemProps>(
         disabled={disabled}
         onPress={handlePress}
         className={cn(
-          'flex-row h-14 items-center justify-between px-4 py-2 active:bg-accent/50',
+          'flex-row h-14 items-center justify-between px-6 py-2 active:bg-accent/50',
           isSelected ? 'bg-accent' : '',
           disabled && 'opacity-50',
           className
@@ -237,8 +237,8 @@ const SelectItem = React.forwardRef<typeof Pressable, SelectItemProps>(
           className={cn(
             'text-base',
             isSelected
-              ? 'text-accent-foreground font-medium'
-              : 'text-foreground'
+              ? 'text-grey-900 font-medium'
+              : 'text-grey-600'
           )}
         >
           {children}
@@ -258,7 +258,7 @@ const SelectLabel = React.forwardRef<Text, SelectLabelProps>(
       <Text
         ref={ref}
         className={cn(
-          'px-3 py-2 text-sm font-semibold text-foreground',
+          'px-4 py-2 text-xl font-semibold text-red-500',
           className
         )}
         {...props}
@@ -286,3 +286,4 @@ const SelectSeparator = React.forwardRef<View, SelectSeparatorProps>(
 SelectSeparator.displayName = 'SelectSeparator';
 
 export { Select, SelectGroup, SelectItem, SelectLabel, SelectSeparator };
+

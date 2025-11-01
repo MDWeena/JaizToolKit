@@ -30,8 +30,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   onValueChange,
   placeholder = 'Select an option',
   className = '',
-  disabled = false,
-  groupLabel,
+  disabled = false
 }) => {
   return (
     <View className={`mb-4 ${className}`}>
@@ -48,9 +47,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         triggerClassName="rounded-xl px-3 py-2 min-h-[60px]"
       >
         <SelectGroup>
-          {groupLabel && <SelectLabel>{groupLabel}</SelectLabel>}
           {options.map((option, index) => (
-            <SelectItem key={index} value={option.value}>
+            <SelectItem key={index} className='flex-1' value={option.value}>
               {option.label}
             </SelectItem>
           ))}

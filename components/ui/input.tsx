@@ -75,7 +75,7 @@ const TextField: FC<Props> = ({
           onBlur={() => setInputFocused(false)}
           autoCapitalize={'none'}
           className={cn(
-            'py-3 transparent text-[1.2rem] placeholder:text-gray',
+            'py-5 transparent text-[1.2rem] placeholder:text-gray',
             props.multiline && 'min-h-[120px]',
             Platform.OS === 'ios' && 'py-4',
             InputProps?.className
