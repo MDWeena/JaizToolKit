@@ -2,13 +2,15 @@ import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import {
-  Pressable,
-  type PressableStateCallbackType,
-  type PressableProps as RNPressableProps,
-  Text,
-  View,
-  type ViewStyle,
+    Pressable,
+    type PressableStateCallbackType,
+    type PressableProps as RNPressableProps,
+    Text,
+    View,
+    type ViewStyle,
 } from 'react-native';
+
+import { FontAwesome } from '@expo/vector-icons';
 
 export const buttonVariants = cva(
   'flex-row items-center justify-center rounded-lg',
@@ -26,7 +28,7 @@ export const buttonVariants = cva(
       size: {
         default: 'h-12 px-4',
         sm: 'h-10 px-3',
-        lg: 'h-14 px-6',
+        lg: 'h-16 px-6',
         icon: 'h-12 w-12',
       },
       selected: {
@@ -61,11 +63,21 @@ export interface ButtonProps
   style?: ViewStyle;
   asChild?: boolean;
   selected?: boolean;
+  loading?: boolean;
 }
 
 const Button = React.forwardRef<View, ButtonProps>(
   (
-    { className, variant, size, selected, asChild = false, children, ...props },
+    {
+      className,
+      variant,
+      size,
+      selected,
+      asChild = false,
+      children,
+      loading,
+      ...props
+    },
     ref
   ) => {
     const [isPressed, setIsPressed] = React.useState(false);
@@ -84,12 +96,25 @@ const Button = React.forwardRef<View, ButtonProps>(
               state.pressed || isPressed ? 'opacity-80' : ''
             }`}
           >
-            {typeof children === 'string' ? (
-              <Text className="text-white font-[500]">{children}</Text>
-            ) : typeof children === 'function' ? (
-              children(state)
+            {loading ? (
+              <>
+                <FontAwesome
+                  name="spinner"
+                  size={18}
+                  className="animate-spin"
+                  color={'white'}
+                />
+              </>
             ) : (
-              children
+              <>
+                {typeof children === 'string' ? (
+                  <Text className="text-white font-[500]">{children}</Text>
+                ) : typeof children === 'function' ? (
+                  children(state)
+                ) : (
+                  children
+                )}
+              </>
             )}
           </View>
         )}

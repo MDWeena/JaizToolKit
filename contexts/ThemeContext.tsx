@@ -21,7 +21,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const system = useSystemColorScheme() ?? 'light';
-    const [theme, setThemeState] = useState<ThemeMode>('system');
+    const [theme, setThemeState] = useState<ThemeMode>('light');
     const [isLoading, setIsLoading] = useState(true);
 
     // Load theme preference on mount
