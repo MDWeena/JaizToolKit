@@ -16,7 +16,7 @@ type FunctionCardProps = {
 };
 
 const FunctionCard = React.memo<FunctionCardProps>(({ func, onPress }) => (
-  <Card icon={func.icon} text={func.text} onPress={() => onPress(func.route)} />
+  <Card icon={func.icon} text={func.text} className={func.class} onPress={() => onPress(func.route)} />
 ));
 FunctionCard.displayName = 'FunctionCard';
 

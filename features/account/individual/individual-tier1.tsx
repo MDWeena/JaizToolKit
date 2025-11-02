@@ -271,6 +271,7 @@ const Tier1Screen = () => {
                         keyboardType: "phone-pad",
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizePhone(text)),
+
                       }}
                       helperText={errors.mobileNumber?.message as string}
                     />

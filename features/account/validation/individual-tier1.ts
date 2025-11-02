@@ -9,8 +9,8 @@ export const step1Schema = z.object({
     .string()
     .trim()
     .min(10, "Enter at least 10 digits")
-    .max(10, "Phone number is too long")
-    .regex(/^[0-9+\s()-]+$/, "Invalid phone number"),
+    .max(11, "Phone number must not be more than 11 digits")
+    .regex(/^[0-9+\s()-]+$/, "Invalid phone number").transform(val => sanitizePhone(val)),
   otp: z
     .string()
     .length(6, "OTP must be 6 digits")
@@ -155,7 +155,7 @@ export const sanitizePhone = (input: string) =>
   input.replace(/[^0-9+\s()-]/g, "");
 
 export const sanitizeName = (input: string) =>
-  input.replace(/\s+/g, " ").trimStart();
+  input.replace(/\s+/g, " ").trim();
 
 export const sanitizeBVN = (input: string) => input.replace(/\D/g, "");
 

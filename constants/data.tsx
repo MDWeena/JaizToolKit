@@ -374,6 +374,7 @@ export const functionsData = [
     text: "Cards",
     route: "/functions/cards" as const,
     keywords: ["link", "pin", "card"],
+    class: "border-grey-200",
   },
   {
     id: 2,
@@ -391,7 +392,8 @@ export const functionsData = [
       "service",
       "requests",
     ],
-  },
+    class: "border-grey-200",
+    },
 
   {
     id: 3,
@@ -399,7 +401,8 @@ export const functionsData = [
     text: "Link BVN/NIN",
     route: "/functions/link-ids" as const,
     keywords: ["bvn", "nin", "link", "identification", "id"],
-  },
+    class: "border-grey-200",
+    },
 
   {
     id: 4,
@@ -407,6 +410,7 @@ export const functionsData = [
     text: "Facility Repayment",
     route: "/functions/repayment" as const,
     keywords: ["facility", "repayment"],
+    class: "border-grey-200",
   },
 ];
 
@@ -468,8 +472,8 @@ export const accounts: PageItem[] = [
     id: 1,
     icon: <OpenAccountIcon width={44} height={44} />,
     text: "Open Account",
-    // route: "/accounts/open/officer-details" as const,
-    route: "/accounts/open" as const,
+    route: "/accounts/open/officer-details" as const,
+    // route: "/accounts/open" as const,
     keywords: ["open account", "account"],
     class: "border-grey-200",
   },
