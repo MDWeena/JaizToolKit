@@ -11,6 +11,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useTheme } from "./ThemeContext";
 
 type CornerRadiusOption = "large" | "medium" | "small";
 
@@ -43,6 +44,8 @@ interface BottomSheetProviderProps {
 export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
   children,
 }) => {
+  const { colorScheme } = useTheme();
+  const isDark = colorScheme === "dark";
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [snapPoints, setSnapPoints] = useState<string[]>(["25%", "50%"]);
   const [bottomSheetComponent, setBottomSheetComponent] = useState<ReactNode>();
@@ -85,13 +88,15 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         backgroundStyle={{
-          backgroundColor: "#ffffff",
+          backgroundColor: isDark ? "#181820" : "#ffffff",
           borderTopLeftRadius:
             options.cornerRadius === "large" ? 50 : options.cornerRadius === "medium" ? 30 : undefined,
           borderTopRightRadius:
             options.cornerRadius === "large" ? 50 : options.cornerRadius === "medium" ? 30 : undefined,
         }}
-        handleIndicatorStyle={{ backgroundColor: "#d1d5db" }}
+        handleIndicatorStyle={{
+          backgroundColor: isDark ? "#53587a" : "#dde0e1",
+        }}
         containerStyle={{
           backgroundColor: bottomSheetComponent ? "rgba(0,0,0,0.5)" : undefined,
         }}

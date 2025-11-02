@@ -471,7 +471,7 @@ export const accounts: PageItem[] = [
     // route: "/accounts/open/officer-details" as const,
     route: "/accounts/open" as const,
     keywords: ["open account", "account"],
-    class: "border-white",
+    class: "border-grey-200",
   },
   {
     id: 2,
@@ -479,7 +479,7 @@ export const accounts: PageItem[] = [
     text: "Verify Account",
     route: "/accounts/verify" as const,
     keywords: ["verify account", "account"],
-    class: "border-white",
+    class: "border-grey-200",
   },
 ];
 

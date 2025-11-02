@@ -59,7 +59,7 @@ const HomeScreen = () => {
             hasQuery && !hasResults ? (
               <></>
             ) : (
-              <Text className="my-4 text-xl font-medium">Categories</Text>
+              <Text className="my-4 text-xl text-text font-interMedium">Categories</Text>
             )
           }
           renderItem={renderItem}
@@ -84,7 +84,7 @@ const HomeScreen = () => {
 
         {hasQuery ? null : (
           <>
-            <Text className="my-4 text-xl font-medium">Updates</Text>
+            <Text className="my-4 text-xl text-text font-interMedium">Updates</Text>
             <AutoSlider height={120} />
           </>
         )}

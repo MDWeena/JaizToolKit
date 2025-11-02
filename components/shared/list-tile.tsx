@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
 import Feather from "@expo/vector-icons/Feather";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Animated, Pressable, View } from "react-native";
+import { Text } from "../ui/Text";
 
 type Position = "start" | "end";
 
@@ -93,7 +94,7 @@ const ListTileComponent: React.FC<ListTileProps> = ({
         <View className='flex-1 gap-1'>
           <Text
             className={cn(
-              "text-[1.1rem] text-black leading-tight",
+              "text-[1.1rem] text-text leading-tight",
               titleClassName
             )}
             numberOfLines={2}
@@ -146,21 +147,44 @@ const Switch: React.FC<{
   onValueChange: (value: boolean) => void;
   disabled?: boolean;
 }> = ({ value, onValueChange, disabled }) => {
+  const animatedValue = useRef(new Animated.Value(value ? 1 : 0)).current;
+
+  const thumbTranslateX = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 14.5],
+  });
+
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: value ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }, [value, animatedValue]);
+
   return (
     <Pressable
       onPress={() => !disabled && onValueChange(!value)}
-      className={cn(
-        "w-12 h-6 rounded-full p-1",
-        value ? "bg-primary" : "bg-gray-300",
-        disabled && "opacity-50"
-      )}
+      disabled={disabled}
+      accessibilityRole="switch"
+      data-state={value ? "checked" : "unchecked"}
+      className={cn("relative w-12 h-8 rounded-full", 
+        value
+          ? "bg-primary"
+          : "bg-grey-300",
+        disabled && "opacity-50")}
     >
-      <View
-        className={cn(
-          "w-4 h-4 bg-white rounded-full",
-          value ? "self-end" : "self-start"
-        )}
-      />
+    
+        <Animated.View
+          className="w-7 h-7 bg-white rounded-full absolute"
+          style={{
+            transform: [{ translateX: thumbTranslateX }],
+            top: "50%",
+            marginTop: -12,
+            marginLeft: 2,
+            marginRight: 2,
+          }}
+        />
     </Pressable>
   );
 };

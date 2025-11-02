@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Header } from "@/components/shared/header";
@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 import Images from "@/constants/Images";
 import { useBottomSheet } from "@/contexts/BottomSheetContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { Text } from "@/components/ui/Text";
+import { BiometricsIcon, HelpIcon, ThemeIcon } from "@/assets/images/svgs/settings";
+import { useAuthStore } from "@/store/auth.store";
 
 const ThemeSelector: React.FC<{
   currentTheme: "system" | "light" | "dark";
@@ -42,7 +45,7 @@ const ThemeSelector: React.FC<{
             className='h-16'
           >
             <View className='flex-row items-center justify-between w-full px-4'>
-              <Text className='text-lg font-bold text-grey-900'>
+              <Text className='text-lg font-bold text-text'>
                 {option.charAt(0).toUpperCase() + option.slice(1)}
               </Text>
               {selectedTheme === option ? (
@@ -63,7 +66,7 @@ const ThemeSelector: React.FC<{
         className='h-14 rounded-2xl'
         onPress={handleApply}
       >
-        <Text className='text-lg font-semibold text-white'>Apply</Text>
+        <Text className='text-lg font-interSemiBold text-text-foreground'>Apply</Text>
       </Button>
     </View>
   );
@@ -71,6 +74,7 @@ const ThemeSelector: React.FC<{
 
 const SettingsScreen = () => {
   const [enabled, setEnabled] = useState(false);
+  const { user } = useAuthStore();
   const { theme: appTheme, setTheme: setAppTheme } = useTheme();
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
 
@@ -90,20 +94,20 @@ const SettingsScreen = () => {
 
   return (
     <>
-      <SafeAreaView style={{ paddingTop: 20 }} className='flex-1 bg-background'>
+      <SafeAreaView className='flex-1 bg-background'>
         <StatusBar style='auto' />
         <ScrollView className='flex-1 px-5'>
           <Header title='Settings' />
           <Header
-            title='Michael'
-            subtitle='Michael@example.com'
+            title={user?.name ?? ''}
+            subtitle={user?.email ?? ''}
             userNameClassName='text-xl'
             profileImage={Images.profileImagePlaceholder}
           />
-          <View className='bg-grey-0'>
+          <View className='bg-grey-0 border-grey-200 border rounded-lg'>
             <ListTile
               title='Enable Biometrics'
-              leading={<Feather name='bell' size={24} />}
+              leading={<BiometricsIcon />}
               accessories={[
                 {
                   component: (
@@ -119,7 +123,7 @@ const SettingsScreen = () => {
             />
             <ListTile
               title='Theme'
-              leading={<Feather name='bell' size={24} />}
+              leading={<ThemeIcon />}
               trailing={
                 <View className='flex-row items-center'>
                   <Text>
@@ -132,7 +136,7 @@ const SettingsScreen = () => {
             />
             <ListTile
               title='Help and Support'
-              leading={<Feather name='bell' size={24} />}
+              leading={<HelpIcon />}
             />
           </View>
         </ScrollView>

@@ -59,7 +59,7 @@ const Jaiz3AccountScreen = () => {
           removeClippedSubviews={true}
           maxToRenderPerBatch={10}
           windowSize={10}
-          className='rounded-lg bg-grey-0'
+          className='rounded-lg bg-grey-0 border-grey-200 border'
           initialNumToRender={6}
           ListEmptyComponent={
             hasQuery && !hasResults ? (

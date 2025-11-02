@@ -5,19 +5,19 @@ import {
     Pressable,
     type PressableStateCallbackType,
     type PressableProps as RNPressableProps,
-    Text,
     View,
     type ViewStyle,
 } from 'react-native';
 
 import { FontAwesome } from '@expo/vector-icons';
+import { Text } from './Text';
 
 export const buttonVariants = cva(
   'flex-row items-center justify-center rounded-lg',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground shadow-sm',
+        default: 'bg-primary text-text-foreground shadow-sm',
         destructive: 'bg-destructive text-destructive-foreground shadow-sm',
         outline: 'border border-grey-300 bg-transparent text-foreground',
         secondary: 'bg-secondary text-secondary-foreground shadow-sm',
@@ -108,7 +108,7 @@ const Button = React.forwardRef<View, ButtonProps>(
             ) : (
               <>
                 {typeof children === 'string' ? (
-                  <Text className="text-white font-[500]">{children}</Text>
+                  <Text className="text-text-foreground font-[500]">{children}</Text>
                 ) : typeof children === 'function' ? (
                   children(state)
                 ) : (

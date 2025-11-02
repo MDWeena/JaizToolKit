@@ -1,7 +1,9 @@
 import { cn } from "@/lib/utils"
 import { Ionicons } from "@expo/vector-icons"
 import * as React from "react"
-import { Pressable, Text } from "react-native"
+import { Pressable } from "react-native"
+import { Text } from "./Text"
+import { TextProps as RNTextProps } from "react-native"
 
 interface CheckboxProps extends Omit<React.ComponentPropsWithoutRef<typeof Pressable>, 'children'> {
   checked?: boolean
@@ -11,9 +13,11 @@ interface CheckboxProps extends Omit<React.ComponentPropsWithoutRef<typeof Press
   id?: string
 }
 
-interface CheckboxLabelProps extends React.ComponentPropsWithoutRef<typeof Text> {
-  disabled?: boolean
+interface CheckboxLabelProps extends RNTextProps {
+  className?: string
+    disabled?: boolean
   htmlFor?: string
+  children?: React.ReactNode
 }
 
 const Checkbox = React.forwardRef<
@@ -86,7 +90,6 @@ const CheckboxLabel = React.forwardRef<
 >(({ className, disabled, htmlFor, ...props }, ref) => {
   return (
     <Text
-      ref={ref}
       className={cn(
         "text-sm text-grey-600 ml-3",
         disabled && "text-grey-300",
