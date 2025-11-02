@@ -1,7 +1,8 @@
-import { cn } from '@/lib/utils';
-import { router } from 'expo-router';
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
+import { Link } from "expo-router";
+
+import { Checkbox, CheckboxLabel } from "./checkbox";
 
 interface AgreementModel {
   agree: boolean;
@@ -9,26 +10,17 @@ interface AgreementModel {
 }
 const Agreement = ({ agree, setAgree }: AgreementModel) => {
   return (
-    <View className="flex-row items-center justify-start w-full border-red-400">
-      {/* <Checkbox
-        className={cn(
-          'w-8 px-0 border-[1.5px] rounded-sm',
-          agree && '!border-primary'
-        )}
-        value={agree}
-        onValueChange={() => setAgree(!agree)}
-        color={agree ? '#D94E05' : undefined}
-      /> */}
-      <Text className="ml-2 !text-sm">
-        I agree to the{' '}
-      </Text>
-      <TouchableOpacity onPress={() => router.push('/')}>
-        <Text
-          className="!text-sm underline !text-primary"
-        >
+    <View className="flex-row items-center justify-start w-full">
+      <Checkbox id="terms" checked={agree} onCheckedChange={setAgree} />
+      <CheckboxLabel
+        htmlFor="terms"
+        className="flex-row flex items-center justify-start w-full"
+      >
+        I agree to the{" "}
+        <Link href="/" className="underline text-primary font-medium">
           Data Privacy Policy
-        </Text>
-      </TouchableOpacity>
+        </Link>
+      </CheckboxLabel>
     </View>
   );
 };

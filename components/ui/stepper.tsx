@@ -96,16 +96,6 @@ export const StepperStep: React.FC<StepperStepProps> = ({
   const isActive = activeStep >= step;
   const isCompleted = activeStep > step;
 
-  const getConnectorWidth = () => {
-    if (totalSteps <= 2) return "w-28";
-    if (totalSteps === 3) return "w-28";
-    if (totalSteps === 4) return "w-24";
-    if (totalSteps === 5) return "w-12";
-    return "w-28";
-  };
-
-  const connectorWidth = getConnectorWidth();
-
   return (
     <>
       <View className={`flex-column justify-center items-center ${className}`}>
@@ -143,7 +133,7 @@ export const StepperStep: React.FC<StepperStepProps> = ({
       </View>
       {step < totalSteps && showConnector && (
         <View
-          className={`h-[2px] w-40 ${connectorWidth} bg-grey-300`}
+          className={`h-[2px] flex-1 bg-grey-300`}
         />
       )}
     </>
