@@ -1,0 +1,1 @@
+export { default } from '@/features/product/individual/hajj-savings-account';

@@ -60,7 +60,7 @@ const OtpField: FC<Props> = ({ length, onOtpChange }) => {
             value: digit,
             onChangeText: (text) => handleChange(text, index),
             onKeyPress: (e) => handleKeyPress(e, index),
-            autoFocus: index === 0,
+            // autoFocus: index === 0,
             className: "h-[65]"
           }}
         />

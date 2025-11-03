@@ -222,11 +222,19 @@ const Tier1Screen = () => {
           ref={scrollViewRef}
           className="flex-1 px-5"
           keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
+          // keyboardDismissMode="on-drag"
         >
           <Pressable
             hitSlop={20}
-            onPress={() => router.canGoBack() && router.dismissAll()}
+            onPress={() => {
+              if (activeStep === 1) {
+                // If on first step, dismiss all
+                router.canGoBack() && router.back();
+              } else {
+                // Go back to previous step
+                handleBack();
+              }
+            }}
           >
             <Ionicons name="arrow-back" size={25} />
           </Pressable>
@@ -271,12 +279,23 @@ const Tier1Screen = () => {
                         keyboardType: "phone-pad",
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizePhone(text)),
-
+                        autoFocus: true,
                       }}
                       helperText={errors.mobileNumber?.message as string}
                     />
                   )}
                 />
+                <Pressable
+                  onPress={() => {
+                    // Handle OTP send action
+                    console.log("Send OTP");
+                  }}
+                  className="mt-1"
+                >
+                  <Text className="text-xs text-primary underline">
+                    Click to send OTP
+                  </Text>
+                </Pressable>
 
                 <View>
                   <Text className="font-[500] mb-2">OTP</Text>
@@ -441,21 +460,11 @@ const Tier1Screen = () => {
                   )}
                 />
 
-                <View className="flex-row gap-3">
-                  {/* <Button
-                    variant="outline"
-                    onPress={handleBack}
-                    disabled={activeStep === 1}
-                    className="flex-1"
-                  >
-                    <Text className="text-sm font-semibold">Back</Text>
-                  </Button> */}
-                  <Button size={"lg"} onPress={handleNext} className="flex-1">
-                    <Text className="text-sm font-semibold text-primary-foreground">
-                      Next
-                    </Text>
-                  </Button>
-                </View>
+                <Button size={"lg"} onPress={handleNext} className="flex-1">
+                  <Text className="text-sm font-semibold text-primary-foreground">
+                    Next
+                  </Text>
+                </Button>
               </StepperStepContent>
 
               {/* Step 3: Address and Additional Info */}
@@ -600,21 +609,11 @@ const Tier1Screen = () => {
                   </Text>
                 )}
 
-                <View className="flex-row gap-3">
-                  {/* <Button
-                    variant="outline"
-                    onPress={handleBack}
-                    disabled={activeStep === 1}
-                    className="flex-1"
-                  >
-                    <Text className="text-sm font-semibold">Back</Text>
-                  </Button> */}
-                  <Button size={"lg"} onPress={handleNext} className="flex-1">
-                    <Text className="text-sm font-semibold text-primary-foreground">
-                      Next
-                    </Text>
-                  </Button>
-                </View>
+                <Button size={"lg"} onPress={handleNext} className="flex-1">
+                  <Text className="text-sm font-semibold text-primary-foreground">
+                    Next
+                  </Text>
+                </Button>
               </StepperStepContent>
 
               {/* Step 4: Documents and Funding */}
@@ -676,30 +675,20 @@ const Tier1Screen = () => {
                   </Text>
                 )}
 
-                <View className="flex-row gap-3">
-                  <Button
-                    variant="outline"
-                    onPress={handleBack}
-                    disabled={activeStep === 1}
-                    className="flex-1"
-                  >
-                    <Text className="text-sm font-semibold">Back</Text>
-                  </Button>
-                  <Button
-                    size={"lg"}
-                    className="flex-1"
-                    onPress={handleSubmit(onSubmit)}
-                    disabled={submitting}
-                  >
-                    {submitting ? (
-                      <ActivityIndicator color="#fff" />
-                    ) : (
-                      <Text className="text-sm font-semibold text-primary-foreground">
-                        Submit
-                      </Text>
-                    )}
-                  </Button>
-                </View>
+                <Button
+                  size={"lg"}
+                  className="flex-1"
+                  onPress={handleSubmit(onSubmit)}
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text className="text-sm font-semibold text-primary-foreground">
+                      Submit
+                    </Text>
+                  )}
+                </Button>
               </StepperStepContent>
             </StepperContent>
           </Stepper>

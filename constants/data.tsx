@@ -39,7 +39,7 @@ import {
 } from "@/assets/images/svgs/service-requests";
 import { PageItem, PageSection } from "@/types/page";
 import { Use } from "react-native-svg";
-import { id } from "zod/v4/locales";
+import { be, id } from "zod/v4/locales";
 
 export const categoriesData: PageItem[] = [
   {
@@ -131,48 +131,143 @@ export const accountTypeData: PageItem[] = [
   },
 ];
 
+// export const individualAccountsData: PageItem[] = [
+//   {
+//     id: 1,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz Instant Account",
+//     keywords: ["jaiz instant", "instant account", "jaiz"],
+//   },
+//   {
+//     id: 2,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "eAccount",
+//     keywords: ["eaccount", "electronic account"],
+//   },
+//   {
+//     id: 3,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz Target",
+//     keywords: ["jaiz target", "target account"],
+//   },
+//   {
+//     id: 4,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz EasySavers Account",
+//     keywords: ["easysavers", "easy savers", "jaiz"],
+//   },
+//   {
+//     id: 5,
+//     icon: <UserIcon width={44} height={44} />,
+//     text: "Teens Account",
+//     route: "/products/account-type/individual/teens-account" as const,
+//     keywords: ["teens account", "teen", "jaiz"],
+//   },
+//   {
+//     id: 6,
+//     icon: <UserIcon width={44} height={44} />,
+//     text: "Jaiz eSavers",
+//     route: "/products/account-type/individual" as const,
+//     keywords: ["esavers", "jaiz esavers", "savers"],
+//   },
+// ];
+// export const individualAccountsData: PageItem[] = [
+//   {
+//     id: 1,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz Instant Account",
+//     keywords: ["jaiz instant", "instant account", "jaiz"],
+//   },
+//   {
+//     id: 2,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "eAccount",
+//     keywords: ["eaccount", "electronic account"],
+//   },
+//   {
+//     id: 3,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz Target",
+//     keywords: ["jaiz target", "target account"],
+//   },
+//   {
+//     id: 4,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz EasySavers Account",
+//     keywords: ["easysavers", "easy savers", "jaiz"],
+//   },
+//   {
+//     id: 5,
+//     icon: <UserIcon width={44} height={44} />,
+//     text: "Teens Account",
+//     route: "/products/account-type/individual/teens-account" as const,
+//     keywords: ["teens account", "teen", "jaiz"],
+//   },
+//   {
+//     id: 6,
+//     icon: <UserIcon width={44} height={44} />,
+//     text: "Jaiz eSavers",
+//     route: "/products/account-type/individual" as const,
+//     keywords: ["esavers", "jaiz esavers", "savers"],
+//   },
+// ];
 export const individualAccountsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
-    route: "/products/account-type/individual" as const,
-    text: "Jaiz Instant Account",
-    keywords: ["jaiz instant", "instant account", "jaiz"],
+    route: "/products/account-type/individual/tier1" as const,
+    text: "Tier 1",
+    keywords: ["tier 1", "tier one", "jaiz"],
   },
   {
     id: 2,
     icon: <UserIcon width={44} height={44} />,
-    route: "/products/account-type/individual" as const,
-    text: "eAccount",
-    keywords: ["eaccount", "electronic account"],
+    route: "/products/account-type/individual/tier3" as const,
+    text: "Tier 3",
+    keywords: ["tier 3", "tier three", "jaiz"],
   },
   {
     id: 3,
     icon: <UserIcon width={44} height={44} />,
-    route: "/products/account-type/individual" as const,
-    text: "Jaiz Target",
-    keywords: ["jaiz target", "target account"],
+    route: "/products/account-type/individual/current-account" as const,
+    text: " Current Account",
+    keywords: ["current account", "current"],
   },
   {
     id: 4,
     icon: <UserIcon width={44} height={44} />,
-    route: "/products/account-type/individual" as const,
-    text: "Jaiz EasySavers Account",
+    route: "/products/account-type/individual/domicilliary-account" as const,
+    text: "Jaiz Domicilliary Account",
     keywords: ["easysavers", "easy savers", "jaiz"],
   },
   {
     id: 5,
+    icon: <UserIcon width={44} height={44} />,
+    route: "/products/account-type/individual/japsa-term-deposit" as const,
+    text: "JAPSA Term Deposit(JTD)",
+    keywords: ["japsa term deposit", "jtd", "jaiz"],
+  },
+  {
+    id: 6,
     icon: <UserIcon width={44} height={44} />,
     text: "Teens Account",
     route: "/products/account-type/individual/teens-account" as const,
     keywords: ["teens account", "teen", "jaiz"],
   },
   {
-    id: 6,
+    id: 7,
     icon: <UserIcon width={44} height={44} />,
-    text: "Jaiz eSavers",
-    route: "/products/account-type/individual" as const,
-    keywords: ["esavers", "jaiz esavers", "savers"],
+    text: "Hajj Savings Account",
+    route: "/products/account-type/individual/hajj-savings-account" as const,
+    keywords: ["hajj savings account", "hajj", "savings"],
   },
 ];
 
@@ -190,49 +285,6 @@ export const corporateAccountsData: PageItem[] = [
     text: "Jaiz Business",
     route: "/products/account-type/corporate" as const,
     keywords: ["corporate", "account", "jaiz business"],
-  },
-];
-
-export const teenAccountData: PageSection[] = [
-  {
-    id: 1,
-    section: "Description",
-    content: [
-      "Start your children on the road to financial success.",
-      "The Smart Kids Save account is designed to enable parents/guardians save for their children under 18 years of age, whilst also developing a savings culture in them.",
-      "Teaching children the value of savings early can help them develop SMART financial habits for life.",
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-  {
-    id: 2,
-    section: "Target Market",
-    content: [
-      "Minimum opening/account balance of N1,000.00 (One Thousand Naira Only).",
-      "Periodic lodgements can be made into the account through Standing Order/automated direct debits.",
-      "Complimentary invite to SKS Fun events.",
-      "SKS can be converted into a regular savings or current account, with the young saver as an authorized signatory. This is however only after the Smart kid saver has attained the age of 18.",
-      "From the age of 13, an SKS Teen account will be opened for the teenager which comes with a Trendy Teen MasterCard (issued upon Parent’s request) so the child can learn to manage money responsibly.",
-    ],
-    icon: <TargetIcon width={32} height={32} />,
-  },
-  {
-    id: 3,
-    section: "Features & Benefits",
-    content: [
-      "Minimum opening/account balance of N1,000.00 (One Thousand Naira Only).",
-      "Periodic lodgements can be made into the account through Standing Order/automated direct debits.",
-      "Complimentary invite to SKS Fun events.",
-      "SKS can be converted into a regular savings or current account, with the young saver as an authorized signatory. This is however only after the Smart kid saver has attained the age of 18.",
-      "From the age of 13, an SKS Teen account will be opened for the teenager which comes with a Trendy Teen MasterCard (issued upon Parent’s request) so the child can learn to manage money responsibly.",
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-  {
-    id: 4,
-    section: "Documentation",
-    content: [],
-    icon: <DocumentIcon width={32} height={32} />,
   },
 ];
 
@@ -393,7 +445,7 @@ export const functionsData = [
       "requests",
     ],
     class: "border-grey-200",
-    },
+  },
 
   {
     id: 3,
@@ -402,7 +454,7 @@ export const functionsData = [
     route: "/functions/link-ids" as const,
     keywords: ["bvn", "nin", "link", "identification", "id"],
     class: "border-grey-200",
-    },
+  },
 
   {
     id: 4,

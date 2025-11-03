@@ -28,7 +28,7 @@ const AccountTypeScreen = () => {
         <Pressable
           hitSlop={20}
           onPress={() =>
-            router.canGoBack() && router.dismissAll()
+            router.canGoBack() && router.back()
           }
         >
           <Ionicons name="arrow-back" size={25} />
