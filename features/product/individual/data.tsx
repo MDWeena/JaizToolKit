@@ -1,6 +1,5 @@
 import { PageSection } from "@/types/page";
 import { DocumentIcon, TargetIcon } from "@/assets/images/svgs/product-icons";
-import { Card } from "@/components/shared/card";
 
 export const tier1AccountData: PageSection[] = [
   {
