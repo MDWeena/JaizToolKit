@@ -24,6 +24,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         placeholder: placeholder,
         value: value,
         onChangeText: onChangeText,
+        className: "py-3"
       }}
     />
   );

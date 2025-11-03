@@ -5,6 +5,7 @@ const Images = {
   enableTouchId: require('../assets/images/enable-touch-id.png'),
   success: require('../assets/images/success.png'),
   failed: require('../assets/images/failed.png'),
+  successAlert: require('../assets/images/success-alert.png'),
 };
 
 export default Images;

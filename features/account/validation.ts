@@ -5,7 +5,7 @@ export const phoneSchema = z.object({
     .string()
     .trim()
     .min(10, "Enter at least 10 digits")
-    .max(15, "Too long")
+    .max(15, "Phone number must not be more than 15 digits")
     .regex(/^[0-9+\s()-]+$/, "Invalid phone number"),
 });
 
@@ -21,7 +21,7 @@ export const sanitizePhone = (input: string) =>
   input.replace(/[^0-9+\s()-]/g, "");
 
 export const sanitizeName = (input: string) =>
-  input.replace(/\s+/g, " ").trimStart();
+  input.replace(/\s+/g, " ").trim();
 
 export type PhoneForm = z.infer<typeof phoneSchema>;
 export type NameForm = z.infer<typeof nameSchema>;
@@ -47,6 +47,3 @@ export const officerSchema = z.object({
 });
 
 export type OfficerForm = z.infer<typeof officerSchema>;
-export const sanitizeOfficerCode = (s: string) =>
-  s.toUpperCase().replace(/[^A-Za-z0-9-]/g, "");
-export const sanitizeTeamName = (s: string) => s.replace(/\s+/g, " ").trimStart();

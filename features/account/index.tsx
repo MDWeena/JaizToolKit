@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Pressable, ScrollView, Text } from "react-native";
+import { FlatList, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Href, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -47,7 +47,7 @@ const AccountScreen = () => {
           data={filteredAccounts}
           renderItem={({ item }) => (
             <Card
-              className={`!border-none !outline-none ${item.class} items-start`}
+              className={`borderborder-grey-900 ${item.class} items-start`}
               icon={item.icon}
               text={item.text}
               onPress={() => router.navigate(item.route as Href)}

@@ -1,1 +1,1 @@
-export { default } from "@/features/product/teens-account"
+export { default } from "@/features/product/individual/teens-account"

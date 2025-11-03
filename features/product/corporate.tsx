@@ -32,7 +32,7 @@ const CorporateAccountsScreen = () => {
       <ScrollView className='flex-1 px-5'>
         <Pressable
           hitSlop={20}
-          onPress={() => router.canGoBack() && router.dismissAll()}
+          onPress={() => router.canGoBack() && router.back()}
         >
           <Ionicons name='arrow-back' size={25} />
         </Pressable>

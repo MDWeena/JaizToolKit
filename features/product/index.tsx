@@ -29,7 +29,7 @@ const ProductScreen = () => {
   } = useSearch(productsData);
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
   const { isStarred, toggleStar } = useStarred();
-  const { showToast } = useToast();
+  const { showToast, dismissToast } = useToast();
 
   const handleProductStarSheet = useCallback(
     (item: PageItem) => {
@@ -58,7 +58,7 @@ const ProductScreen = () => {
                   showToast({
                     message: 'Added to Starred',
                     linkText: 'See List',
-                    onLinkPress: () => router.push('/(tabs)/starred'),
+                    onLinkPress: () => {router.push('/(tabs)/starred'); dismissToast();},
                     position: 'bottom',
                   });
                 }
@@ -88,7 +88,7 @@ const ProductScreen = () => {
       <ScrollView className="flex-1 px-5">
         <Pressable
           hitSlop={20}
-          onPress={() => router.canGoBack() && router.dismissAll()}
+          onPress={() => router.canGoBack() && router.back()}
         >
           <Ionicons name="arrow-back" size={25} />
         </Pressable>
@@ -125,7 +125,7 @@ const ProductScreen = () => {
           removeClippedSubviews={true}
           maxToRenderPerBatch={10}
           windowSize={10}
-          className="rounded-lg bg-grey-0"
+          className="rounded-lg bg-grey-0 border-grey-200 border"
           initialNumToRender={6}
           ListEmptyComponent={
             hasQuery && !hasResults ? (
