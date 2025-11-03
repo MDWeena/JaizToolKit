@@ -6,6 +6,7 @@ type ReturnType = {
   authMethods: LocalAuthentication.AuthenticationType[];
   bioAuth: () => Promise<LocalAuthentication.LocalAuthenticationResult>;
   isConfigured: boolean;
+  clearBiometrics: VoidFunction;
 };
 
 const BIOMETRICS_CONFIGURED = 'BIOMETRICS';
@@ -28,6 +29,10 @@ export const useBiometrics = () => {
     }
 
     return result;
+  };
+
+  const clearBiometrics = async () => {
+    await SecureStore.deleteItemAsync(BIOMETRICS_CONFIGURED);
   };
 
   useEffect(() => {
@@ -62,5 +67,6 @@ export const useBiometrics = () => {
     authMethods,
     bioAuth,
     isConfigured: isBiometricSetup,
+    clearBiometrics,
   };
 };

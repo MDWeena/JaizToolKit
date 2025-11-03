@@ -73,7 +73,11 @@ const BiometricsBottomSheet: FC<Props> = ({ onSuccess }) => {
         </Button>
 
         {state != 'successful' && (
-          <Button variant="outline" size="lg" onPress={hideBottomSheet}>
+          <Button
+            variant="outline"
+            size="lg"
+            onPress={() => (hideBottomSheet(), onSuccess())}
+          >
             <Text className="text-base font-semibold text-grey-900">
               {state === 'enable' ? 'Maybe Later' : 'Go Back'}
             </Text>
