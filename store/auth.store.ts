@@ -31,3 +31,18 @@ export const useAuthStore = create<AuthStore>()(
     }
   )
 );
+
+type LoginState = {
+  hasLoggedIn: boolean;
+};
+
+type LoginActions = {
+  setLoginState: (state: boolean) => void;
+};
+
+export const useLoginState = create<LoginState & LoginActions>()((set) => ({
+  hasLoggedIn: false,
+  setLoginState(state) {
+    set({ hasLoggedIn: state });
+  },
+}));

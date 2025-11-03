@@ -13,7 +13,7 @@ import { ToastProvider } from '@/components/shared/toast';
 import { BottomSheetProvider } from '@/contexts/BottomSheetContext';
 import { StarredProvider } from '@/contexts/StarredContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { useAuthStore } from '@/store/auth.store';
+import { useAuthStore, useLoginState } from '@/store/auth.store';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export { ErrorBoundary } from 'expo-router';
@@ -55,8 +55,9 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const { user } = useAuthStore();
+  const { hasLoggedIn } = useLoginState();
 
-  const isAuthenticated = !!user;
+  const isAuthenticated = !!user && hasLoggedIn;
 
   return (
     <GestureHandlerRootView style={{ flex: 1, paddingTop: 20 }}>
