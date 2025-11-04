@@ -1,16 +1,17 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Header } from "@/components/shared/header";
-import { Button } from "@/components/ui/button";
 import CustomSelect from "@/components/ui/custom-select";
-import DatePicker from "@/components/ui/date-picker";
-import FileInput from "@/components/ui/file-input";
-import Agreement from "@/components/ui/form-agreement";
-import { TextField } from "@/components/ui/input";
-import OtpField from "@/components/ui/otp-field";
+import {
+  Button,
+  DatePicker,
+  FileInput,
+  Agreement,
+  TextField,
+  OtpField,
+} from "@/components/ui";
 import {
   Stepper,
   StepperContent,
@@ -18,14 +19,9 @@ import {
   StepperStepContent,
   StepperSteps,
 } from "@/components/ui/stepper";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import {
-  KeyboardAvoidingView,
-  Pressable,
-  Text,
-  View
-} from "react-native";
+import { KeyboardAvoidingView, Text, View } from "react-native";
+import { BackButton } from "@/components/shared";
 
 const CorporateAccountsScreen = () => {
   const router = useRouter();
@@ -43,23 +39,9 @@ const CorporateAccountsScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
-      <StatusBar style="auto" />
-      <KeyboardAvoidingView
-        // behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-        // keyboardVerticalOffset={100}
-      >
-        <ScrollView
-          className="flex-1 px-5"
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-        >
-          <Pressable
-            hitSlop={20}
-            onPress={() => router.canGoBack() && router.dismissAll()}
-          >
-            <Ionicons name="arrow-back" size={25} />
-          </Pressable>
+      <BackButton />
+      <KeyboardAvoidingView style={{ flex: 1 }}>
+        <ScrollView className="flex-1 px-5" keyboardShouldPersistTaps="handled">
           <Stepper
             activeStep={activeStep}
             onStepChange={setActiveStep}

@@ -1,19 +1,12 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { ActivityIndicator, Alert } from "react-native";
+import React from "react";
+import { KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
+import { Controller } from "react-hook-form";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Header } from "@/components/shared/header";
-import { Button } from "@/components/ui/button";
+import { BackButton, Header } from "@/components/shared";
+import { Button, DatePicker, FileInput, Agreement, TextField, OtpField } from "@/components/ui";
 import CustomSelect, { SelectOption } from "@/components/ui/custom-select";
-import DatePicker from "@/components/ui/date-picker";
-import FileInput from "@/components/ui/file-input";
-import Agreement from "@/components/ui/form-agreement";
-import { TextField } from "@/components/ui/input";
-import OtpField from "@/components/ui/otp-field";
 import {
   Stepper,
   StepperContent,
@@ -22,6 +15,7 @@ import {
   StepperSteps,
 } from "@/components/ui/stepper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
+import { useTierForm } from "@/features/account/hooks/useTierForm";
 import {
   IndividualTier1FormData,
   getDefaultValues,
@@ -36,56 +30,43 @@ import {
   step3Fields,
   step4Fields,
 } from "@/features/account/validation/individual-tier1";
-import { Ionicons } from "@expo/vector-icons";
+import { Text } from "@/components/ui/Text";
 import { useRouter } from "expo-router";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
 
 const TOTAL_STEPS = 4;
 
 const Tier1Screen = () => {
   const router = useRouter();
-  const scrollViewRef = useRef<ScrollView>(null);
-  const [activeStep, setActiveStep] = useState(1);
-  const [submitting, setSubmitting] = useState(false);
-  const [fileUploads, setFileUploads] = useState<{
-    passportPhotograph: any | null;
-    signature: any | null;
-  }>({
-    passportPhotograph: null,
-    signature: null,
-  });
-
-  // Initialize form
-  const form = useForm<IndividualTier1FormData>({
-    resolver: zodResolver(individualTier1Schema),
-    mode: "onChange",
+  const {
+    form,
+    activeStep,
+    setActiveStep,
+    handleNext,
+    handleBack,
+    scrollViewRef,
+  } = useTierForm<IndividualTier1FormData>({
+    schema: individualTier1Schema,
     defaultValues: getDefaultValues(),
+    totalSteps: TOTAL_STEPS,
+    stepFields: {
+      1: step1Fields as (keyof IndividualTier1FormData)[],
+      2: step2Fields as (keyof IndividualTier1FormData)[],
+      3: step3Fields as (keyof IndividualTier1FormData)[],
+      4: step4Fields as (keyof IndividualTier1FormData)[],
+    },
   });
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
-    trigger,
+    formState: { errors, isSubmitting, isValid },
     watch,
     setValue,
+    trigger,
   } = form;
 
-  // Watch idType to sync tabs
   const idType = watch("idType");
   const activeTab = idType || "bvn";
-
-  // Set maximum date to today
-  const maxDate = new Date();
-  // Set minimum date to 100 years ago
-  const minDate = new Date();
-  minDate.setFullYear(minDate.getFullYear() - 100);
 
   const genderOptions: SelectOption[] = [
     { label: "Male", value: "male" },
@@ -114,136 +95,40 @@ const Tier1Screen = () => {
     { label: "Jaiz Bank", value: "jaiz" },
   ];
 
-  // Handle tab change
+  const onSubmit = async (data: IndividualTier1FormData) => {
+    try {
+      const { idType: _idType, bvn, nin, ...rest } = data as any;
+      const payload = activeTab === "bvn" ? { ...rest, bvn } : { ...rest, nin };
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log("Submitting Individual Tier 1 Form", payload);
+      router.push("/(app)/accounts/open/success");
+    } catch {}
+  };
+
   const handleTabChange = (value: "bvn" | "nin") => {
     setValue("idType", value);
-    // Clear the other field when switching
     if (value === "bvn") {
       setValue("nin", undefined);
+      trigger("bvn");
     } else {
       setValue("bvn", undefined);
+      trigger("nin");
     }
   };
-
-  // Get fields for current step
-  const getFieldsForStep = (step: number): string[] => {
-    switch (step) {
-      case 1:
-        return step1Fields as string[];
-      case 2:
-        return step2Fields as string[];
-      case 3:
-        return step3Fields as string[];
-      case 4:
-        return step4Fields as string[];
-      default:
-        return [];
-    }
-  };
-
-  // Handle next step with validation
-  const handleNext = async () => {
-    const fields = getFieldsForStep(activeStep);
-    const isValid = await trigger(fields as any);
-
-    if (!isValid) {
-      Alert.alert(
-        "Validation Error",
-        "Please fill all required fields correctly before proceeding."
-      );
-      // Scroll to top to show errors
-      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-      return;
-    }
-
-    if (activeStep < TOTAL_STEPS) {
-      setActiveStep(activeStep + 1);
-      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-    }
-  };
-
-  // Handle back navigation
-  const handleBack = () => {
-    if (activeStep > 1) {
-      setActiveStep(activeStep - 1);
-      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-    }
-  };
-
-  // Handle file selection
-  const handleFileSelect = (
-    fieldName: "passportPhotograph" | "signature",
-    file: any
-  ) => {
-    setFileUploads((prev) => ({ ...prev, [fieldName]: file }));
-    setValue(fieldName as any, file);
-  };
-
-  // Handle form submission
-  const onSubmit = async (data: IndividualTier1FormData) => {
-    setSubmitting(true);
-    try {
-      // Combine form data with file uploads
-      const payload = {
-        ...data,
-        passportPhotograph: fileUploads.passportPhotograph,
-        signature: fileUploads.signature,
-      };
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      console.log("Form submitted:", payload);
-
-      // Navigate to success page
-      router.push("/(app)/accounts/open/success");
-    } catch (error) {
-      Alert.alert("Error", "Failed to submit form. Please try again later.");
-      console.error("Submission error:", error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  // Scroll to top when step changes
-  useEffect(() => {
-    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-  }, [activeStep]);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <StatusBar style="auto" />
+      <BackButton activeStep={activeStep} onStepBack={handleBack} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
-        // keyboardVerticalOffset={100}
       >
         <ScrollView
           ref={scrollViewRef}
           className="flex-1 px-5"
           keyboardShouldPersistTaps="handled"
-          // keyboardDismissMode="on-drag"
         >
-          <Pressable
-            hitSlop={20}
-            onPress={() => {
-              if (activeStep === 1) {
-                // If on first step, dismiss all
-                router.canGoBack() && router.back();
-              } else {
-                // Go back to previous step
-                handleBack();
-              }
-            }}
-          >
-            <Ionicons name="arrow-back" size={25} />
-          </Pressable>
-
-          <Stepper
-            activeStep={activeStep}
-            onStepChange={setActiveStep}
-            className="mt-6"
-          >
+          <Stepper activeStep={activeStep} onStepChange={setActiveStep}>
             <StepperSteps className="mb-4">
               <StepperStep step={1} />
               <StepperStep step={2} />
@@ -268,34 +153,36 @@ const Tier1Screen = () => {
                   </Text>
                 )}
 
-                <Controller
-                  control={control}
-                  name="mobileNumber"
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      className="!mt-5 w-full"
-                      InputProps={{
-                        placeholder: "Mobile Number",
-                        keyboardType: "phone-pad",
-                        value: value || "",
-                        onChangeText: (text) => onChange(sanitizePhone(text)),
-                        autoFocus: true,
-                      }}
-                      helperText={errors.mobileNumber?.message as string}
-                    />
-                  )}
-                />
-                <Pressable
-                  onPress={() => {
-                    // Handle OTP send action
-                    console.log("Send OTP");
-                  }}
-                  className="mt-1"
-                >
-                  <Text className="text-xs text-primary underline">
-                    Click to send OTP
-                  </Text>
-                </Pressable>
+                <View>
+                  <Controller
+                    control={control}
+                    name="mobileNumber"
+                    render={({ field: { value, onChange } }) => (
+                      <TextField
+                        className="w-full"
+                        InputProps={{
+                          placeholder: "Mobile Number",
+                          keyboardType: "phone-pad",
+                          value: value || "",
+                          onChangeText: (text) => onChange(sanitizePhone(text)),
+                          autoFocus: true,
+                        }}
+                        helperText={errors.mobileNumber?.message as string}
+                      />
+                    )}
+                  />
+                  <Pressable
+                    onPress={() => {
+                      // Handle OTP send action
+                      console.log("Send OTP");
+                    }}
+                    className="ml-auto mt-1"
+                  >
+                    <Text className="text-xs text-primary underline font-bold">
+                      Click to send OTP
+                    </Text>
+                  </Pressable>
+                </View>
 
                 <View>
                   <Text className="font-[500] mb-2">OTP</Text>
@@ -345,20 +232,19 @@ const Tier1Screen = () => {
                     control={control}
                     name="dateOfBirth"
                     render={({ field: { value, onChange }, fieldState }) => (
-                      <>
+                      <View className="w-full">
                         <DatePicker
                           value={value}
                           onChange={onChange}
                           placeholder="Date of Birth"
-                          maximumDate={maxDate}
-                          minimumDate={minDate}
+                          maximumDate={new Date()}
                         />
                         {fieldState.error && (
                           <Text className="text-red-500 text-sm mt-1">
                             {String(fieldState.error.message)}
                           </Text>
                         )}
-                      </>
+                      </View>
                     )}
                   />
 
@@ -656,7 +542,7 @@ const Tier1Screen = () => {
                 <FileInput
                   label="Passport Photograph"
                   onFileSelect={(file) =>
-                    handleFileSelect("passportPhotograph", file)
+                    setValue("passportPhotograph", file as any)
                   }
                 />
                 {errors.passportPhotograph && (
@@ -667,7 +553,7 @@ const Tier1Screen = () => {
 
                 <FileInput
                   label="Signature"
-                  onFileSelect={(file) => handleFileSelect("signature", file)}
+                  onFileSelect={(file) => setValue("signature", file as any)}
                 />
                 {errors.signature && (
                   <Text className="text-red-500 text-sm -mt-2">
@@ -679,15 +565,12 @@ const Tier1Screen = () => {
                   size={"lg"}
                   className="flex-1"
                   onPress={handleSubmit(onSubmit)}
-                  disabled={submitting}
+                  disabled={isSubmitting || !isValid}
+                  loading={isSubmitting}
                 >
-                  {submitting ? (
-                    <ActivityIndicator color="#fff" />
-                  ) : (
-                    <Text className="text-sm font-semibold text-primary-foreground">
-                      Submit
-                    </Text>
-                  )}
+                  <Text className="text-sm font-semibold text-primary-foreground">
+                    Submit
+                  </Text>
                 </Button>
               </StepperStepContent>
             </StepperContent>

@@ -195,7 +195,7 @@ const StarredScreen = () => {
             key="grid-view"
             data={starredItemsWithIcons}
             numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-between", gap: 10, display:"flex" }}
+            columnWrapperStyle={{ justifyContent: "space-between", gap: 8, display:"flex" }}
             renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}
             scrollEnabled={false}

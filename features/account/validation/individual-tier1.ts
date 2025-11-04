@@ -18,7 +18,7 @@ export const step1Schema = z.object({
 });
 
 // Step 2: Personal Details (with conditional BVN/NIN)
-export const step2SchemaBase = z.object({
+export const step2Schema = z.object({
   idType: z.enum(["bvn", "nin"], {
     required_error: "Please select BVN or NIN",
   }),
@@ -53,25 +53,6 @@ export const step2SchemaBase = z.object({
     .regex(/^[a-zA-Z\s'-]+$/, "Last name can only contain letters"),
 });
 
-export const step2Schema = step2SchemaBase.superRefine((data, ctx) => {
-  if (data.idType === "bvn") {
-    if (!data.bvn || data.bvn.length < 10) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "BVN must be at least 10 digits",
-        path: ["bvn"],
-      });
-    }
-  } else {
-    if (!data.nin || data.nin.length < 11) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "NIN must be at least 11 digits",
-        path: ["nin"],
-      });
-    }
-  }
-});
 
 // Step 3: Address and Additional Info
 export const step3Schema = z.object({
@@ -108,9 +89,28 @@ export const step4Schema = z.object({
 
 // Combined schema
 export const individualTier1Schema = step1Schema
-  .merge(step2SchemaBase)
+  .merge(step2Schema)
   .merge(step3Schema)
-  .merge(step4Schema);
+  .merge(step4Schema)
+  .superRefine((data, ctx) => {
+    if (data.idType === "bvn") {
+      if (!data.bvn || data.bvn.length < 10) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "BVN must be at least 10 digits",
+          path: ["bvn"],
+        });
+      }
+    } else if (data.idType === "nin") {
+      if (!data.nin || data.nin.length < 11) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "NIN must be at least 11 digits",
+          path: ["nin"],
+        });
+      }
+    }
+  });
 
 export type IndividualTier1FormData = z.infer<typeof individualTier1Schema>;
 

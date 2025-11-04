@@ -84,11 +84,12 @@ const Button = React.forwardRef<View, ButtonProps>(
 
     return (
       <Pressable
-        className={cn(buttonVariants({ variant, size, selected, className }))}
+        className={cn(buttonVariants({ variant, size, selected, className }), props.disabled && 'opacity-50')}
         ref={ref}
         onPressIn={() => setIsPressed(true)}
         onPressOut={() => setIsPressed(false)}
         {...props}
+        disabled={loading || props.disabled}
       >
         {(state: PressableStateCallbackType) => (
           <View

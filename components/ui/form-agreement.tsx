@@ -17,7 +17,7 @@ const Agreement = ({ agree, setAgree }: AgreementModel) => {
         className="flex-row flex items-center justify-start w-full"
       >
         I agree to the{" "}
-        <Link href="/" className="underline text-primary font-medium">
+        <Link href="/privacy-policy" className="underline text-primary font-medium">
           Data Privacy Policy
         </Link>
       </CheckboxLabel>
@@ -25,4 +25,4 @@ const Agreement = ({ agree, setAgree }: AgreementModel) => {
   );
 };
 
-export default Agreement;
+export { Agreement };

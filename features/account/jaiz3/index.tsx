@@ -6,6 +6,7 @@ import { Href, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import {
+  BackButton,
   Header,
   ListTile,
   SearchBar,
@@ -28,14 +29,8 @@ const Jaiz3AccountScreen = () => {
   return (
     <SafeAreaView className='flex-1 bg-background'>
       <StatusBar style='auto' />
+      <BackButton />
       <ScrollView className='flex-1 px-5'>
-        <Pressable
-          hitSlop={20}
-          onPress={() => router.canGoBack() && router.dismissAll()}
-        >
-          <Ionicons name='arrow-back' size={25} />
-        </Pressable>
-
         {/* Header Section */}
         <Header title='Jaiz 3 Account' />
         <SearchBar

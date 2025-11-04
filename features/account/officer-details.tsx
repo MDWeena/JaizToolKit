@@ -1,15 +1,14 @@
-import { Ionicons } from "@expo/vector-icons";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { KeyboardAvoidingView, Platform, Pressable, Text } from "react-native";
+import { KeyboardAvoidingView, Platform, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Header } from "@/components/shared";
-import { Button } from "@/components/ui/button";
-import { TextField } from "@/components/ui/input";
+import { BackButton, Header } from "@/components/shared";
+import { Button, TextField } from "@/components/ui";
 import {
   OfficerForm,
   officerSchema,
@@ -44,20 +43,15 @@ export default function OfficerDetailsScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <StatusBar style="auto" />
+      <BackButton />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
-        keyboardVerticalOffset={100}
       >
         <ScrollView
           className="flex-1 px-5"
           keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
         >
-          {/* Header Section */}
-          <Pressable hitSlop={20} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={25} />
-          </Pressable>
           <Header title="Officer Details" />
 
           <Controller
@@ -65,7 +59,7 @@ export default function OfficerDetailsScreen() {
             name="officerCode"
             render={({ field: { value, onChange } }) => (
               <TextField
-                className="!mt-5 w-full"
+                className="w-full"
                 InputProps={{
                   placeholder: "Account Officer code",
                   value: value,

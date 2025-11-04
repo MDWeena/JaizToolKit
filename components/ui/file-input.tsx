@@ -274,4 +274,4 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
   );
 };
 
-export default FileInput;
+export { FileInput };

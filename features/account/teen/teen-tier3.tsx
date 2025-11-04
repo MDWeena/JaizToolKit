@@ -4,24 +4,19 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Header } from "@/components/shared/header";
-import { Button } from "@/components/ui/button";
+import { Button, DatePicker, FileInput, Agreement, TextField, OtpField } from "@/components/ui";
 import CustomSelect, { SelectOption } from "@/components/ui/custom-select";
-import DatePicker from "@/components/ui/date-picker";
-import FileInput from "@/components/ui/file-input";
-import Agreement from "@/components/ui/form-agreement";
-import { TextField } from "@/components/ui/input";
-import OtpField from "@/components/ui/otp-field";
 import {
   Stepper,
   StepperContent,
   StepperStep,
-  StepperStepContent,
+  StepperStepContent,   
   StepperSteps,
 } from "@/components/ui/stepper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { KeyboardAvoidingView, Pressable, Text, View } from "react-native";
+import { BackButton } from "@/components/shared";
 
 const Tier3Screen = () => {
   const router = useRouter();
@@ -45,23 +40,15 @@ const Tier3Screen = () => {
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
       <StatusBar style="auto" />
+      <BackButton />
       <KeyboardAvoidingView
         // behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
-        // keyboardVerticalOffset={100}
       >
         <ScrollView
           className="flex-1 px-5"
           keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
         >
-          <Pressable
-            hitSlop={20}
-            onPress={() => router.canGoBack() && router.dismissAll()}
-          >
-            <Ionicons name="arrow-back" size={25} />
-          </Pressable>
-
           <Stepper
             activeStep={activeStep}
             onStepChange={setActiveStep}
