@@ -1,11 +1,8 @@
 import React from "react";
-import { FlatList, Pressable, ScrollView, Text, View } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 
-import { Header } from "@/components/shared/header";
+import { Header, BackButton } from "@/components/shared";
 import {
   Collapsible,
   CollapsibleContent,
@@ -15,25 +12,11 @@ import { japsaTermDepositData } from "./data";
 import { PageSection } from "@/types/page";
 
 const JapsaTermDepositScreen = () => {
-  const router = useRouter();
-
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <StatusBar style="auto" />
+      <BackButton />
       <ScrollView className="flex-1 px-5">
-        {/* Back Button */}
-        <Pressable
-          hitSlop={20}
-          className="mb-5"
-          onPress={() => router.canGoBack() && router.back()}
-        >
-          <Ionicons name="arrow-back" size={25} />
-        </Pressable>
-
-        {/* Header Section */}
         <Header title="Japsa Term Deposit" />
-
-        {/* Tier List */}
         <FlatList<PageSection>
           data={japsaTermDepositData}
           renderItem={({ item }) => (
@@ -45,10 +28,7 @@ const JapsaTermDepositScreen = () => {
               <CollapsibleContent className="px-5 pb-5 bg-white">
                 {item.content.map((list, index) => (
                   <View key={index} className="flex-row items-start mb-1">
-                    {/* Dot bullet */}
                     <Text className="text-lg leading-snug mr-2">•</Text>
-
-                    {/* List text */}
                     <Text className="flex-1 text-sm leading-normal text-secondary-foreground">
                       {list}
                     </Text>
