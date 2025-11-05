@@ -14,7 +14,6 @@ import { individualAccountsData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
 import { PageItem } from "@/types/page";
 
-
 const IndividualAccountsScreen = () => {
   const router = useRouter();
   const {
@@ -26,9 +25,9 @@ const IndividualAccountsScreen = () => {
   } = useSearch(individualAccountsData);
 
   return (
-    <SafeAreaView className='flex-1 bg-background'>
+    <SafeAreaView className="flex-1 bg-background">
       <BackButton />
-      <ScrollView className='flex-1 px-5'>
+      <ScrollView className="flex-1 px-5">
         <Header title="Individual" />
         <SearchBar
           value={searchQuery}
@@ -51,7 +50,7 @@ const IndividualAccountsScreen = () => {
           removeClippedSubviews={true}
           maxToRenderPerBatch={10}
           windowSize={10}
-          className='rounded-lg bg-grey-0'
+          className="rounded-lg bg-grey-0"
           initialNumToRender={6}
           ListEmptyComponent={
             hasQuery && !hasResults ? (
