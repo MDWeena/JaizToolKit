@@ -234,13 +234,13 @@ export const individualAccountsData: PageItem[] = [
     text: "Tier 3",
     keywords: ["tier 3", "tier three", "jaiz"],
   },
-  {
-    id: 3,
-    icon: <UserIcon width={44} height={44} />,
-    route: "/products/account-type/individual/current-account" as const,
-    text: " Current Account",
-    keywords: ["current account", "current"],
-  },
+  // {
+  //   id: 3,
+  //   icon: <UserIcon width={44} height={44} />,
+  //   route: "/products/account-type/individual/current-account" as const,
+  //   text: " Current Account",
+  //   keywords: ["current account", "current"],
+  // },
   {
     id: 4,
     icon: <UserIcon width={44} height={44} />,
