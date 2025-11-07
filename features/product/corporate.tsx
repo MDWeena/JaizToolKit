@@ -1,69 +1,54 @@
 import React from "react";
-import { FlatList, ScrollView } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Href, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
+import { Header, BackButton } from "@/components/shared";
 import {
-  BackButton,
-  Header,
-  ListTile,
-  SearchBar,
-  SearchNotFound,
-} from "@/components/shared";
-import { corporateAccountsData } from "@/constants/data";
-import { useSearch } from "@/hooks/useSearch";
-import { PageItem } from "@/types/page";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { corporateAccountData } from "./data";
+import { PageSection } from "@/types/page";
 
-const CorporateAccountsScreen = () => {
-  const router = useRouter();
-  const {
-    searchQuery,
-    setSearchQuery,
-    filteredItems: filteredCategories,
-    hasQuery,
-    hasResults,
-  } = useSearch(corporateAccountsData);
-
+const CorporateAccountScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <BackButton />
       <ScrollView className="flex-1 px-5">
-        <Header title="Corporate" />
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder="Search"
-        />
-
-        <FlatList<PageItem>
-          data={filteredCategories}
+        <Header title="Corporate Account" />
+        <FlatList<PageSection>
+          data={corporateAccountData}
           renderItem={({ item }) => (
-            <ListTile
-              leading={item.icon}
-              title={item.text}
-              onPress={() => router.navigate(item.route as Href)}
-            />
+            <Collapsible className="mb-3">
+              <CollapsibleTrigger className="bg-white" iconLeft={item.icon}>
+                <Text className="text-lg font-semibold">{item.section}</Text>
+              </CollapsibleTrigger>
+
+              <CollapsibleContent className="px-5 pb-5 bg-white">
+                {item.content.map((list, index) => (
+                  <View key={index} className="flex-row items-start mb-1">
+                    <Text className="mr-2 text-lg leading-snug">•</Text>
+                    <Text className="flex-1 text-sm leading-normal text-secondary-foreground">
+                      {list}
+                    </Text>
+                  </View>
+                ))}
+              </CollapsibleContent>
+            </Collapsible>
           )}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={true}
+          removeClippedSubviews
           maxToRenderPerBatch={10}
           windowSize={10}
-          className="rounded-lg bg-grey-0"
           initialNumToRender={6}
-          ListEmptyComponent={
-            hasQuery && !hasResults ? (
-              <SearchNotFound
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-              />
-            ) : null
-          }
         />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default CorporateAccountsScreen;
+export default CorporateAccountScreen;

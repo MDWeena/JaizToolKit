@@ -2,14 +2,14 @@ import React from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Header, BackButton } from "@/components/shared";
+import { BackButton, Header } from "@/components/shared";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { japsaTermDepositData } from "./data";
 import { PageSection } from "@/types/page";
+import { japsaTermDepositData } from "../data";
 
 const JapsaTermDepositScreen = () => {
   return (

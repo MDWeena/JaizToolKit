@@ -234,13 +234,13 @@ export const individualAccountsData: PageItem[] = [
     text: "Tier 3",
     keywords: ["tier 3", "tier three", "jaiz"],
   },
-  // {
-  //   id: 3,
-  //   icon: <UserIcon width={44} height={44} />,
-  //   route: "/products/account-type/individual/current-account" as const,
-  //   text: " Current Account",
-  //   keywords: ["current account", "current"],
-  // },
+  {
+    id: 3,
+    icon: <UserIcon width={44} height={44} />,
+    route: "/products/account-type/individual/current-account" as const,
+    text: " Current Account",
+    keywords: ["current account", "current"],
+  },
   {
     id: 4,
     icon: <UserIcon width={44} height={44} />,
@@ -268,23 +268,6 @@ export const individualAccountsData: PageItem[] = [
     text: "Hajj Savings Account",
     route: "/products/account-type/individual/hajj-savings-account" as const,
     keywords: ["hajj savings account", "hajj", "savings"],
-  },
-];
-
-export const corporateAccountsData: PageItem[] = [
-  {
-    id: 1,
-    icon: <CorporateIcon width={44} height={44} />,
-    text: "Jaiz Max",
-    route: "/products/account-type/corporate" as const,
-    keywords: ["corporate", "account", "jaiz max"],
-  },
-  {
-    id: 2,
-    icon: <CorporateIcon width={44} height={44} />,
-    text: "Jaiz Business",
-    route: "/products/account-type/corporate" as const,
-    keywords: ["corporate", "account", "jaiz business"],
   },
 ];
 

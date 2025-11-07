@@ -2,14 +2,14 @@ import React from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Header, BackButton } from "@/components/shared";
+import { BackButton, Header } from "@/components/shared";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { hajjSavingsAccountData } from "./data";
 import { PageSection } from "@/types/page";
+import { hajjSavingsAccountData } from "../data";
 
 const HajjSavingsAccountScreen = () => {
   return (

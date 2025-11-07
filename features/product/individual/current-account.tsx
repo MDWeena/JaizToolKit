@@ -9,7 +9,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { currentAccountData } from "./data";
+import { currentAccountData } from "../data";
 import { PageSection } from "@/types/page";
 
 const CurrentAccountScreen = () => {
@@ -29,7 +29,7 @@ const CurrentAccountScreen = () => {
               <CollapsibleContent className="px-5 pb-5 bg-white">
                 {item.content.map((list, index) => (
                   <View key={index} className="flex-row items-start mb-1">
-                    <Text className="text-lg leading-snug mr-2">•</Text>
+                    <Text className="mr-2 text-lg leading-snug">•</Text>
                     <Text className="flex-1 text-sm leading-normal text-secondary-foreground">
                       {list}
                     </Text>

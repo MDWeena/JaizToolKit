@@ -185,7 +185,7 @@ const Tier1Screen = () => {
                 </View>
 
                 <View>
-                  <Text className="font-[500] mb-2">OTP</Text>
+                  <Text className="font-[500] mb-2 text-text">OTP</Text>
                   <Controller
                     control={control}
                     name="otp"

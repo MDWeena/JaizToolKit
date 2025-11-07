@@ -2,14 +2,14 @@ import React from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Header, BackButton } from "@/components/shared";
+import { BackButton, Header } from "@/components/shared";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { tier3AccountData } from "./data";
 import { PageSection } from "@/types/page";
+import { tier3AccountData } from "../data";
 
 const Tier3AccountScreen = () => {
   return (
