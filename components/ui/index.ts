@@ -10,3 +10,4 @@ export * from './otp-field';
 export * from './select';
 export * from './stepper';
 export * from './tab';
+export * from './Text';

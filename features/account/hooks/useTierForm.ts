@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import {
-    useForm,
-    type DefaultValues,
-    type FieldValues,
-    type Path,
-    type UseFormReturn,
+  useForm,
+  type DefaultValues,
+  type FieldValues,
+  type Path,
+  type UseFormReturn,
 } from "react-hook-form";
 import { ScrollView } from "react-native-gesture-handler";
 
