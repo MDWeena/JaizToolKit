@@ -1,3 +1,4 @@
+import { FileUpload } from "@/types/file-upload";
 import { z } from "zod";
 
 // Step 1: Verification
@@ -8,26 +9,33 @@ export const step1Schema = z.object({
   mobileNumber: z
     .string()
     .trim()
-    .min(10, "Enter at least 10 digits")
-    .max(11, "Phone number must not be more than 11 digits")
-    .regex(/^[0-9+\s()-]+$/, "Invalid phone number").transform(val => sanitizePhone(val)),
+    .regex(/^\d+$/, "Phone number must be numeric")
+    .length(11, "Phone number must be exactly 11 digits"),
   otp: z
     .string()
     .length(6, "OTP must be 6 digits")
     .regex(/^\d+$/, "OTP must be numeric"),
 });
 
-// Step 2: Personal Details (with conditional BVN/NIN)
-export const step2Schema = z.object({
-  idType: z.enum(["bvn", "nin"], {
-    required_error: "Please select BVN or NIN",
-  }),
-  bvn: z.string().optional(),
-  nin: z.string().optional(),
-  dateOfBirth: z.date({
-    required_error: "Date of birth is required",
-    invalid_type_error: "Please select a valid date",
-  }),
+// Step 2: Personal Details (with conditional BVN/NIN using discriminated union)
+// Common fields for both BVN and NIN cases
+const step2CommonFields = {
+  dateOfBirth: z
+    .date({
+      required_error: "Date of birth is required",
+      invalid_type_error: "Please select a valid date",
+    })
+    .refine(
+      (date) => {
+        const today = new Date();
+        const age = today.getFullYear() - date.getFullYear();
+        const monthDiff = today.getMonth() - date.getMonth();
+        const dayDiff = today.getDate() - date.getDate();
+        const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+        return actualAge >= 18 && actualAge <= 120;
+      },
+      { message: "You must be at least 18 years old and not more than 120 years old" }
+    ),
   email: z
     .string()
     .trim()
@@ -51,7 +59,34 @@ export const step2Schema = z.object({
     .min(2, "Last name must be at least 2 characters")
     .max(50, "Last name is too long")
     .regex(/^[a-zA-Z\s'-]+$/, "Last name can only contain letters"),
+};
+
+// BVN schema with common fields
+const bvnSchema = z.object({
+  idType: z.literal("bvn"),
+  bvn: z
+    .string()
+    .trim()
+    .length(11, "BVN must be exactly 11 digits")
+    .regex(/^\d+$/, "BVN must be numeric"),
+  nin: z.undefined(),
+  ...step2CommonFields,
 });
+
+// NIN schema with common fields
+const ninSchema = z.object({
+  idType: z.literal("nin"),
+  nin: z
+    .string()
+    .trim()
+    .length(11, "NIN must be exactly 11 digits")
+    .regex(/^\d+$/, "NIN must be numeric"),
+  bvn: z.undefined(),
+  ...step2CommonFields,
+});
+
+// Discriminated union for idType
+export const step2Schema = z.discriminatedUnion("idType", [bvnSchema, ninSchema]);
 
 
 // Step 3: Address and Additional Info
@@ -78,39 +113,27 @@ export const step3Schema = z.object({
 // Step 4: Documents and Funding
 export const step4Schema = z.object({
   bank: z.string().min(1, "Please select a bank"),
-  amount: z.string().min(1, "Amount is required"),
-  passportPhotograph: z.any().refine((val) => val !== null && val !== undefined, {
+  amount: z
+    .string()
+    .min(1, "Amount is required")
+    .regex(/^\d+(\.\d{1,2})?$/, "Amount must be a valid number")
+    .refine(
+      (val) => parseFloat(val) >= 100,
+      { message: "Minimum amount is ₦100" }
+    ),
+  passportPhotograph: z.custom<FileUpload>((val) => val !== null && val !== undefined, {
     message: "Passport photograph is required",
   }),
-  signature: z.any().refine((val) => val !== null && val !== undefined, {
+  signature: z.custom<FileUpload>((val) => val !== null && val !== undefined, {
     message: "Signature is required",
   }),
 });
 
-// Combined schema
+// Combined schema - use intersection for discriminated union
 export const individualTier1Schema = step1Schema
-  .merge(step2Schema)
   .merge(step3Schema)
   .merge(step4Schema)
-  .superRefine((data, ctx) => {
-    if (data.idType === "bvn") {
-      if (!data.bvn || data.bvn.length < 10) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "BVN must be at least 10 digits",
-          path: ["bvn"],
-        });
-      }
-    } else if (data.idType === "nin") {
-      if (!data.nin || data.nin.length < 11) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "NIN must be at least 11 digits",
-          path: ["nin"],
-        });
-      }
-    }
-  });
+  .and(step2Schema);
 
 export type IndividualTier1FormData = z.infer<typeof individualTier1Schema>;
 
@@ -150,27 +173,16 @@ export const step4Fields: (keyof IndividualTier1FormData)[] = [
   "signature",
 ];
 
-// Sanitization helpers
-export const sanitizePhone = (input: string) =>
-  input.replace(/[^0-9+\s()-]/g, "");
-
-export const sanitizeName = (input: string) =>
-  input.replace(/\s+/g, " ").trim();
-
-export const sanitizeBVN = (input: string) => input.replace(/\D/g, "");
-
-export const sanitizeNIN = (input: string) => input.replace(/\D/g, "");
-
-export const sanitizeEmail = (input: string) => input.trim().toLowerCase();
 
 // Default values
+// Note: For discriminated union, when idType is "bvn", nin must be undefined, and vice versa
 export const getDefaultValues = (): Partial<IndividualTier1FormData> => ({
   agreement: false,
   mobileNumber: "",
   otp: "",
   idType: "bvn",
   bvn: "",
-  nin: "",
+  nin: undefined, // Must be undefined when idType is "bvn"
   email: "",
   firstName: "",
   middleName: "",

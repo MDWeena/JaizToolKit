@@ -1,12 +1,21 @@
+import { useRouter } from "expo-router";
 import React from "react";
-import { KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
 import { Controller } from "react-hook-form";
+import { Alert, KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BackButton, Header } from "@/components/shared";
-import { Button, DatePicker, FileInput, Agreement, TextField, OtpField } from "@/components/ui";
-import CustomSelect, { SelectOption } from "@/components/ui/custom-select";
+import {
+  Agreement,
+  Button,
+  DatePicker,
+  FileInput,
+  OtpField,
+  Text,
+  TextField,
+} from "@/components/ui";
+import CustomSelect from "@/components/ui/custom-select";
 import {
   Stepper,
   StepperContent,
@@ -15,23 +24,28 @@ import {
   StepperSteps,
 } from "@/components/ui/stepper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
+import {
+  BANK_OPTIONS,
+  GENDER_OPTIONS,
+  NIGERIAN_STATES,
+} from "@/constants/form-options";
 import { useTierForm } from "@/features/account/hooks/useTierForm";
 import {
-  IndividualTier1FormData,
   getDefaultValues,
+  IndividualTier1FormData,
   individualTier1Schema,
-  sanitizeBVN,
-  sanitizeEmail,
-  sanitizeNIN,
-  sanitizeName,
-  sanitizePhone,
   step1Fields,
   step2Fields,
   step3Fields,
   step4Fields,
 } from "@/features/account/validation/individual-tier1";
-import { Text } from "@/components/ui/Text";
-import { useRouter } from "expo-router";
+import {
+  sanitizeBVN,
+  sanitizeEmail,
+  sanitizeName,
+  sanitizeNIN,
+  sanitizePhone,
+} from "@/utils";
 
 const TOTAL_STEPS = 4;
 
@@ -68,41 +82,18 @@ const Tier1Screen = () => {
   const idType = watch("idType");
   const activeTab = idType || "bvn";
 
-  const genderOptions: SelectOption[] = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-  ];
-
-  const stateOptions: SelectOption[] = [
-    { value: "lagos", label: "Lagos" },
-    { value: "abuja", label: "Abuja" },
-    { value: "kano", label: "Kano" },
-    { value: "ibadan", label: "Ibadan" },
-    { value: "port-harcourt", label: "Port Harcourt" },
-    { value: "enugu", label: "Enugu" },
-    { value: "oyo", label: "Oyo" },
-    { value: "kaduna", label: "Kaduna" },
-  ];
-
-  const bankOptions: SelectOption[] = [
-    { label: "Access Bank", value: "access" },
-    { label: "GTBank", value: "gtb" },
-    { label: "Zenith Bank", value: "zenith" },
-    { label: "First Bank", value: "firstbank" },
-    { label: "UBA", value: "uba" },
-    { label: "Union Bank", value: "union" },
-    { label: "Fidelity Bank", value: "fidelity" },
-    { label: "Jaiz Bank", value: "jaiz" },
-  ];
 
   const onSubmit = async (data: IndividualTier1FormData) => {
     try {
-      const { idType: _idType, bvn, nin, ...rest } = data as any;
+      const { idType: _idType, bvn, nin, ...rest } = data;
       const payload = activeTab === "bvn" ? { ...rest, bvn } : { ...rest, nin };
       await new Promise((resolve) => setTimeout(resolve, 1500));
       console.log("Submitting Individual Tier 1 Form", payload);
-      router.push("/(app)/accounts/open/success");
-    } catch {}
+      // router.push("/(app)/accounts/open/success");
+    } catch (error) {
+      console.error("Form submission error:", error);
+      Alert.alert("Error", "Failed to submit form. Please try again.");
+    }
   };
 
   const handleTabChange = (value: "bvn" | "nin") => {
@@ -148,7 +139,7 @@ const Tier1Screen = () => {
                   )}
                 />
                 {errors.agreement && (
-                  <Text className="text-red-500 text-sm ml-2 -mt-4">
+                  <Text className="ml-2 -mt-4 text-sm text-red-500">
                     {String(errors.agreement.message)}
                   </Text>
                 )}
@@ -176,9 +167,9 @@ const Tier1Screen = () => {
                       // Handle OTP send action
                       console.log("Send OTP");
                     }}
-                    className="ml-auto mt-1"
+                    className="mt-1 ml-auto"
                   >
-                    <Text className="text-xs text-primary underline font-bold">
+                    <Text className="text-xs font-bold underline text-primary">
                       Click to send OTP
                     </Text>
                   </Pressable>
@@ -194,7 +185,7 @@ const Tier1Screen = () => {
                     )}
                   />
                   {errors.otp && (
-                    <Text className="text-red-500 text-sm mt-1">
+                    <Text className="mt-1 text-sm text-red-500">
                       {String(errors.otp.message)}
                     </Text>
                   )}
@@ -240,7 +231,7 @@ const Tier1Screen = () => {
                           maximumDate={new Date()}
                         />
                         {fieldState.error && (
-                          <Text className="text-red-500 text-sm mt-1">
+                          <Text className="mt-1 text-sm text-red-500">
                             {String(fieldState.error.message)}
                           </Text>
                         )}
@@ -360,7 +351,7 @@ const Tier1Screen = () => {
                   name="gender"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={genderOptions}
+                      options={GENDER_OPTIONS}
                       placeholder="Gender"
                       value={value as string}
                       onValueChange={onChange}
@@ -368,7 +359,7 @@ const Tier1Screen = () => {
                   )}
                 />
                 {errors.gender && (
-                  <Text className="text-red-500 text-sm -mt-4">
+                  <Text className="-mt-4 text-sm text-red-500">
                     {String(errors.gender.message)}
                   </Text>
                 )}
@@ -393,7 +384,7 @@ const Tier1Screen = () => {
                   name="stateOfOrigin"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={stateOptions}
+                      options={NIGERIAN_STATES}
                       placeholder="State of Origin"
                       value={value as string}
                       onValueChange={onChange}
@@ -401,7 +392,7 @@ const Tier1Screen = () => {
                   )}
                 />
                 {errors.stateOfOrigin && (
-                  <Text className="text-red-500 text-sm -mt-4">
+                  <Text className="-mt-4 text-sm text-red-500">
                     {String(errors.stateOfOrigin.message)}
                   </Text>
                 )}
@@ -411,7 +402,7 @@ const Tier1Screen = () => {
                   name="lgaOfOrigin"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={stateOptions}
+                      options={NIGERIAN_STATES}
                       placeholder="LGA of Origin"
                       value={value as string}
                       onValueChange={onChange}
@@ -419,7 +410,7 @@ const Tier1Screen = () => {
                   )}
                 />
                 {errors.lgaOfOrigin && (
-                  <Text className="text-red-500 text-sm -mt-4">
+                  <Text className="-mt-4 text-sm text-red-500">
                     {String(errors.lgaOfOrigin.message)}
                   </Text>
                 )}
@@ -446,7 +437,7 @@ const Tier1Screen = () => {
                   name="stateOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={stateOptions}
+                      options={NIGERIAN_STATES}
                       placeholder="State of Residence"
                       value={value as string}
                       onValueChange={onChange}
@@ -454,7 +445,7 @@ const Tier1Screen = () => {
                   )}
                 />
                 {errors.stateOfResidence && (
-                  <Text className="text-red-500 text-sm -mt-4">
+                  <Text className="-mt-4 text-sm text-red-500">
                     {String(errors.stateOfResidence.message)}
                   </Text>
                 )}
@@ -464,7 +455,7 @@ const Tier1Screen = () => {
                   name="lgaOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={stateOptions}
+                      options={NIGERIAN_STATES}
                       placeholder="LGA of Residence"
                       value={value as string}
                       onValueChange={onChange}
@@ -472,7 +463,7 @@ const Tier1Screen = () => {
                   )}
                 />
                 {errors.lgaOfResidence && (
-                  <Text className="text-red-500 text-sm -mt-4">
+                  <Text className="-mt-4 text-sm text-red-500">
                     {String(errors.lgaOfResidence.message)}
                   </Text>
                 )}
@@ -482,7 +473,7 @@ const Tier1Screen = () => {
                   name="cityOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={stateOptions}
+                      options={NIGERIAN_STATES}
                       placeholder="City of Residence"
                       value={value as string}
                       onValueChange={onChange}
@@ -490,7 +481,7 @@ const Tier1Screen = () => {
                   )}
                 />
                 {errors.cityOfResidence && (
-                  <Text className="text-red-500 text-sm -mt-4">
+                  <Text className="-mt-4 text-sm text-red-500">
                     {String(errors.cityOfResidence.message)}
                   </Text>
                 )}
@@ -510,7 +501,7 @@ const Tier1Screen = () => {
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
                       label="Fund Account Instantly"
-                      options={bankOptions}
+                      options={BANK_OPTIONS}
                       placeholder="Select Bank"
                       value={value as string}
                       onValueChange={onChange}
@@ -518,7 +509,7 @@ const Tier1Screen = () => {
                   )}
                 />
                 {errors.bank && (
-                  <Text className="text-red-500 text-sm -mt-4">
+                  <Text className="-mt-4 text-sm text-red-500">
                     {String(errors.bank.message)}
                   </Text>
                 )}
@@ -546,7 +537,7 @@ const Tier1Screen = () => {
                   }
                 />
                 {errors.passportPhotograph && (
-                  <Text className="text-red-500 text-sm -mt-2">
+                  <Text className="-mt-2 text-sm text-red-500">
                     {String(errors.passportPhotograph.message)}
                   </Text>
                 )}
@@ -556,7 +547,7 @@ const Tier1Screen = () => {
                   onFileSelect={(file) => setValue("signature", file as any)}
                 />
                 {errors.signature && (
-                  <Text className="text-red-500 text-sm -mt-2">
+                  <Text className="-mt-2 text-sm text-red-500">
                     {String(errors.signature.message)}
                   </Text>
                 )}
@@ -565,7 +556,7 @@ const Tier1Screen = () => {
                   size={"lg"}
                   className="flex-1"
                   onPress={handleSubmit(onSubmit)}
-                  disabled={isSubmitting || !isValid}
+                  // disabled={isSubmitting || !isValid}
                   loading={isSubmitting}
                 >
                   <Text className="text-sm font-semibold text-primary-foreground">
