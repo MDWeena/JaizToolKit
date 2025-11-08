@@ -1,29 +1,29 @@
-import { FaceIdIcon } from "@/assets/images/svgs/login-icons";
-import Logo from "@/assets/images/svgs/logo";
-import { useToast } from "@/components/shared";
-import { Button } from "@/components/ui/button";
-import { TextField } from "@/components/ui/input";
-import { Text } from "@/components/ui/Text";
-import { useBottomSheet } from "@/contexts/BottomSheetContext";
-import { useBiometrics } from "@/hooks/useBiometrics";
-import { login } from "@/services/auth.service";
-import { useAuthStore } from "@/store/auth.store";
-import { Ionicons } from "@expo/vector-icons";
-import { useMutation } from "@tanstack/react-query";
-import * as LocalAuthentication from "expo-local-authentication";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { FaceIdIcon } from '@/assets/images/svgs/login-icons';
+import Logo from '@/assets/images/svgs/logo';
+import { useToast } from '@/components/shared';
+import { Button } from '@/components/ui/button';
+import { TextField } from '@/components/ui/input';
+import { Text } from '@/components/ui/Text';
+import { useBottomSheet } from '@/contexts/BottomSheetContext';
+import { useBiometrics } from '@/hooks/useBiometrics';
+import { login } from '@/services/auth.service';
+import { useAuthStore, useLoginState } from '@/store/auth.store';
+import { Ionicons } from '@expo/vector-icons';
+import { useMutation } from '@tanstack/react-query';
+import * as LocalAuthentication from 'expo-local-authentication';
+import { useRouter } from 'expo-router';
+import React, { useMemo, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Dimensions,
   Pressable,
   TouchableWithoutFeedback,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import BiometricsBottomSheet from "./components/biometrics-bottom-sheet";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import BiometricsBottomSheet from './components/biometrics-bottom-sheet';
 
-const { height } = Dimensions.get("screen");
+const { height } = Dimensions.get('screen');
 
 type Inputs = {
   staffId: string;
@@ -37,7 +37,9 @@ const LoginScreen = () => {
     useState(false);
 
   const { authMethods, bioAuth, isConfigured } = useBiometrics();
-  const { setUser } = useAuthStore();
+  const { setUser, user } = useAuthStore();
+  const isUserLoggedIn = useMemo(() => !!user, [user]);
+  const { setLoginState } = useLoginState();
   const { showBottomSheet } = useBottomSheet();
   const { showToast } = useToast();
 
@@ -45,25 +47,31 @@ const LoginScreen = () => {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
+    reset,
   } = useForm<Inputs>({
     defaultValues: {
-      staffId: "",
-      password: "",
+      staffId: user?.id ?? '',
+      password: '',
     },
   });
 
+  const [password] = watch(['password']);
+
   const onSuccess = () => {
-    router.push("/(tabs)/(home)");
+    router.push('/(tabs)/(home)');
+    setLoginState(true);
+    reset();
   };
 
   const { mutateAsync: _login, isPending: loggingIn } = useMutation({
-    mutationKey: ["auth", "login"],
+    mutationKey: ['auth', 'login'],
     mutationFn: login,
     onSuccess(response) {
       if (!response?.success) {
         showToast({
-          message: response?.message ?? "Login failed. Please try again.",
-          linkText: "",
+          message: response?.message ?? 'Login failed. Please try again.',
+          linkText: '',
           onLinkPress: () => {},
         });
         return;
@@ -72,18 +80,18 @@ const LoginScreen = () => {
       const payload = response?.data?.data;
       if (!payload?.user || !payload?.token) {
         showToast({
-          message: "Unable to complete login.",
-          linkText: "",
+          message: 'Unable to complete login.',
+          linkText: '',
           onLinkPress: () => {},
         });
         return;
       }
 
-      setUser({ ...payload.user, accessToken: payload.token });
+      setUser({ ...payload.user, accessToken: payload.token, password });
 
       showToast({
-        message: "Logged in successfully!",
-        linkText: "",
+        message: 'Logged in successfully!',
+        linkText: '',
         onLinkPress: () => {},
       });
 
@@ -98,10 +106,10 @@ const LoginScreen = () => {
     onError(error: any) {
       const message =
         error?.message ||
-        "Unable to log in at the moment. Please check your internet connection.";
+        'Unable to log in at the moment. Please check your internet connection.';
       showToast({
         message,
-        linkText: "",
+        linkText: '',
         onLinkPress: () => {},
       });
     },
@@ -113,7 +121,12 @@ const LoginScreen = () => {
 
   const onBiometricClick = async () => {
     const result = await bioAuth();
-    if (result.success) onSuccess();
+    if (result.success) {
+      onSubmit({
+        staffId: user?.id!,
+        password: user?.password!,
+      });
+    }
   };
 
   return (
@@ -136,17 +149,17 @@ const LoginScreen = () => {
           name="staffId"
           control={control}
           rules={{
-            required: { value: true, message: "This field is required" },
+            required: { value: true, message: 'This field is required' },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextField
               className="!mt-5 w-full"
               inputPrefix={
-                <Ionicons name="mail-outline" color={"#00000040"} size={25} />
+                <Ionicons name="mail-outline" color={'#00000040'} size={25} />
               }
               InputProps={{
-                placeholder: "Staff ID",
-                value: value ?? "",
+                placeholder: 'Staff ID',
+                value: value ?? '',
                 onChangeText: onChange,
                 onBlur: onBlur,
               }}
@@ -160,10 +173,10 @@ const LoginScreen = () => {
           name="password"
           control={control}
           rules={{
-            required: { value: true, message: "This field is required" },
+            required: { value: true, message: 'This field is required' },
             minLength: {
               value: 8,
-              message: "Password must not be less than 8 characters",
+              message: 'Password must not be less than 8 characters',
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -172,7 +185,7 @@ const LoginScreen = () => {
               inputPrefix={
                 <Ionicons
                   name="lock-closed-outline"
-                  color={"#00000040"}
+                  color={'#00000040'}
                   size={25}
                 />
               }
@@ -181,18 +194,17 @@ const LoginScreen = () => {
                   onPress={() => setShowPassword((prev) => !prev)}
                 >
                   <Ionicons
-                    name={showPassword ? "eye" : "eye-off-outline"}
-                    color={"#00000040"}
+                    name={showPassword ? 'eye' : 'eye-off-outline'}
+                    color={'#00000040'}
                     size={25}
                   />
                 </TouchableWithoutFeedback>
               }
               InputProps={{
-                placeholder: "Password",
-                value: value ?? "",
+                placeholder: 'Password',
+                value: value ?? '',
                 onChangeText: onChange,
                 onBlur: onBlur,
-                keyboardType: "visible-password",
                 secureTextEntry: !showPassword,
               }}
               helperText={errors?.password?.message}
@@ -205,13 +217,13 @@ const LoginScreen = () => {
           loading={loggingIn}
           onPress={(e) => !loggingIn && handleSubmit(onSubmit)(e)}
           className="mt-24 !min-w-full"
-          size={"lg"}
+          size={'lg'}
         >
           <Text className="text-white font-bold">Log In</Text>
         </Button>
 
         {/* Biometrics Login */}
-        {isConfigured && authMethods?.length > 0 && (
+        {isConfigured && isUserLoggedIn && authMethods?.length > 0 && (
           <>
             <View className="my-6 flex items-center gap-3 flex-row">
               <View className="h-[.8px] flex-1 bg-gray-300" />
