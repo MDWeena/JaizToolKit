@@ -59,13 +59,13 @@ const HomeScreen = () => {
             hasQuery && !hasResults ? (
               <></>
             ) : (
-              <Text className="my-4 text-xl text-text font-interMedium">Categories</Text>
+              <Text className="mb-4 text-xl text-text font-interMedium">Categories</Text>
             )
           }
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           numColumns={2}
-          columnWrapperStyle={{ justifyContent: 'space-between', gap: 10 }}
+          columnWrapperStyle={{ justifyContent: 'space-between', gap: 8 }}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}

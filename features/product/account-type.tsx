@@ -1,15 +1,18 @@
 import React from "react";
-import { FlatList, Pressable, ScrollView } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
 import { Href, useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 
-import { Header, ListTile, SearchBar, SearchNotFound } from "@/components/shared";
+import {
+  BackButton,
+  Header,
+  ListTile,
+  SearchBar,
+  SearchNotFound,
+} from "@/components/shared";
 import { accountTypeData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
 import { PageItem } from "@/types/page";
-
 
 const AccountTypeScreen = () => {
   const router = useRouter();
@@ -22,26 +25,15 @@ const AccountTypeScreen = () => {
   } = useSearch(accountTypeData);
 
   return (
-    <SafeAreaView className='flex-1 bg-background'>
-      <StatusBar style='auto' />
-      <ScrollView className='flex-1 px-5'>
-        <Pressable
-          hitSlop={20}
-          onPress={() =>
-            router.canGoBack() && router.back()
-          }
-        >
-          <Ionicons name="arrow-back" size={25} />
-        </Pressable>
-
-        {/* Header Section */}
-        <Header title='Account Type' />
+    <SafeAreaView className="flex-1 bg-background">
+      <BackButton />
+      <ScrollView className="flex-1 px-5">
+        <Header title="Account Type" />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
-          placeholder='Search'
+          placeholder="Search"
         />
-
         <FlatList<PageItem>
           data={filteredCategories}
           renderItem={({ item }) => (

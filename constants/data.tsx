@@ -271,23 +271,6 @@ export const individualAccountsData: PageItem[] = [
   },
 ];
 
-export const corporateAccountsData: PageItem[] = [
-  {
-    id: 1,
-    icon: <CorporateIcon width={44} height={44} />,
-    text: "Jaiz Max",
-    route: "/products/account-type/corporate" as const,
-    keywords: ["corporate", "account", "jaiz max"],
-  },
-  {
-    id: 2,
-    icon: <CorporateIcon width={44} height={44} />,
-    text: "Jaiz Business",
-    route: "/products/account-type/corporate" as const,
-    keywords: ["corporate", "account", "jaiz business"],
-  },
-];
-
 export const loansData: PageItem[] = [
   {
     id: 1,
