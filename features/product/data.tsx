@@ -540,3 +540,127 @@ export const afrigoCardData: PageSection[] = [
     icon: <DocumentIcon width={32} height={32} />,
   },
 ];
+
+export const mobileBankingData: PageSection[] = [
+  {
+    id: 1,
+    section: "Target Market",
+    content: [
+      "Individuals with savings or current account.",
+    ],
+    icon: <TargetIcon width={32} height={32} />,
+  },
+  {
+    id: 2,
+    section: "Features",
+    content: [
+      "Domestic Card.",
+      "Backed by CBN and NIBSS.",
+      "Acceptable Nationwide.",
+      "Lower transactions costs.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 3,
+    section: "Benefits",
+    content: [
+      "Reduced cost of transactions.",
+      "Enhanced local control and security.",
+      "Improved payment infrastructure and locally adaptable.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 4,
+    section: "Documentation",
+    content: [
+      "Customer must have either Tier 3 savings or current account with bank (full KYC must be taken during the opening of account).",
+      "Fill card request form at the branch.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+];
+
+export const internetBankingData: PageSection[] = [
+  {
+    id: 1,
+    section: "Target Market",
+    content: [
+      "Individuals with savings or current account.",
+    ],
+    icon: <TargetIcon width={32} height={32} />,
+  },
+  {
+    id: 2,
+    section: "Features",
+    content: [
+      "Domestic Card.",
+      "Backed by CBN and NIBSS.",
+      "Acceptable Nationwide.",
+      "Lower transactions costs.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 3,
+    section: "Benefits",
+    content: [
+      "Reduced cost of transactions.",
+      "Enhanced local control and security.",
+      "Improved payment infrastructure and locally adaptable.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 4,
+    section: "Documentation",
+    content: [
+      "Customer must have either Tier 3 savings or current account with bank (full KYC must be taken during the opening of account).",
+      "Fill card request form at the branch.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+];
+
+export const ussdBankingData: PageSection[] = [
+  {
+    id: 1,
+    section: "Target Market",
+    content: [
+      "Individuals with savings or current account.",
+    ],
+    icon: <TargetIcon width={32} height={32} />,
+  },
+  {
+    id: 2,
+    section: "Features",
+    content: [
+      "Domestic Card.",
+      "Backed by CBN and NIBSS.",
+      "Acceptable Nationwide.",
+      "Lower transactions costs.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 3,
+    section: "Benefits",
+    content: [
+      "Reduced cost of transactions.",
+      "Enhanced local control and security.",
+      "Improved payment infrastructure and locally adaptable.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 4,
+    section: "Documentation",
+    content: [
+      "Customer must have either Tier 3 savings or current account with bank (full KYC must be taken during the opening of account).",
+      "Fill card request form at the branch.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+];
+

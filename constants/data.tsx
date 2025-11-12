@@ -365,30 +365,23 @@ export const bankingChannelsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
-    text: "Jaiz Bank App",
-    route: "/products/banking-channel" as const,
-    keywords: ["jaiz bank", "banking app"],
+    text: "Mobile Banking",
+    route: "/products/banking-channel/mobile-banking" as const,
+    keywords: ["mobile banking", "banking app"],
   },
   {
     id: 2,
     icon: <UserIcon width={44} height={44} />,
     text: "Internet Banking",
-    route: "/products/banking-channel" as const,
+    route: "/products/banking-channel/internet-banking" as const,
     keywords: ["internet banking", "online banking"],
   },
   {
     id: 3,
     icon: <UserIcon width={44} height={44} />,
-    text: "USSD Bank",
-    route: "/products/banking-channel" as const,
-    keywords: ["ussd", "banking", "mobile banking"],
-  },
-  {
-    id: 4,
-    icon: <UserIcon width={44} height={44} />,
-    text: "SMS Banking",
-    route: "/products/banking-channel" as const,
-    keywords: ["sms banking", "text banking", "mobile banking"],
+    text: "USSD Banking",
+    route: "/products/banking-channel/ussd-banking" as const,
+    keywords: ["ussd", "banking"],
   },
 ];
 
