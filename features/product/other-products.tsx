@@ -1,20 +1,18 @@
 import React from "react";
-import { FlatList, Pressable, ScrollView } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
 import { Href, useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 
 import {
+  BackButton,
   Header,
   ListTile,
   SearchBar,
   SearchNotFound,
 } from "@/components/shared";
-import { bankingChannelsData, cardsData, otherProductsData } from "@/constants/data";
+import { otherProductsData } from "@/constants/data";
 import { useSearch } from "@/hooks/useSearch";
 import { PageItem } from "@/types/page";
-
 
 const OtherProductsScreen = () => {
   const router = useRouter();
@@ -27,22 +25,14 @@ const OtherProductsScreen = () => {
   } = useSearch(otherProductsData);
 
   return (
-    <SafeAreaView className='flex-1 bg-background'>
-      <StatusBar style='auto' />
-      <ScrollView className='flex-1 px-5'>
-        <Pressable
-          hitSlop={20}
-          onPress={() => router.canGoBack() && router.dismissAll()}
-        >
-          <Ionicons name='arrow-back' size={25} />
-        </Pressable>
-
-        {/* Header Section */}
-        <Header title='Other Products' />
+    <SafeAreaView className="flex-1 bg-background">
+      <BackButton />
+      <ScrollView className="flex-1 px-5">
+        <Header title="Other Products" />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
-          placeholder='Search'
+          placeholder="Search"
         />
 
         <FlatList<PageItem>
@@ -60,7 +50,7 @@ const OtherProductsScreen = () => {
           removeClippedSubviews={true}
           maxToRenderPerBatch={10}
           windowSize={10}
-          className='rounded-lg bg-grey-0'
+          className="rounded-lg bg-grey-0"
           initialNumToRender={6}
           ListEmptyComponent={
             hasQuery && !hasResults ? (

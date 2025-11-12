@@ -34,7 +34,7 @@ export const AccountDetailsSheet: React.FC<Props> = ({ details, onCopy, onClose 
       </View>
       <View className='mt-4'>
         <Button size='lg' onPress={onClose}>
-          <Text className='text-sm font-semibold text-primary-foreground'>Close</Text>
+          <Text className='text-sm font-interSemiBold text-primary-foreground'>Close</Text>
         </Button>
       </View>
     </View>

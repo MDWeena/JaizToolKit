@@ -1,4 +1,10 @@
-import { Card, Header, SearchBar, SearchNotFound } from '@/components/shared';
+import {
+  BackButton,
+  Card,
+  Header,
+  SearchBar,
+  SearchNotFound,
+} from '@/components/shared';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback } from 'react';
@@ -16,7 +22,12 @@ type FunctionCardProps = {
 };
 
 const FunctionCard = React.memo<FunctionCardProps>(({ func, onPress }) => (
-  <Card icon={func.icon} text={func.text} onPress={() => onPress(func.route)} />
+  <Card
+    icon={func.icon}
+    text={func.text}
+    className={func.class}
+    onPress={() => onPress(func.route)}
+  />
 ));
 FunctionCard.displayName = 'FunctionCard';
 
@@ -49,6 +60,7 @@ const FunctionsScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
       <StatusBar style="auto" />
+      <BackButton />
 
       <ScrollView className="flex-1 px-5">
         <Header title="Functions" />

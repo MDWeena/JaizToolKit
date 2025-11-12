@@ -1,5 +1,6 @@
 import {
   OpenAccountIcon,
+  TeensAccountIcon,
   VerifyAccountIcon,
 } from '@/assets/images/svgs/account';
 import {
@@ -18,12 +19,18 @@ import {
   CardIcon,
   ChannelIcon,
   CorporateIcon,
-  DocumentIcon,
   LoanIcon,
   PieIcon,
-  TargetIcon,
   UserIcon,
 } from '@/assets/images/svgs/product-icons';
+import {
+  Directory,
+  FAQsIcon,
+  FormIcon,
+  NIMCIcon,
+  QuickLinks,
+  UsefulCodes,
+} from '@/assets/images/svgs/ressources';
 import {
   ChequeIcon,
   CustomerDetailsIcon,
@@ -36,7 +43,7 @@ import {
   PasswordResetIcon,
   RequestTrackerIcon,
 } from '@/assets/images/svgs/service-requests';
-import { PageItem, PageSection } from '@/types/page';
+import { PageItem } from '@/types/page';
 
 export const categoriesData: PageItem[] = [
   {
@@ -128,108 +135,143 @@ export const accountTypeData: PageItem[] = [
   },
 ];
 
+// export const individualAccountsData: PageItem[] = [
+//   {
+//     id: 1,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz Instant Account",
+//     keywords: ["jaiz instant", "instant account", "jaiz"],
+//   },
+//   {
+//     id: 2,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "eAccount",
+//     keywords: ["eaccount", "electronic account"],
+//   },
+//   {
+//     id: 3,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz Target",
+//     keywords: ["jaiz target", "target account"],
+//   },
+//   {
+//     id: 4,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz EasySavers Account",
+//     keywords: ["easysavers", "easy savers", "jaiz"],
+//   },
+//   {
+//     id: 5,
+//     icon: <UserIcon width={44} height={44} />,
+//     text: "Teens Account",
+//     route: "/products/account-type/individual/teens-account" as const,
+//     keywords: ["teens account", "teen", "jaiz"],
+//   },
+//   {
+//     id: 6,
+//     icon: <UserIcon width={44} height={44} />,
+//     text: "Jaiz eSavers",
+//     route: "/products/account-type/individual" as const,
+//     keywords: ["esavers", "jaiz esavers", "savers"],
+//   },
+// ];
+// export const individualAccountsData: PageItem[] = [
+//   {
+//     id: 1,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz Instant Account",
+//     keywords: ["jaiz instant", "instant account", "jaiz"],
+//   },
+//   {
+//     id: 2,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "eAccount",
+//     keywords: ["eaccount", "electronic account"],
+//   },
+//   {
+//     id: 3,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz Target",
+//     keywords: ["jaiz target", "target account"],
+//   },
+//   {
+//     id: 4,
+//     icon: <UserIcon width={44} height={44} />,
+//     route: "/products/account-type/individual" as const,
+//     text: "Jaiz EasySavers Account",
+//     keywords: ["easysavers", "easy savers", "jaiz"],
+//   },
+//   {
+//     id: 5,
+//     icon: <UserIcon width={44} height={44} />,
+//     text: "Teens Account",
+//     route: "/products/account-type/individual/teens-account" as const,
+//     keywords: ["teens account", "teen", "jaiz"],
+//   },
+//   {
+//     id: 6,
+//     icon: <UserIcon width={44} height={44} />,
+//     text: "Jaiz eSavers",
+//     route: "/products/account-type/individual" as const,
+//     keywords: ["esavers", "jaiz esavers", "savers"],
+//   },
+// ];
 export const individualAccountsData: PageItem[] = [
   {
     id: 1,
     icon: <UserIcon width={44} height={44} />,
-    route: '/products/account-type/individual' as const,
-    text: 'Jaiz Instant Account',
-    keywords: ['jaiz instant', 'instant account', 'jaiz'],
+    route: '/products/account-type/individual/tier1' as const,
+    text: 'Tier 1',
+    keywords: ['tier 1', 'tier one', 'jaiz'],
   },
   {
     id: 2,
     icon: <UserIcon width={44} height={44} />,
-    route: '/products/account-type/individual' as const,
-    text: 'eAccount',
-    keywords: ['eaccount', 'electronic account'],
+    route: '/products/account-type/individual/tier3' as const,
+    text: 'Tier 3',
+    keywords: ['tier 3', 'tier three', 'jaiz'],
   },
   {
     id: 3,
     icon: <UserIcon width={44} height={44} />,
-    route: '/products/account-type/individual' as const,
-    text: 'Jaiz Target',
-    keywords: ['jaiz target', 'target account'],
+    route: '/products/account-type/individual/current-account' as const,
+    text: ' Current Account',
+    keywords: ['current account', 'current'],
   },
   {
     id: 4,
     icon: <UserIcon width={44} height={44} />,
-    route: '/products/account-type/individual' as const,
-    text: 'Jaiz EasySavers Account',
+    route: '/products/account-type/individual/domicilliary-account' as const,
+    text: 'Jaiz Domicilliary Account',
     keywords: ['easysavers', 'easy savers', 'jaiz'],
   },
   {
     id: 5,
+    icon: <UserIcon width={44} height={44} />,
+    route: '/products/account-type/individual/japsa-term-deposit' as const,
+    text: 'JAPSA Term Deposit(JTD)',
+    keywords: ['japsa term deposit', 'jtd', 'jaiz'],
+  },
+  {
+    id: 6,
     icon: <UserIcon width={44} height={44} />,
     text: 'Teens Account',
     route: '/products/account-type/individual/teens-account' as const,
     keywords: ['teens account', 'teen', 'jaiz'],
   },
   {
-    id: 6,
+    id: 7,
     icon: <UserIcon width={44} height={44} />,
-    text: 'Jaiz eSavers',
-    route: '/products/account-type/individual' as const,
-    keywords: ['esavers', 'jaiz esavers', 'savers'],
-  },
-];
-
-export const corporateAccountsData: PageItem[] = [
-  {
-    id: 1,
-    icon: <CorporateIcon width={44} height={44} />,
-    text: 'Jaiz Max',
-    route: '/products/account-type/corporate' as const,
-    keywords: ['corporate', 'account', 'jaiz max'],
-  },
-  {
-    id: 2,
-    icon: <CorporateIcon width={44} height={44} />,
-    text: 'Jaiz Business',
-    route: '/products/account-type/corporate' as const,
-    keywords: ['corporate', 'account', 'jaiz business'],
-  },
-];
-
-export const teenAccountData: PageSection[] = [
-  {
-    id: 1,
-    section: 'Description',
-    content: [
-      'Start your children on the road to financial success.',
-      'The Smart Kids Save account is designed to enable parents/guardians save for their children under 18 years of age, whilst also developing a savings culture in them.',
-      'Teaching children the value of savings early can help them develop SMART financial habits for life.',
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-  {
-    id: 2,
-    section: 'Target Market',
-    content: [
-      'Minimum opening/account balance of N1,000.00 (One Thousand Naira Only).',
-      'Periodic lodgements can be made into the account through Standing Order/automated direct debits.',
-      'Complimentary invite to SKS Fun events.',
-      'SKS can be converted into a regular savings or current account, with the young saver as an authorized signatory. This is however only after the Smart kid saver has attained the age of 18.',
-      'From the age of 13, an SKS Teen account will be opened for the teenager which comes with a Trendy Teen MasterCard (issued upon Parent’s request) so the child can learn to manage money responsibly.',
-    ],
-    icon: <TargetIcon width={32} height={32} />,
-  },
-  {
-    id: 3,
-    section: 'Features & Benefits',
-    content: [
-      'Minimum opening/account balance of N1,000.00 (One Thousand Naira Only).',
-      'Periodic lodgements can be made into the account through Standing Order/automated direct debits.',
-      'Complimentary invite to SKS Fun events.',
-      'SKS can be converted into a regular savings or current account, with the young saver as an authorized signatory. This is however only after the Smart kid saver has attained the age of 18.',
-      'From the age of 13, an SKS Teen account will be opened for the teenager which comes with a Trendy Teen MasterCard (issued upon Parent’s request) so the child can learn to manage money responsibly.',
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-  {
-    id: 4,
-    section: 'Documentation',
-    content: [],
-    icon: <DocumentIcon width={32} height={32} />,
+    text: 'Hajj Savings Account',
+    route: '/products/account-type/individual/hajj-savings-account' as const,
+    keywords: ['hajj savings account', 'hajj', 'savings'],
   },
 ];
 
@@ -359,7 +401,7 @@ export const otherProductsData: PageItem[] = [
     id: 4,
     icon: <PieIcon width={44} height={44} />,
     text: 'POS Terminals',
-    route: '/' as const,
+    route: '/products/other-products' as const,
     keywords: ['pos terminals', 'point of sale', 'mobile banking'],
   },
 ];
@@ -371,6 +413,7 @@ export const functionsData = [
     text: 'Cards',
     route: '/functions/cards' as const,
     keywords: ['link', 'pin', 'card'],
+    class: 'border-grey-200',
   },
   {
     id: 2,
@@ -381,21 +424,23 @@ export const functionsData = [
       'customer',
       'balance',
       'lien',
-      'freeze',
+      'restrictions',
       'transactions',
       'statement',
       'cheque',
       'service',
       'requests',
     ],
+    class: 'border-grey-200',
   },
 
   {
     id: 3,
     icon: <LinkBvnIcon width={44} height={44} />,
     text: 'Link BVN/NIN',
-    route: '/functions/link-ids' as const,
+    route: '/functions/linking' as const,
     keywords: ['bvn', 'nin', 'link', 'identification', 'id'],
+    class: 'border-grey-200',
   },
 
   {
@@ -404,6 +449,7 @@ export const functionsData = [
     text: 'Facility Repayment',
     route: '/functions/repayment' as const,
     keywords: ['facility', 'repayment'],
+    class: 'border-grey-200',
   },
 ];
 
@@ -418,7 +464,7 @@ export const rmData = [
       'customer',
       'balance',
       'lien',
-      'freeze',
+      'restrictions',
       'transactions',
       'statement',
       'cheque',
@@ -430,7 +476,7 @@ export const rmData = [
     id: 2,
     icon: <LienIcons width={25} height={25} />,
     description: 'View restrictions & Blocked funds',
-    text: 'View LIEN / Freeze',
+    text: 'View LIEN / Retrictions',
     route: '/functions/rm/lien' as const,
     keywords: ['link', 'pin', 'card'],
   },
@@ -466,8 +512,9 @@ export const accounts: PageItem[] = [
     icon: <OpenAccountIcon width={44} height={44} />,
     text: 'Open Account',
     route: '/accounts/open/officer-details' as const,
+    // route: "/accounts/open" as const,
     keywords: ['open account', 'account'],
-    class: 'border-white',
+    class: 'border-grey-200',
   },
   {
     id: 2,
@@ -475,7 +522,7 @@ export const accounts: PageItem[] = [
     text: 'Verify Account',
     route: '/accounts/verify' as const,
     keywords: ['verify account', 'account'],
-    class: 'border-white',
+    class: 'border-grey-200',
   },
 ];
 
@@ -491,8 +538,8 @@ export const serviceRequestData = [
   {
     id: 2,
     icon: <PasswordResetIcon width={30} height={30} />,
-    text: 'GAPS Password Reset',
-    description: 'Reset GAPS password',
+    text: 'Log in Detail Request',
+    description: 'Reset password',
     route: '/functions/rm/service-requests/login-request',
     keywords: ['GAPS', 'password', 'reset'],
   },
@@ -503,5 +550,438 @@ export const serviceRequestData = [
     description: 'Block customer cards',
     route: '/functions/rm/service-requests/card-hotlist',
     keywords: ['card', 'hotlist', 'block', 'customer'],
+  },
+];
+
+export const openAccountData: PageItem[] = [
+  {
+    id: 1,
+    icon: <UserIcon width={44} height={44} />,
+    route: '/accounts/open/individual' as const,
+    text: 'Individual Account',
+    keywords: ['Individual', 'account'],
+  },
+  {
+    id: 2,
+    icon: <CorporateIcon width={44} height={44} />,
+    route: '/accounts/open/corporate' as const,
+    text: 'Corporate Account',
+    keywords: ['Corporate', 'account'],
+  },
+  {
+    id: 3,
+    icon: <TeensAccountIcon width={44} height={44} />,
+    route: '/accounts/open/teen' as const,
+    text: 'Teens Account',
+    keywords: ['Teens', 'account'],
+  },
+  {
+    id: 4,
+    icon: <PieIcon width={44} height={44} />,
+    route: '/accounts/open/jaiz3' as const,
+    text: 'Jaiz 3 Account',
+    keywords: ['Jaiz 3', 'account'],
+  },
+];
+
+export const IndividualAccountData: PageItem[] = [
+  {
+    id: 1,
+    icon: <UserIcon width={44} height={44} />,
+    route: '/accounts/open/individual/tier1' as const,
+    text: 'Tier 1',
+    keywords: ['Tier 1', 'individual', 'account'],
+  },
+  {
+    id: 2,
+    icon: <UserIcon width={44} height={44} />,
+    route: '/accounts/open/individual/tier3' as const,
+    text: 'Tier 3',
+    keywords: ['Tier 3', 'individual', 'account'],
+  },
+];
+
+export const TeenAccountData: PageItem[] = [
+  {
+    id: 1,
+    icon: <TeensAccountIcon width={44} height={44} />,
+    route: '/accounts/open/teen/tier1' as const,
+    text: 'Tier 1- Teen Account',
+    keywords: ['Tier 1', 'teen', 'account'],
+  },
+  {
+    id: 2,
+    icon: <TeensAccountIcon width={44} height={44} />,
+    route: '/accounts/open/teen/tier3' as const,
+    text: 'Tier 3 - Teen Account',
+    keywords: ['Tier 3', 'teen', 'account'],
+  },
+];
+
+export const Jaiz3AccountData: PageItem[] = [
+  {
+    id: 1,
+    icon: <PieIcon width={44} height={44} />,
+    route: '/accounts/open/jaiz3/tier1' as const,
+    text: 'Tier 1 - Jaiz 3 Account',
+    keywords: ['Tier 1', 'jaiz 3', 'account'],
+  },
+  {
+    id: 2,
+    icon: <PieIcon width={44} height={44} />,
+    route: '/accounts/open/jaiz3/tier3' as const,
+    text: 'Tier 3 - Jaiz 3 Account',
+    keywords: ['Tier 3', 'jaiz 3', 'account'],
+  },
+];
+
+export const transactionHistoryData = [
+  {
+    period: 'Today',
+    transactions: [
+      {
+        id: 1,
+        amount: '₦50,000.00',
+        direction: 'credit',
+        actor: 'Yusuf Salisu',
+        type: 'Transfer',
+      },
+
+      {
+        id: 2,
+        amount: '₦50,000.00',
+        direction: 'debit',
+        actor: 'Yusuf Salisu',
+        type: 'Transfer',
+      },
+    ],
+  },
+  {
+    period: 'Yesterday',
+    transactions: [
+      {
+        id: 1,
+        amount: '₦20,000.00',
+        direction: 'debit',
+        actor: 'Aminu Bello',
+        type: 'Transfer',
+      },
+      {
+        id: 2,
+        amount: '₦100,000.00',
+        direction: 'credit',
+        actor: 'Aminu Bello',
+        type: 'Transfer',
+      },
+      {
+        id: 1,
+        amount: '₦20,000.00',
+        direction: 'debit',
+        actor: 'Aminu Bello',
+        type: 'Transfer',
+      },
+      {
+        id: 2,
+        amount: '₦100,000.00',
+        direction: 'credit',
+        actor: 'Aminu Bello',
+        type: 'Transfer',
+      },
+      {
+        id: 1,
+        amount: '₦20,000.00',
+        direction: 'debit',
+        actor: 'Aminu Bello',
+        type: 'Transfer',
+      },
+      {
+        id: 2,
+        amount: '₦100,000.00',
+        direction: 'credit',
+        actor: 'Aminu Bello',
+        type: 'Transfer',
+      },
+    ],
+  },
+];
+
+export const resourcesData = [
+  {
+    id: 1,
+    icon: <FormIcon width={44} height={44} />,
+    text: 'Forms',
+    route: '/resources/forms' as const,
+    keywords: ['link', 'pin', 'card'],
+    class: 'border-grey-200',
+  },
+  {
+    id: 2,
+    icon: <UsefulCodes width={44} height={44} />,
+    text: 'Useful Codes',
+    route: '/resources/useful-codes' as const,
+    keywords: ['codes', 'sort codes', 'pc codes'],
+    class: 'border-grey-200',
+  },
+
+  {
+    id: 3,
+    icon: <QuickLinks width={44} height={44} />,
+    text: 'Quick Links',
+    route: '/resources/quick-links' as const,
+    keywords: ['quick', 'links', 'quick links'],
+    class: 'border-grey-200',
+  },
+
+  {
+    id: 4,
+    icon: <Directory width={44} height={44} />,
+    text: 'Directories',
+    route: '/resources/directories' as const,
+    keywords: ['directories', 'unit', 'hmo'],
+    class: 'border-grey-200',
+  },
+
+  {
+    id: 5,
+    icon: <FAQsIcon width={44} height={44} />,
+    text: 'FAQs',
+    route: '/resources/faqs' as const,
+    keywords: ['faqs', 'frequently asked questions', 'questions'],
+    class: 'border-grey-200',
+  },
+
+  {
+    id: 6,
+    icon: <NIMCIcon width={44} height={44} />,
+    text: 'NIMC Centres',
+    route: '/resources/nimc' as const,
+    keywords: ['nimc'],
+    class: 'border-grey-200',
+  },
+];
+
+export const quickLinksData = [
+  {
+    id: 1,
+    text: 'ProcessMaker',
+    url: '',
+  },
+  {
+    id: 2,
+    text: 'Office 635',
+    url: '',
+  },
+  {
+    id: 3,
+    text: 'CRM Portal',
+    url: '',
+  },
+  {
+    id: 4,
+    text: 'Digital Skills',
+    url: '',
+  },
+  {
+    id: 5,
+    text: 'E-Library',
+    url: '',
+  },
+];
+
+export const directoriesData = [
+  {
+    id: 1,
+    text: 'Unit Directories',
+    link: '/resources/directories/unit' as const,
+  },
+  {
+    id: 2,
+    text: 'Escalation Directories',
+    link: '/resources/directories/escalation' as const,
+    external: true,
+  },
+  {
+    id: 3,
+    text: 'HMO Directories',
+    link: '/resources/directories/hmo' as const,
+    external: true,
+  },
+];
+
+export const directoryContacts = [
+  {
+    name: 'John Doe',
+    phone: '08012345678',
+  },
+  {
+    name: 'Jane Smith',
+    phone: '08087654321',
+  },
+  {
+    name: 'Michael Johnson',
+    phone: '08123456789',
+  },
+  {
+    name: 'Branch Head',
+    phone: '08098765432',
+  },
+  {
+    name: 'Customer Service',
+    phone: '08134567890',
+  },
+  {
+    name: 'Security Officer',
+    phone: '08045678901',
+  },
+  {
+    name: 'Switchboard',
+    phone: '07012345678',
+  },
+  {
+    name: 'IT Support',
+    phone: '07087654321',
+  },
+  {
+    name: 'CBG',
+    phone: '08123456780',
+  },
+];
+
+export const usefulCodesData = [
+  {
+    id: 1,
+    text: 'Sort Codes',
+    url: '',
+  },
+  {
+    id: 2,
+    text: 'PC Codes',
+    url: '',
+  },
+];
+
+export const NIMCCentresData = [
+  {
+    id: 1,
+    centre: 'Ajah',
+    location: 'Lagos Island',
+    live: true,
+    operational: true,
+  },
+  {
+    id: 2,
+    centre: 'Maitama',
+    location: 'Abuja',
+    live: false,
+    operational: true,
+  },
+  {
+    id: 3,
+    centre: 'Kaduna',
+    location: 'Kaduna State',
+    live: true,
+    operational: false,
+  },
+  {
+    id: 4,
+    centre: 'Port Harcourt',
+    location: 'Rivers State',
+    live: false,
+    operational: false,
+  },
+];
+
+export const faqsData = [
+  {
+    id: 1,
+    question: 'How to generate card statement?',
+    answer:
+      "To generate your card statement, log in to the Jaiz Bank App or Internet Banking platform. Navigate to the 'Cards' section, select your card, and choose the 'Generate Statement' option. You can specify the date range for the statement you wish to generate.",
+    categories: ['Cards', 'Channels'],
+  },
+  {
+    id: 2,
+    question: 'How to link BVN to my account?',
+    answer:
+      "To link your BVN to your Jaiz Bank account, you can visit any Jaiz Bank branch with a valid ID and your BVN. Alternatively, you can use the Jaiz Bank App or Internet Banking platform to link your BVN online by navigating to the 'Profile' or 'Account Settings' section and following the prompts to link your BVN.",
+    categories: ['Accounts'],
+  },
+  {
+    id: 3,
+    question: 'What are the charges for SMS banking?',
+    answer:
+      'Jaiz Bank offers SMS banking services at a nominal fee. The charges may vary based on the type of transaction you perform via SMS. For detailed information on SMS banking charges, please refer to the official Jaiz Bank website or contact customer service.',
+    categories: ['Channels'],
+  },
+  {
+    id: 4,
+    question: 'What is the interest rate for Jaiz Salary Advance?',
+    answer:
+      'The interest rate for Jaiz Salary Advance is competitive and may vary based on the amount and tenure of the advance. For the most accurate and up-to-date information on interest rates, please visit the Jaiz Bank website or contact your relationship manager.',
+    categories: ['Loans'],
+  },
+  {
+    id: 5,
+    question: 'How to reset my Internet Banking password?',
+    answer:
+      'To reset your Internet Banking password, go to the Jaiz Bank Internet Banking login page and click on the "Forgot Password" link. Follow the instructions provided, which may include verifying your identity through email or SMS, to create a new password.',
+    categories: ['Channels', 'Functions'],
+  },
+  {
+    id: 6,
+    question: 'Where can I find Jaiz Bank forms?',
+    answer:
+      'Jaiz Bank forms can be found on the official Jaiz Bank website under the "Resources" or "Forms" section. You can download the required forms for various services such as account opening, loan applications, and more.',
+    categories: ['Resources'],
+  },
+  {
+    id: 7,
+    question: 'How to contact Jaiz Bank customer service?',
+    answer:
+      'You can contact Jaiz Bank customer service through various channels including phone, email, or by visiting a local branch. The customer service hotline is available on the Jaiz Bank website, and you can also reach out via the Jaiz Bank App for assistance.',
+    categories: ['Resources'],
+  },
+];
+
+export const formsData = [
+  {
+    id: 1,
+    name: 'Tier 3 Individual Account Opening',
+    categories: ['Account Opening', 'Individual Accounts'],
+  },
+  {
+    id: 2,
+    name: 'Tier 1 Individual Account Opening',
+    categories: ['Account Opening', 'Individual Accounts'],
+  },
+  {
+    id: 3,
+    name: 'Corporate Account Opening',
+    categories: ['Account Opening', 'Corporate Accounts'],
+  },
+  {
+    id: 4,
+    name: 'Teens Account Opening',
+    categories: ['Account Opening', 'Teen Accounts'],
+  },
+  {
+    id: 5,
+    name: 'Jaiz 3 Account Opening',
+    categories: ['Account Opening', 'Jaiz 3 Accounts'],
+  },
+  {
+    id: 6,
+    name: 'Loan Application Form',
+    categories: ['Loans'],
+  },
+  {
+    id: 7,
+    name: 'Card Request Form',
+    categories: ['Cards'],
+  },
+  {
+    id: 8,
+    name: 'Account Closure Form',
+    categories: ['Account Management'],
   },
 ];

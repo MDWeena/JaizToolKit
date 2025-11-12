@@ -1,15 +1,15 @@
-import Colors from '@/constants/Colors';
-import { useTheme } from '@/contexts/ThemeContext';
-import { cn } from '@/lib/utils';
-import Feather from '@expo/vector-icons/Feather';
-import React from 'react';
+import Colors from "@/constants/Colors";
+import { useTheme } from "@/contexts/ThemeContext";
+import { cn } from "@/lib/utils";
+import Feather from "@expo/vector-icons/Feather";
+import React from "react";
 import {
   Image,
   ImageSourcePropType,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { Text } from '../ui/Text';
+} from "react-native";
+import { Text } from "../ui/Text";
 
 interface HeaderProps {
   profileImage?: ImageSourcePropType;
@@ -31,16 +31,22 @@ export const Header: React.FC<HeaderProps> = ({
   subtitle,
   showNotification = false,
   onNotificationPress,
-  userNameClassName = '',
-  userIdClassName = '',
+  userNameClassName = "",
+  userIdClassName = "",
 }) => {
   const { colorScheme } = useTheme();
 
-  const mainText = userName ? `Hello, ${userName}` : title;
+  const truncatedUserName = userName
+    ? userName.length > 10
+      ? userName.split(" ")[0].slice(0, 10) + "..."
+      : userName
+    : "";
+
+  const mainText = userName ? `Hello, ${truncatedUserName}` : title;
   const secondaryText = userName ? `User ID: ${userId}` : subtitle;
 
   return (
-    <View className="flex-row items-center gap-4 justify-between mb-4">
+    <View className="flex-row items-center gap-4 justify-between mb-6">
       <View className="flex-row items-center">
         {profileImage && (
           <Image
@@ -51,14 +57,14 @@ export const Header: React.FC<HeaderProps> = ({
         <View className="gap-1">
           <Text
             className={cn(
-              'text-3xl text-grey-900 font-semibold',
+              "text-3xl text-text font-interSemiBold",
               userNameClassName
             )}
           >
             {mainText}
           </Text>
           {secondaryText && (
-            <Text className={cn('text-sm text-grey-600', userIdClassName)}>
+            <Text className={cn("text-sm text-grey-600", userIdClassName)}>
               {secondaryText}
             </Text>
           )}

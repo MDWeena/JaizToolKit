@@ -22,6 +22,7 @@ interface Props extends ViewProps {
   helperTextStyle?: 'custom' | 'error';
   ignoreFocus?: boolean;
   InputRef?: (ref: TextInput) => void | RefObject<TextInput | null>;
+  containerClassName?: string;
 }
 
 const TextField: FC<Props> = ({
@@ -35,6 +36,7 @@ const TextField: FC<Props> = ({
   helperTextStyle = 'error',
   ignoreFocus,
   InputRef,
+  containerClassName,
   ...props
 }) => {
   const [inputFocused, setInputFocused] = useState(false);
@@ -52,6 +54,7 @@ const TextField: FC<Props> = ({
       <View
         className={cn(
           'relative bg-[#E1E1E4] rounded-[12px]',
+          containerClassName,
           inputFocused && 'border border-primary',
           inputPrefix ? 'pl-16' : 'pl-4',
           inputSuffix ? 'pr-16' : 'pr-4',

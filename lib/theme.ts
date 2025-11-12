@@ -26,6 +26,7 @@ export const themes = {
     "--color-secondary-foreground": "255 255 255", // Secondary Foreground (white)
     "--color-background": "24 24 32", // Grey Scale/900 (dark background)
     "--color-background-foreground": "255 255 255", // Background Foreground (white)
+    "--color-grey-0": "24 24 32", // Grey Scale/0 (dark background)
     "--color-grey-200": "83 88 122", // Grey - Medium (lighter grey for dark)
     "--color-grey-300": "83 88 122", // grey Scale/300
     "--color-grey-600": "156 155 164", // Grey Scale/600 (same)

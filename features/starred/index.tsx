@@ -8,7 +8,6 @@ import {
   FlatList,
   Pressable,
   ScrollView,
-  Text,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,7 +17,7 @@ import { Card, Header, ListTile } from "@/components/shared";
 import { productsData } from "@/constants/data";
 import { useStarred } from "@/contexts/StarredContext";
 import { PageItem } from "@/types/page";
-import { cn } from "@/lib/utils";
+import { Text } from "@/components/ui/Text";
 
 type ViewMode = "list" | "grid";
 
@@ -92,11 +91,12 @@ const StarredScreen = () => {
       }
 
       return (
-        <View className="relative">
+        <View className="relative flex-1">
           <Card
             icon={item.icon}
             text={item.text}
             onPress={() => onItemPress(item.route as Href | undefined)}
+            className="border-grey-200 border"
           />
           {isEditMode && (
             <Pressable
@@ -126,7 +126,7 @@ const StarredScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ paddingTop: 20 }} className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-background">
       <StatusBar style="auto" />
       <ScrollView className="flex-1 px-5">
         {/* Header with view toggle and edit button */}
@@ -148,7 +148,7 @@ const StarredScreen = () => {
               </Pressable>
               <Pressable
                 onPress={() => setViewMode("grid")}
-                className={`px-4 py-1.5 ${viewMode === "grid" ? "bg-primary-foreground" : ""}`}
+                className={`px-4 h-full py-3 ${viewMode === "grid" ? "bg-primary-foreground" : ""}`}
               >
                 <GridIcon />
               </Pressable>
@@ -184,7 +184,7 @@ const StarredScreen = () => {
             keyExtractor={(item) => item.id.toString()}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            className="rounded-lg bg-grey-0"
+            className="rounded-lg bg-grey-0 border-grey-200 border"
             removeClippedSubviews={true}
             maxToRenderPerBatch={10}
             windowSize={10}
@@ -195,7 +195,7 @@ const StarredScreen = () => {
             key="grid-view"
             data={starredItemsWithIcons}
             numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
+            columnWrapperStyle={{ justifyContent: "space-between", gap: 8, display:"flex" }}
             renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}
             scrollEnabled={false}

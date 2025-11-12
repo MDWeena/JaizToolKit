@@ -1,4 +1,4 @@
-import ServiceRequestScreen from '@/features/functions/service-requests';
+import ServiceRequestScreen from '@/features/functions/rm/service-requests';
 import React from 'react';
 
 const page = () => <ServiceRequestScreen />;
