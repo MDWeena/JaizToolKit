@@ -453,7 +453,6 @@ export const visaDollarCardData: PageSection[] = [
   },
 ];
 
-
 export const masterCardData: PageSection[] = [
   {
     id: 1,
@@ -504,91 +503,7 @@ export const afrigoCardData: PageSection[] = [
   {
     id: 1,
     section: "Target Market",
-    content: [
-      "Individuals with savings or current account.",
-    ],
-    icon: <TargetIcon width={32} height={32} />,
-  },
-  {
-    id: 2,
-    section: "Features",
-    content: [
-      "Domestic Card.",
-      "Backed by CBN and NIBSS.",
-      "Acceptable Nationwide.",
-      "Lower transactions costs.",
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-  {
-    id: 3,
-    section: "Benefits",
-    content: [
-      "Reduced cost of transactions.",
-      "Enhanced local control and security.",
-      "Improved payment infrastructure and locally adaptable.",
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-  {
-    id: 4,
-    section: "Documentation",
-    content: [
-      "Customer must have either Tier 3 savings or current account with bank (full KYC must be taken during the opening of account).",
-      "Fill card request form at the branch.",
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-];
-
-export const mobileBankingData: PageSection[] = [
-  {
-    id: 1,
-    section: "Target Market",
-    content: [
-      "Individuals with savings or current account.",
-    ],
-    icon: <TargetIcon width={32} height={32} />,
-  },
-  {
-    id: 2,
-    section: "Features",
-    content: [
-      "Domestic Card.",
-      "Backed by CBN and NIBSS.",
-      "Acceptable Nationwide.",
-      "Lower transactions costs.",
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-  {
-    id: 3,
-    section: "Benefits",
-    content: [
-      "Reduced cost of transactions.",
-      "Enhanced local control and security.",
-      "Improved payment infrastructure and locally adaptable.",
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-  {
-    id: 4,
-    section: "Documentation",
-    content: [
-      "Customer must have either Tier 3 savings or current account with bank (full KYC must be taken during the opening of account).",
-      "Fill card request form at the branch.",
-    ],
-    icon: <DocumentIcon width={32} height={32} />,
-  },
-];
-
-export const internetBankingData: PageSection[] = [
-  {
-    id: 1,
-    section: "Target Market",
-    content: [
-      "Individuals with savings or current account.",
-    ],
+    content: ["Individuals with savings or current account."],
     icon: <TargetIcon width={32} height={32} />,
   },
   {
@@ -627,19 +542,22 @@ export const ussdBankingData: PageSection[] = [
   {
     id: 1,
     section: "Target Market",
-    content: [
-      "Individuals with savings or current account.",
-    ],
+    content: ["Underserved/unbanked and all Individual Account holders."],
     icon: <TargetIcon width={32} height={32} />,
   },
   {
     id: 2,
     section: "Features",
     content: [
-      "Domestic Card.",
-      "Backed by CBN and NIBSS.",
-      "Acceptable Nationwide.",
-      "Lower transactions costs.",
+      "Funds Transfer.",
+      "Bills Payments.",
+      "Buy Airtime.",
+      "Settings and Personalization.",
+      "Self Service.",
+      "Security & Authentication.",
+      "Merchant Payments.",
+      "Account Opening.",
+      "Agent's services Promotes the Bank's brand.",
     ],
     icon: <DocumentIcon width={32} height={32} />,
   },
@@ -647,9 +565,18 @@ export const ussdBankingData: PageSection[] = [
     id: 3,
     section: "Benefits",
     content: [
-      "Reduced cost of transactions.",
-      "Enhanced local control and security.",
-      "Improved payment infrastructure and locally adaptable.",
+      "Increases revenue generation for the Bank.",
+      "Increases overall profitability for the Bank.",
+      "Banking halls decongestion and in return achieve transaction cost saving by our customers using prepaid Cards issued by the Bank.",
+      "Source of Fee Income to the Bank.",
+      "Grows fee based income.",
+      "Opportunity for offering Basic Banking Services on a 24/7 Basis hence serving as Enabler for more patronage and customer retention.",
+      "Enablers for Retailing and Value Added Services such as Bills Payments.",
+      "Enhance market reputation and give a customer centric image to the Bank.",
+      "The Bank gains competitive advantage over competition.",
+      "Access to fast and convenient transactional Banking.",
+      "Quick and easy bill payment experience.",
+      "Self enrolment.",
     ],
     icon: <DocumentIcon width={32} height={32} />,
   },
@@ -657,10 +584,120 @@ export const ussdBankingData: PageSection[] = [
     id: 4,
     section: "Documentation",
     content: [
-      "Customer must have either Tier 3 savings or current account with bank (full KYC must be taken during the opening of account).",
-      "Fill card request form at the branch.",
+      "Customer without an account but must have BVN, an account number, mobile number, debit car or token.",
     ],
     icon: <DocumentIcon width={32} height={32} />,
   },
 ];
 
+export const internetBankingData: PageSection[] = [
+  {
+    id: 1,
+    section: "Target Market",
+    content: ["All Individual Account holders.", "Corporate Account holders."],
+    icon: <TargetIcon width={32} height={32} />,
+  },
+  {
+    id: 2,
+    section: "Features",
+    content: [
+      "Funds Transfer.",
+      "Bills Payments.",
+      "Buy Airtime.",
+      "Settings and Personalization.",
+      "Customer & Self Service.",
+      "Security & Authentication Settings.",
+      "Data Purchase.",
+      "Bulk Payment.",
+      "View, Download and print transaction history.",
+      "View, Download and print transaction statement.",
+      "Internet Based.",
+      "Application Program Interface (API) integration capability.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 3,
+    section: "Benefits",
+    content: [
+      "Promotes the Bank's brand.",
+      "Increases revenue generation for the Bank.",
+      "Increases overall profitability for the Bank.",
+      "Banking halls decongestion and in return achieve transaction cost saving by our customers using prepaid Cards issued by the Bank.  ",
+      "Source of fee income to the Bank.",
+      "Grows fee based income.",
+      "Opportunity for offering Basic Banking Services on a 24/7 Basis hence serving as Enabler for more patronage and customer retention.",
+      "Enablers for Retailing and Value Added Services such as Bills Payments.",
+      "Enhance market reputation and give a customer centric image to the Bank.",
+      "The Bank gains competitive advantage over competitors.",
+      "Quick and easy bill payment experience.",
+      "24/7 user access.",
+      "Fast, simple and User friendly.",
+      "Guaranteed security for all your online transactions.",
+      "Online real-time account monitoring facility.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 4,
+    section: "Documentation",
+    content: [
+      "Customers with savings, current, or corporate accounts, Board resolution and a duly filled onboarding form, BVN.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+];
+
+export const mobileBankingData: PageSection[] = [
+  {
+    id: 1,
+    section: "Target Market",
+    content: [	
+      "All Individual Account holders.",
+      "Corporate Account holders (upon justification).",
+    ],
+    icon: <TargetIcon width={32} height={32} />,
+  },
+  {
+    id: 2,
+    section: "Features",
+    content: [
+      "Funds Transfer.",
+      "Bills Payments.",
+      "Buy Airtime.",
+      "Settings and Personalisation.",
+      "Customer & Self Service.",
+      "Zero Data Features.",
+      "Security & Authentication Settings.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 3,
+    section: "Benefits",
+    content: [
+      "Promotes the Bank's brand.",
+      "Increases revenue generation for the Bank.",
+      "Increases overall profitability for the Bank.",
+      "Banking halls decongestion and in return achieve transaction cost saving by our customers using prepaid Cards issued by the Bank.",
+      "Source of Fee Income to the Bank.",
+      "Grows fee based income.",
+      "Opportunity for offering Basic Banking Services on a 24/7 Basis hence serving as Enabler for more patronage and customer retention.",
+      "Enablers for Retailing and Value Added Services such as Bills Payments.",
+      "Enhance market reputation and give a customer centric image to the Bank.",
+      "The Bank gains competitive advantage over competitors.",
+      "Access to fast and convenient transactional Banking.",
+      "Quick and easy bill payment experience.",
+      "Self-enrolment.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+  {
+    id: 4,
+    section: "Documentation",
+    content: [
+      "Customers with savings or current accounts, BVN, Debit card or Token.",
+    ],
+    icon: <DocumentIcon width={32} height={32} />,
+  },
+];
