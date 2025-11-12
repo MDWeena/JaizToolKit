@@ -4,53 +4,63 @@ import React, { useCallback } from 'react';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { LaunchUrlIcon, UnitUserIcon } from '@/assets/images/svgs/ressources';
 import {
+  BackButton,
   Header,
   ListTile,
   SearchBar,
   SearchNotFound,
 } from '@/components/shared';
-import { rmData } from '@/constants/data';
+import { usefulCodesData } from '@/constants/data';
 import { useSearch } from '@/hooks/useSearch';
 
-type RMFunction = (typeof rmData)[0];
+type UsefulCodesFunction = (typeof usefulCodesData)[0];
 
-type RMFunctionItemProps = {
-  rmFunction: RMFunction;
+type UsefulCodesFunctionItemProps = {
+  usefulCodesFunction: UsefulCodesFunction;
   onPress(route: string): void;
 };
 
-const RMFunctionItem = React.memo<RMFunctionItemProps>(
-  ({ rmFunction, onPress }) => (
+const UsefulCodesFunctionItem = React.memo<UsefulCodesFunctionItemProps>(
+  ({ usefulCodesFunction, onPress }) => (
     <ListTile
-      leading={rmFunction.icon}
-      title={rmFunction.text}
-      onPress={() => onPress(rmFunction.route)}
+      leading={<UnitUserIcon width={25} height={25} />}
+      title={usefulCodesFunction.text}
+      onPress={() => onPress(usefulCodesFunction.url)}
+      trailing={<LaunchUrlIcon />}
+      containerClassName="!pb-0"
     />
   )
 );
-RMFunctionItem.displayName = 'RMFunctionItem';
+UsefulCodesFunctionItem.displayName = 'UsefulCodesFunctionItem';
 
-export default function RmScreen() {
+export default function UsefulCodesScreen() {
   const router = useRouter();
   const {
     searchQuery,
     setSearchQuery,
-    filteredItems: filteredRm,
+    filteredItems: filteredUsefulCodes,
     hasQuery,
-  } = useSearch(rmData);
+  } = useSearch(usefulCodesData);
 
-  const handleRMPress = useCallback(
+  const handleUsefulCodesPress = useCallback(
     (route: string) => {
       router.push(route as any);
     },
     [router]
   );
 
-  const renderRMItem: ListRenderItem<RMFunction> = useCallback(
-    ({ item }) => <RMFunctionItem rmFunction={item} onPress={handleRMPress} />,
-    [handleRMPress]
-  );
+  const renderUsefulCodesItem: ListRenderItem<UsefulCodesFunction> =
+    useCallback(
+      ({ item }) => (
+        <UsefulCodesFunctionItem
+          usefulCodesFunction={item}
+          onPress={handleUsefulCodesPress}
+        />
+      ),
+      [handleUsefulCodesPress]
+    );
 
   const renderEmptyComponent = useCallback(
     () => (hasQuery ? <SearchNotFound searchQuery={searchQuery} /> : null),
@@ -59,10 +69,11 @@ export default function RmScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
+      <BackButton />
       <StatusBar style="auto" />
       <ScrollView className="flex-1 px-5">
         {/* Header Section */}
-        <Header title="Relationship Mgmt." />
+        <Header title="Quick Links" />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -70,9 +81,9 @@ export default function RmScreen() {
         />
 
         <View className="mb-5 bg-white rounded-lg">
-          <FlatList<RMFunction>
-            data={filteredRm}
-            renderItem={renderRMItem}
+          <FlatList<UsefulCodesFunction>
+            data={filteredUsefulCodes}
+            renderItem={renderUsefulCodesItem}
             keyExtractor={(item) => item.id.toString()}
             ListEmptyComponent={renderEmptyComponent}
             scrollEnabled={false}
@@ -81,7 +92,7 @@ export default function RmScreen() {
             maxToRenderPerBatch={10}
             windowSize={10}
             initialNumToRender={8}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={{ paddingBottom: 0 }}
           />
         </View>
       </ScrollView>

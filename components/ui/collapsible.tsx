@@ -1,14 +1,7 @@
-import * as React from "react";
-import {
-  View,
-  Pressable,
-  LayoutAnimation,
-  // Platform,
-  // UIManager,
-} from "react-native";
-import { cn } from "@/lib/utils";
-import { Feather } from "@expo/vector-icons";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { cn } from '@/lib/utils';
+import { Feather } from '@expo/vector-icons';
+import * as React from 'react';
+import { LayoutAnimation, Pressable, View } from 'react-native';
 
 // Enable layout animation for Android
 // if (Platform.OS === "android") {
@@ -79,7 +72,11 @@ const Collapsible = React.forwardRef<View, CollapsibleProps>(
       <CollapsibleContext.Provider value={{ open: currentOpen, toggle }}>
         <View
           ref={ref}
-          className={cn("overflow-hidden border shadow-sm rounded-xl border-secondary-foreground/10", disabled && "opacity-50", className)}
+          className={cn(
+            'overflow-hidden border rounded-xl border-secondary-foreground/10',
+            disabled && 'opacity-50',
+            className
+          )}
           {...props}
         >
           {children}
@@ -89,7 +86,7 @@ const Collapsible = React.forwardRef<View, CollapsibleProps>(
   }
 );
 
-Collapsible.displayName = "Collapsible";
+Collapsible.displayName = 'Collapsible';
 
 interface CollapsibleTriggerProps {
   children: React.ReactNode;
@@ -104,7 +101,7 @@ const CollapsibleTrigger = React.forwardRef<View, CollapsibleTriggerProps>(
     const context = React.useContext(CollapsibleContext);
 
     if (!context) {
-      throw new Error("CollapsibleTrigger must be used within a Collapsible");
+      throw new Error('CollapsibleTrigger must be used within a Collapsible');
     }
 
     const { open, toggle } = context;
@@ -113,7 +110,7 @@ const CollapsibleTrigger = React.forwardRef<View, CollapsibleTriggerProps>(
       return React.cloneElement(children, {
         ...props,
         onPress: toggle,
-        accessibilityRole: "button",
+        accessibilityRole: 'button',
         accessibilityState: { expanded: open },
       } as any);
     }
@@ -122,7 +119,7 @@ const CollapsibleTrigger = React.forwardRef<View, CollapsibleTriggerProps>(
       <Pressable
         ref={ref as any}
         className={cn(
-          "flex-row items-center justify-between p-4 active:opacity-70",
+          'flex-row items-center justify-between p-4 active:opacity-70',
           className
         )}
         onPress={toggle}
@@ -136,8 +133,8 @@ const CollapsibleTrigger = React.forwardRef<View, CollapsibleTriggerProps>(
           {children}
         </View>
         {icon && (
-          <View style={{ transform: [{ rotate: open ? "0deg" : "270deg" }] }}>
-            <Feather name='chevron-down' size={26} color='#004081' />
+          <View style={{ transform: [{ rotate: open ? '0deg' : '270deg' }] }}>
+            <Feather name="chevron-down" size={26} color="#004081" />
           </View>
         )}
       </Pressable>
@@ -145,7 +142,7 @@ const CollapsibleTrigger = React.forwardRef<View, CollapsibleTriggerProps>(
   }
 );
 
-CollapsibleTrigger.displayName = "CollapsibleTrigger";
+CollapsibleTrigger.displayName = 'CollapsibleTrigger';
 
 interface CollapsibleContentProps {
   children: React.ReactNode;
@@ -157,7 +154,7 @@ const CollapsibleContent = React.forwardRef<View, CollapsibleContentProps>(
     const context = React.useContext(CollapsibleContext);
 
     if (!context) {
-      throw new Error("CollapsibleContent must be used within a Collapsible");
+      throw new Error('CollapsibleContent must be used within a Collapsible');
     }
 
     const { open } = context;
@@ -167,13 +164,13 @@ const CollapsibleContent = React.forwardRef<View, CollapsibleContentProps>(
     }
 
     return (
-      <View ref={ref} className={cn("overflow-hidden", className)} {...props}>
+      <View ref={ref} className={cn('overflow-hidden', className)} {...props}>
         {children}
       </View>
     );
   }
 );
 
-CollapsibleContent.displayName = "CollapsibleContent";
+CollapsibleContent.displayName = 'CollapsibleContent';
 
-export { Collapsible, CollapsibleTrigger, CollapsibleContent };
+export { Collapsible, CollapsibleContent, CollapsibleTrigger };

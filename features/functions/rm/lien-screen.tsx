@@ -4,7 +4,7 @@ import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header } from '@/components/shared';
+import { BackButton, Header } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
@@ -26,6 +26,7 @@ export default function LienScreen() {
   };
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
+      <BackButton />
       <StatusBar style="auto" />
       <ScrollView className="flex-1 px-5">
         {/* Header Section */}
@@ -46,30 +47,30 @@ export default function LienScreen() {
                 Lien
               </Text>
             </TabsTrigger>
-            <TabsTrigger value="freeze" className="flex-1">
+            <TabsTrigger value="restrictions" className="flex-1">
               <Text
                 className={cn(
                   '!text-primary !font-medium',
-                  activeTab === 'freeze' ? '!text-primary' : '!text-darkGray'
+                  activeTab === 'restrictions'
+                    ? '!text-primary'
+                    : '!text-darkGray'
                 )}
               >
-                Freeze
+                Restrictions
               </Text>
             </TabsTrigger>
           </TabsList>
           <TabsContent value="lien">
             <TextField
               className="!mt-5 w-full"
-              label="Account Number"
               InputProps={{
-                placeholder: 'Enter NUBAN',
+                placeholder: 'Account Number',
               }}
             />
             <TextField
               className="!mt-5 w-full"
-              label="Account Name"
               InputProps={{
-                placeholder: 'MICHAEL GWENDOLYN',
+                placeholder: 'Account Name',
                 editable: false,
               }}
             />
@@ -81,19 +82,17 @@ export default function LienScreen() {
               Search
             </Button>
           </TabsContent>
-          <TabsContent value="freeze">
+          <TabsContent value="restrictions">
             <TextField
               className="!mt-5 w-full"
-              label="Account Number"
               InputProps={{
-                placeholder: 'Enter NUBAN',
+                placeholder: 'Account Number',
               }}
             />
             <TextField
               className="!mt-5 w-full"
-              label="Account Name"
               InputProps={{
-                placeholder: 'MICHAEL GWENDOLYN',
+                placeholder: 'Account Name',
                 editable: false,
               }}
             />

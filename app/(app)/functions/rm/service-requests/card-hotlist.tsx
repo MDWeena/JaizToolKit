@@ -1,4 +1,4 @@
-import CardHotlistScreen from '@/features/functions/service-requests/card-hotlist';
+import CardHotlistScreen from '@/features/functions/rm/service-requests/card-hotlist';
 import React from 'react';
 
 const page = () => <CardHotlistScreen />;

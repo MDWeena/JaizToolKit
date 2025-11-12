@@ -4,31 +4,26 @@ import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header } from '@/components/shared';
+import { BackButton, Header } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
+import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { cn } from '@/lib/utils';
 import { Text } from 'react-native';
+import { BalanceSheet } from './balance-sheet';
+import { CustomerDetailsSheet } from './details-sheet';
 
 export default function CustomerDetailsScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = React.useState('balance');
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleVerify = async () => {
-    setIsLoading(true);
+  const { showBottomSheet, hideBottomSheet } = useBottomSheet();
 
-    // Simulate API call with delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsLoading(false);
-
-    // Navigate to officer details page
-    router.push('/accounts/open/officer-details');
-  };
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
+      <BackButton />
       <StatusBar style="auto" />
       <ScrollView className="flex-1 px-5">
         {/* Header Section */}
@@ -63,21 +58,21 @@ export default function CustomerDetailsScreen() {
           <TabsContent value="balance">
             <TextField
               className="!mt-5 w-full"
-              label="Account Number"
               InputProps={{
-                placeholder: 'Enter NUBAN',
+                placeholder: 'Account Number',
               }}
             />
             <TextField
               className="!mt-5 w-full"
-              label="Account Name"
               InputProps={{
-                placeholder: 'MICHAEL GWENDOLYN',
+                placeholder: 'Account Name',
                 editable: false,
               }}
             />
             <Button
-              onPress={handleVerify}
+              onPress={() =>
+                showBottomSheet(<BalanceSheet onClose={hideBottomSheet} />)
+              }
               className="mt-12 !min-w-full"
               disabled={isLoading}
             >
@@ -87,21 +82,23 @@ export default function CustomerDetailsScreen() {
           <TabsContent value="details">
             <TextField
               className="!mt-5 w-full"
-              label="Account Number"
               InputProps={{
-                placeholder: 'Enter NUBAN',
+                placeholder: 'Account Number',
               }}
             />
             <TextField
               className="!mt-5 w-full"
-              label="Account Name"
               InputProps={{
-                placeholder: 'MICHAEL GWENDOLYN',
+                placeholder: 'Account Name',
                 editable: false,
               }}
             />
             <Button
-              onPress={handleVerify}
+              onPress={() =>
+                showBottomSheet(
+                  <CustomerDetailsSheet onClose={hideBottomSheet} />
+                )
+              }
               className="mt-12 !min-w-full"
               disabled={isLoading}
             >
