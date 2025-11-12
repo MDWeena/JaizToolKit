@@ -8,17 +8,17 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { currentAccountData } from "../data";
+import { mobileBankingData } from "../data";
 import { PageSection } from "@/types/page";
 
-const CurrentAccountScreen = () => {
+const MobileBankingScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <BackButton />
       <ScrollView className="flex-1 px-5">
-        <Header title="Current Account" />
+        <Header title="Mobile Banking" />
         <FlatList<PageSection>
-          data={currentAccountData}
+          data={mobileBankingData}
           renderItem={({ item }) => (
             <Collapsible className="mb-3">
               <CollapsibleTrigger className="bg-white" iconLeft={item.icon}>
@@ -50,4 +50,4 @@ const CurrentAccountScreen = () => {
   );
 };
 
-export default CurrentAccountScreen;
+export default MobileBankingScreen;
