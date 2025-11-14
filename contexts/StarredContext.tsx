@@ -1,12 +1,17 @@
-import { PageItem } from "@/types/page";
+import { StarredItem } from "@/types/page";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
-
-type StarredItem = Pick<PageItem, "id" | "text" | "route">;
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 interface StarredContextType {
   starredItems: StarredItem[];
-  isStarred: (id: number) => boolean;
+  isStarred: (text: string) => boolean;
   toggleStar: (item: StarredItem) => Promise<void>;
   clearAll: () => Promise<void>;
   loading: boolean;
@@ -16,7 +21,14 @@ const StarredContext = createContext<StarredContextType | undefined>(undefined);
 
 const STORAGE_KEY = "@starred_items";
 
-export const StarredProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+// Helper function to normalize text (lowercase, no spaces)
+const normalizeText = (text: string): string => {
+  return text.toLowerCase().replace(/\s+/g, "");
+};
+
+export const StarredProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [starredItems, setStarredItems] = useState<StarredItem[]>([]);
   const [loading, setLoading] = useState(true);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -45,28 +57,38 @@ export const StarredProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
     saveTimeoutRef.current = setTimeout(async () => {
       try {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        // Exclude icon from storage since React components can't be serialized
+        const itemsToStore = items.map(({ icon, ...rest }) => rest);
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(itemsToStore));
       } catch (error) {
         console.error("Error saving starred items:", error);
       }
     }, 200);
   };
 
-  const isStarred = (id: number): boolean => {
-    return starredItems.some(item => item.id === id);
+  const isStarred = (text: string): boolean => {
+    const normalizedText = normalizeText(text);
+    return starredItems.some(
+      (item) => normalizeText(item.text) === normalizedText
+    );
   };
 
   const toggleStar = async (item: StarredItem) => {
-    setStarredItems(prevItems => {
-      const isCurrentlyStarred = prevItems.some(starred => starred.id === item.id);
+    setStarredItems((prevItems) => {
+      const normalizedItemText = normalizeText(item.text);
+      const isCurrentlyStarred = prevItems.some(
+        (starred) => normalizeText(starred.text) === normalizedItemText
+      );
       let newItems: StarredItem[];
-      
+
       if (isCurrentlyStarred) {
-        newItems = prevItems.filter(starred => starred.id !== item.id);
+        newItems = prevItems.filter(
+          (starred) => normalizeText(starred.text) !== normalizedItemText
+        );
       } else {
-        newItems = [...prevItems, item];
+        newItems = [item, ...prevItems];
       }
-      
+
       saveStarredItems(newItems);
       return newItems;
     });
@@ -99,4 +121,3 @@ export const useStarred = () => {
   }
   return context;
 };
-

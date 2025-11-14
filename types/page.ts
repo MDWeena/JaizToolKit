@@ -10,6 +10,8 @@ export interface PageItem {
   class?: string;
 }
 
+export type StarredItem = Pick<PageItem, "id" | "text" | "route" | "icon">;
+
 export type PageSection = Pick<PageItem, "id" | "icon"> & {
   section: string;
   content: string[];

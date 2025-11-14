@@ -14,10 +14,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EditIcon, GridIcon } from "@/assets/images/svgs/favorite";
 import { Card, Header, ListTile } from "@/components/shared";
-import { productsData } from "@/constants/data";
-import { useStarred } from "@/contexts/StarredContext";
-import { PageItem } from "@/types/page";
 import { Text } from "@/components/ui/Text";
+import { useStarred } from "@/contexts/StarredContext";
+import { useIconLookup } from "@/hooks/useIconLookup";
+import { PageItem } from "@/types/page";
+import { normalizeIcon } from "@/utils/normalizeIcon";
 
 type ViewMode = "list" | "grid";
 
@@ -40,18 +41,27 @@ const StarredScreen = () => {
     }, [])
   );
 
-  // Enrich starred items with icons from productsData
+  const { getIconByText } = useIconLookup();
   const starredItemsWithIcons = useMemo<StarredListItem[]>(() => {
     return starredItems.map((starredItem) => {
-      const productData = productsData.find((p) => p.id === starredItem.id);
+      const originalIcon = getIconByText(starredItem.text);
+      // Normalize icon for consistent size and color in starred page
+      // List view: smaller icons, Grid view: larger icons
+      const normalizedIcon = originalIcon
+        ? normalizeIcon(originalIcon, {
+            size: viewMode === "list" ? 24 : 44,
+            color: "#004081",
+          })
+        : <></>;
+      
       return {
         id: starredItem.id,
         text: starredItem.text,
         route: starredItem.route,
-        icon: productData?.icon || <></>,
+        icon: normalizedIcon,
       };
     });
-  }, [starredItems]);
+  }, [starredItems, getIconByText, viewMode]);
 
   const onItemPress = useCallback(
     (route?: Href) => {
@@ -96,7 +106,8 @@ const StarredScreen = () => {
             icon={item.icon}
             text={item.text}
             onPress={() => onItemPress(item.route as Href | undefined)}
-            className="border-grey-200 border"
+            starredItem={item}
+            className="border border-grey-200"
           />
           {isEditMode && (
             <Pressable
@@ -112,7 +123,6 @@ const StarredScreen = () => {
     [isEditMode, onItemPress, renderTrailing, toggleStar, viewMode]
   );
 
-  // unified item renderer, used by both list and grid views
 
   if (loading) {
     return (
@@ -181,10 +191,10 @@ const StarredScreen = () => {
             key="list-view"
             data={starredItemsWithIcons}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.text.toLowerCase().replace(/\s+/g, "")}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            className="rounded-lg bg-grey-0 border-grey-200 border"
+            className="border rounded-lg bg-grey-0 border-grey-200"
             removeClippedSubviews={true}
             maxToRenderPerBatch={10}
             windowSize={10}
@@ -197,7 +207,7 @@ const StarredScreen = () => {
             numColumns={2}
             columnWrapperStyle={{ justifyContent: "space-between", gap: 8, display:"flex" }}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.text.toLowerCase().replace(/\s+/g, "")}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             removeClippedSubviews={true}
