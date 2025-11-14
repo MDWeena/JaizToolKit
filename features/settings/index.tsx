@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 import { Header } from "@/components/shared/header";
 import { ListTile } from "@/components/shared/list-tile";
@@ -77,7 +78,7 @@ const SettingsScreen = () => {
   const { user } = useAuthStore();
   const { theme: appTheme, setTheme: setAppTheme } = useTheme();
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
-
+  const router = useRouter();
   const handleThemeSheet = () => {
     showBottomSheet(
       <ThemeSelector
@@ -104,7 +105,7 @@ const SettingsScreen = () => {
             userNameClassName='text-xl'
             profileImage={Images.profileImagePlaceholder}
           />
-          <View className='bg-grey-0 border-grey-200 border rounded-lg'>
+          <View className='border rounded-lg bg-grey-0 border-grey-200'>
             <ListTile
               title='Enable Biometrics'
               leading={<BiometricsIcon />}
@@ -121,7 +122,7 @@ const SettingsScreen = () => {
                 },
               ]}
             />
-            <ListTile
+            {/* <ListTile
               title='Theme'
               leading={<ThemeIcon />}
               trailing={
@@ -133,10 +134,11 @@ const SettingsScreen = () => {
                 </View>
               }
               onPress={handleThemeSheet}
-            />
+            /> */}
             <ListTile
               title='Help and Support'
               leading={<HelpIcon />}
+              onPress={() => router.navigate('/(app)/help-support')}
             />
           </View>
         </ScrollView>
