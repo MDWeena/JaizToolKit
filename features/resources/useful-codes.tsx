@@ -25,11 +25,12 @@ type UsefulCodesFunctionItemProps = {
 const UsefulCodesFunctionItem = React.memo<UsefulCodesFunctionItemProps>(
   ({ usefulCodesFunction, onPress }) => (
     <ListTile
-      leading={<UnitUserIcon width={25} height={25} />}
+      leading={usefulCodesFunction.icon}
       title={usefulCodesFunction.text}
       onPress={() => onPress(usefulCodesFunction.url)}
       trailing={<LaunchUrlIcon />}
       containerClassName="!pb-0"
+      starredItem={{ text: usefulCodesFunction.text, id: usefulCodesFunction.id, route: usefulCodesFunction.url, icon: <UnitUserIcon width={25} height={25} /> }}
     />
   )
 );
@@ -73,7 +74,7 @@ export default function UsefulCodesScreen() {
       <StatusBar style="auto" />
       <ScrollView className="flex-1 px-5">
         {/* Header Section */}
-        <Header title="Quick Links" />
+        <Header title="Useful Codes" />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}

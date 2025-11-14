@@ -29,6 +29,9 @@ import {
   FormIcon,
   NIMCIcon,
   QuickLinks,
+  SingleDirectoryIcon,
+  SingleQuickLinkIcon,
+  UnitUserIcon,
   UsefulCodes,
 } from '@/assets/images/svgs/ressources';
 import {
@@ -440,13 +443,13 @@ export const functionsData: PageItem[] = [
     id: 4,
     icon: <FacilityIcon />,
     text: 'Facility Repayment',
-    route: '/functions/repayment' as const,
+    route: '/functions' as const,
     keywords: ['facility', 'repayment'],
     class: 'border-grey-200',
   },
 ];
 
-export const rmData = [
+export const rmData : PageItem[] = [
   {
     id: 1,
     icon: <CustomerDetailsIcon width={25} height={25} />,
@@ -519,7 +522,7 @@ export const accounts: PageItem[] = [
   },
 ];
 
-export const serviceRequestData = [
+export const serviceRequestData : PageItem[] = [
   {
     id: 1,
     icon: <RequestTrackerIcon width={30} height={30} />,
@@ -753,31 +756,36 @@ export const resourcesData = [
   },
 ];
 
-export const quickLinksData = [
-  {
+export const quickLinksData : PageItem[] = [
+  { 
     id: 1,
     text: 'ProcessMaker',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
   {
     id: 2,
     text: 'Office 635',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
   {
     id: 3,
     text: 'CRM Portal',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
   {
     id: 4,
     text: 'Digital Skills',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
   {
     id: 5,
     text: 'E-Library',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
 ];
 
@@ -786,17 +794,20 @@ export const directoriesData = [
     id: 1,
     text: 'Unit Directories',
     link: '/resources/directories/unit' as const,
+    icon: <SingleDirectoryIcon width={25} height={25} />,
   },
   {
     id: 2,
     text: 'Escalation Directories',
     link: '/resources/directories/escalation' as const,
+    icon: <SingleDirectoryIcon width={25} height={25} />,
     external: true,
   },
   {
     id: 3,
     text: 'HMO Directories',
     link: '/resources/directories/hmo' as const,
+    icon: <SingleDirectoryIcon width={25} height={25} />,
     external: true,
   },
 ];
@@ -840,16 +851,18 @@ export const directoryContacts = [
   },
 ];
 
-export const usefulCodesData = [
+export const usefulCodesData : PageItem[] = [
   {
     id: 1,
     text: 'Sort Codes',
     url: '',
+    icon: <UnitUserIcon width={25} height={25} />,
   },
   {
     id: 2,
     text: 'PC Codes',
     url: '',
+    icon: <UnitUserIcon width={25} height={25} />,
   },
 ];
 

@@ -28,11 +28,12 @@ type QuickLinksFunctionItemProps = {
 const QuickLinksFunctionItem = React.memo<QuickLinksFunctionItemProps>(
   ({ quickLinksFunction, onPress }) => (
     <ListTile
-      leading={<SingleQuickLinkIcon width={25} height={25} />}
+      leading={quickLinksFunction.icon}
       title={quickLinksFunction.text}
       onPress={() => onPress(quickLinksFunction.url)}
       trailing={<LaunchUrlIcon />}
       containerClassName="!pb-0"
+      starredItem={{ text: quickLinksFunction.text, id: quickLinksFunction.id, route: quickLinksFunction.url, icon: <SingleQuickLinkIcon width={25} height={25} /> }}
     />
   )
 );
@@ -75,7 +76,7 @@ export default function QuickLinksScreen() {
       <StatusBar style="auto" />
       <ScrollView className="flex-1 px-5">
         {/* Header Section */}
-        <Header title="Useful Codes" />
+        <Header title="Quick Links" />
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}

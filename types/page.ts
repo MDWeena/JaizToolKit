@@ -4,10 +4,12 @@ import React from "react";
 export interface PageItem {
   id: number;
   text: string;
-  icon: React.ReactNode;
-  route: Href;
+  icon?: React.ReactNode;
+  description?: string;
+  route?: Href;
   keywords?: string[];
   class?: string;
+  url?: string;
 }
 
 export type StarredItem = Pick<PageItem, "id" | "text" | "route" | "icon">;

@@ -14,6 +14,12 @@ import {
     resourcesData,
     TeenAccountData,
     functionsData,
+    serviceRequestData,
+    quickLinksData,
+    usefulCodesData,
+    directoriesData,
+    rmData,
+    
 } from '@/constants/data';
 import { PageItem } from '@/types/page';
 import React, { useMemo } from 'react';
@@ -41,6 +47,11 @@ export const useIconLookup = () => {
       ...resourcesData,
       ...accounts,
       ...functionsData,
+      ...serviceRequestData,
+      ...quickLinksData,
+      ...usefulCodesData,
+      ...directoriesData,
+      ...rmData,
     ];
   }, []);
 
