@@ -47,6 +47,7 @@ const OpenAccountScreen = () => {
               leading={item.icon}
               title={item.text}
               onPress={() => router.navigate(item.route as Href)}
+              starredItem={{ text: item.text, id: item.id, route: item.route, icon: item.icon }}
             />
           )}
           keyExtractor={(item) => item.id.toString()}
@@ -55,7 +56,7 @@ const OpenAccountScreen = () => {
           removeClippedSubviews={true}
           maxToRenderPerBatch={10}
           windowSize={10}
-          className='rounded-lg bg-grey-0 border-grey-200 border'
+          className='border rounded-lg bg-grey-0 border-grey-200'
           initialNumToRender={6}
           ListEmptyComponent={
             hasQuery && !hasResults ? (

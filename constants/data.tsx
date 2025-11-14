@@ -228,14 +228,14 @@ export const individualAccountsData: PageItem[] = [
     id: 1,
     icon: <UserIcon />,
     route: '/products/account-type/individual/tier1' as const,
-    text: 'Tier 1',
+    text: 'Tier 1 Account',
     keywords: ['tier 1', 'tier one', 'jaiz'],
   },
   {
     id: 2,
     icon: <UserIcon />,
     route: '/products/account-type/individual/tier3' as const,
-    text: 'Tier 3',
+    text: 'Tier 3 Account',
     keywords: ['tier 3', 'tier three', 'jaiz'],
   },
   {

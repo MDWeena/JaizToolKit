@@ -1,8 +1,8 @@
-import React from 'react';
-import { FlatList, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { Href, useRouter } from 'expo-router';
+import React from "react";
+import { FlatList, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { Href, useRouter } from "expo-router";
 
 import {
   BackButton,
@@ -10,10 +10,10 @@ import {
   ListTile,
   SearchBar,
   SearchNotFound,
-} from '@/components/shared';
-import { productsData } from '@/constants/data';
-import { useSearch } from '@/hooks/useSearch';
-import { PageItem } from '@/types/page';
+} from "@/components/shared";
+import { productsData } from "@/constants/data";
+import { useSearch } from "@/hooks/useSearch";
+import { PageItem } from "@/types/page";
 
 const ProductScreen = () => {
   const router = useRouter();

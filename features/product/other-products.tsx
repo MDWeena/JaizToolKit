@@ -42,6 +42,7 @@ const OtherProductsScreen = () => {
               leading={item.icon}
               title={item.text}
               onPress={() => router.navigate(item.route as Href)}
+              starredItem={{ text: item.text, id: item.id, route: item.route, icon: item.icon }}
             />
           )}
           keyExtractor={(item) => item.id.toString()}
