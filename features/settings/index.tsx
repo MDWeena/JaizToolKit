@@ -14,6 +14,9 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Text } from "@/components/ui/Text";
 import { BiometricsIcon, HelpIcon, ThemeIcon } from "@/assets/images/svgs/settings";
 import { useAuthStore } from "@/store/auth.store";
+import { navigateToWebView } from "@/utils/navigateToWebView";
+
+const HELP_SUPPORT_URL = 'https://jaizbankplc.com/contact-us';
 
 const ThemeSelector: React.FC<{
   currentTheme: "system" | "light" | "dark";
@@ -138,7 +141,13 @@ const SettingsScreen = () => {
             <ListTile
               title='Help and Support'
               leading={<HelpIcon />}
-              onPress={() => router.navigate('/(app)/help-support')}
+              onPress={() => navigateToWebView(router, {
+                url: HELP_SUPPORT_URL,
+                title: 'Help and Support',
+                loadingText: 'Loading Jaiz Bank Help and Support...',
+                errorTitle: 'Failed to load help and support.',
+                errorMessage: 'Please check your internet connection or try again later.',
+              })}
             />
           </View>
         </ScrollView>
