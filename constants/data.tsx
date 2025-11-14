@@ -399,7 +399,7 @@ export const otherProductsData: PageItem[] = [
   },
 ];
 
-export const functionsData = [
+export const functionsData: PageItem[] = [
   {
     id: 1,
     icon: <FCardIcon />,

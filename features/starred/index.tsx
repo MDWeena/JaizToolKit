@@ -50,7 +50,7 @@ const StarredScreen = () => {
       const normalizedIcon = originalIcon
         ? normalizeIcon(originalIcon, {
             size: viewMode === "list" ? 24 : 44,
-            color: "#004081",
+            // color: "#004081",
           })
         : <></>;
       
@@ -194,7 +194,7 @@ const StarredScreen = () => {
             keyExtractor={(item) => item.text.toLowerCase().replace(/\s+/g, "")}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            className="border rounded-lg bg-grey-0 border-grey-200"
+            className="mb-5 border rounded-lg bg-grey-0 border-grey-200"
             removeClippedSubviews={true}
             maxToRenderPerBatch={10}
             windowSize={10}

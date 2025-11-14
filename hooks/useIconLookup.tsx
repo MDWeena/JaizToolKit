@@ -13,6 +13,7 @@ import {
     productsData,
     resourcesData,
     TeenAccountData,
+    functionsData,
 } from '@/constants/data';
 import { PageItem } from '@/types/page';
 import React, { useMemo } from 'react';
@@ -39,6 +40,7 @@ export const useIconLookup = () => {
       ...Jaiz3AccountData,
       ...resourcesData,
       ...accounts,
+      ...functionsData,
     ];
   }, []);
 
