@@ -6,6 +6,7 @@ import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
+  BackButton,
   Header,
   ListTile,
   SearchBar,
@@ -51,6 +52,7 @@ export default function ServiceRequestScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
+      <BackButton />
       <StatusBar style="auto" />
       <ScrollView className="flex-1 px-5">
         {/* Header Section */}

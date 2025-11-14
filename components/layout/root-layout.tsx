@@ -71,7 +71,7 @@ function RootLayoutNav() {
                     name="(auth)"
                     options={{ headerShown: false }}
                   />
-                  <Stack.Protected guard={isAuthenticated}>
+                  <Stack.Protected guard={true}>
                     <Stack.Screen
                       name="(tabs)"
                       options={{ headerShown: false }}

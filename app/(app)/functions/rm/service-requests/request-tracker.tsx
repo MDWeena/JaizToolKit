@@ -1,4 +1,4 @@
-import RequestTrackerScreen from '@/features/functions/service-requests/request-tracker';
+import RequestTrackerScreen from '@/features/functions/rm/service-requests/request-tracker';
 import React from 'react';
 
 const page = () => <RequestTrackerScreen />;

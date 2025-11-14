@@ -1,4 +1,4 @@
-import { Header } from '@/components/shared';
+import { BackButton, Header } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import CustomSelect from '@/components/ui/custom-select';
 import { TextField } from '@/components/ui/input';
@@ -10,10 +10,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const RequestTrackerScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
+      <BackButton />
       <StatusBar style="auto" />
       <ScrollView className="flex-1 px-5">
         {/* Header Section */}
-        <Header title="Request Tracker" />
+        <Header title="Track Request" />
         <TextField
           className="!mt-5 w-full"
           InputProps={{
