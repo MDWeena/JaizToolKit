@@ -52,7 +52,7 @@ export const WebViewComponent: React.FC<WebViewComponentProps> = ({
           onError={() => setHasError(true)}
           startInLoadingState
           renderLoading={() => (
-            <View className="items-center justify-center flex-1 bg-background">
+            <View className="items-center justify-center flex-1">
               <ActivityIndicator size="large" color="#fb5022" />
               <Text className="mt-2 text-grey-500">{loadingText}</Text>
             </View>
