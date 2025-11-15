@@ -705,3 +705,533 @@ export const mobileBankingData: PageSection[] = [
     icon: <DocumentIcon width={32} height={32} />,
   },
 ];
+
+export const baiMuajjalData: PageSection[] = [
+  {
+    id: 1,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Description",
+    content: [
+      "Bank sources goods from dealers and sells to customers on deferred payment with online and in-store distribution.",
+    ],
+  },
+  {
+    id: 2,
+    icon: <TargetIcon width={32} height={32} />,
+    section: "Target Market",
+    content: [
+      "Retail customers.",
+      "Salaried employees.",
+      "MSMEs for appliances.",
+      "Consumer goods.",
+      "Renewable energy.",
+      "Inventory.",
+    ],
+  },
+  {
+    id: 3,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Features",
+    content: [
+      "Deferred sale where bank buys goods from suppliers and sells to customer on installment terms.",
+    ],
+  },
+  {
+    id: 4,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Benefits",
+    content: [
+      "Quick retail access to goods with installment payment; bank handles procurement and distribution channels.",
+    ],
+  },
+  {
+    id: 5,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Documentation",
+    content: [
+      "Request letter.",
+      "Application form.",
+      "Approvals.",
+      "Salary domiciliation.",
+      "Employer undertaking.",
+      "Employment offer/confirmation.",
+      "Good credit report.",
+      "Purchase undertaking.",
+      "Executed offer letter.",
+      "Executed Bai-Muajjal agreement.",
+      "ID cards.",
+    ],
+  },
+];
+
+
+export const ijaraMuntahiyaBittamlikData: PageSection[] = [
+  {
+    id: 1,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Description",
+    content: [
+      "Bank purchases asset and leases it to customer with rental payments and option to transfer ownership at end.",
+    ],
+  },
+  {
+    id: 2,
+    icon: <TargetIcon width={32} height={32} />,
+    section: "Target Market",
+    content: [
+      "Manufacturers.",
+      "Construction.",
+      "Agriculture.",
+      "Real estate.",
+      "Transport fleets.",
+      "Medical and tech buyers.",
+    ],
+  },
+  {
+    id: 3,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Features",
+    content: [
+      "Lease-to-own structure where bank retains ownership.",
+      "Rentals paid with option to acquire.",
+      "Maintenance borne by lessor(Bank).",
+    ],
+  },
+  {
+    id: 4,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Benefits",
+    content: [
+      "Enables use of high-value assets with staged payments and end-of-lease ownership option.",
+    ],
+  },
+  {
+    id: 5,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Documentation",
+    content: [
+      "Request letter.",
+      "Application form.",
+      "Approvals (IAM,MIC,BIC,BOD).",
+      "Executed offer letter.",
+      "Invoice.",
+      "Wakala/agency agreement.",
+      "Domiciliation undertaking.",
+      "Facility undertaking.",
+      "PRU for Ijara.",
+      "Letter of set-off.",
+      "Personal guarantees of directors.",
+      "Valuation.",
+      "Security attestation.",
+      "Collateral visitation.",
+      "Legal search.",
+      "CBN/CRMS forms.",
+      "Axis report.",
+      "Two clean credit reports.",
+      "Board resolutions.",
+      "IDs.",
+      "CAC docs.",
+    ],
+  },
+];
+
+export const ijaraServiceData: PageSection[] = [
+  {
+    id: 1,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Description",
+    content: [
+      "Bank procures and provides services to customer for agreed fee and period, bearing service delivery risk until provided.",
+    ],
+  },
+  {
+    id: 2,
+    icon: <TargetIcon width={32} height={32} />,
+    section: "Target Market",
+    content: [
+      "Educational institutions.",
+      "Healthcare facilities.",
+      "Consultants.",
+      "Contract service providers.",
+      "Tution and medical service payments.",
+    ],
+  },
+  {
+    id: 3,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Features",
+    content: [
+      "Service-lease contract providing professional/operational services for a fixed fee and tenor.",
+    ],
+  },
+  {
+    id: 4,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Benefits",
+    content: [
+      "Access to defined services without upfront capital outlay.",
+      "Predictable fees and outsourced service risk to bank until delivery.",
+    ],
+  },
+  {
+    id: 5,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Documentation",
+    content: [
+      "Request letter.",
+      "Application form.",
+      "Approvals (IAM,MIC,BIC,BOD).",
+      "Executed offer letter.",
+      "Invoice.",
+      "Agency agreement for Ijara Service.",
+      "Domiciliation undertaking.",
+      "Facility undertaking.",
+      "PRU for Ijara Service.",
+      "Letter of set-off.",
+      "Personal guarantees of directors.",
+      "Valuation.",
+      "Security attestation.",
+      "Collateral visitation.",
+      "Legal search.",
+      "CBN/CRMS forms.",
+      "Axis report.",
+      "Two clean credit reports.",
+      "Board resolutions.",
+      "IDs.",
+      "CAC docs.",
+    ],
+  },
+];
+
+export const istisnaData: PageSection[] = [
+  {
+    id: 1,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Description",
+    content: [
+      "Bank finances manufacturing/construction to client specification then delivers or assigns the completed asset per contract.",
+    ],
+  },    
+  {
+    id: 2,
+    icon: <TargetIcon width={32} height={32} />,
+    section: "Target Market",
+    content: [
+      "Real estate developers.", 
+      "Manufacturers.", 
+      "Government bodies for housing estates, industrial parks, roads, plants.",
+    ],
+  },
+  {
+    id: 3,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Features",
+    content: [
+      "Project finance for custom-built assets with deferred delivery and subcontracting on buyer specification.",
+    ],
+  },  
+  {
+    id: 4,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Benefits",
+    content: [
+      "Funds construction/manufacturing of bespoke projects with staged financing tied to delivery milestones.",
+    ],
+  },
+  {
+    id: 5,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Documentation",
+    content: [
+      "Request letter.",
+      "Application form.",
+      "Approvals (IAM,MIC,BIC,BOD).",
+      "Executed offer letter.",
+      "Invoice/BOQ.",
+      "Istisna Wakala.",
+      "Domiciliation undertaking.",
+      "Facility undertaking.",
+      "PRU.",
+      "Letter of set-off.",
+      "Personal guarantees of directors.",
+      "Valuation.",
+      "Security attestation.",
+      "Collateral visitation.",
+      "Legal search.",
+      "CBN/CRMS forms.",
+      "Axis report.",
+      "Two clean credit reports.",
+      "Board resolutions.",
+      "Istisna award letter.",
+      "Contracts with developer and customer.",
+      "IDs.",
+      "CAC docs.",
+    ],
+  },
+];
+
+export const murabahaData: PageSection[] = [
+  {
+    id: 1,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Description",
+    content: [
+      "Bank buys asset/goods and sells to customer on a marked-up deferred payment basis.",
+    ],
+  },
+  {
+    id: 2,
+    icon: <TargetIcon width={32} height={32} />,
+    section: "Target Market",
+    content: [
+      "Retail Consumer.", 
+      "Nano/Micro/SMEs.", 
+      "Corporates for appliances, vehicles, inventory, real estate, projects.",
+    ],
+  },
+  {
+    id: 3,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Features",
+    content: [
+      "Cost-plus deferred payment financing for working capital, asset or goods purchase.",
+    ],
+  },
+  {
+    id: 4,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Benefits",
+    content: [
+      "Predictable cost structure and flexible deferred payments to fund consumption or business needs.",
+    ],
+  },
+  {
+    id: 5,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Documentation",
+    content: [
+      "Request letter.",    
+      "Application form.", 
+      "Approvals (IAM,MIC,BIC,BOD).", 
+      "Executed offer letter.", 
+      "Invoice.", 
+      "Agency agreement.", 
+      "Domiciliation undertaking.", 
+      "Facility undertaking.", 
+      "PRU.", 
+      "Stock hypothecation.", 
+      "Letter of set-off.", 
+      "Personal guarantees of directors.", 
+      "Valuation report.", 
+      "Security attestation.", 
+      "Collateral visitation.", 
+      "Axis report.", 
+      "Legal search.", 
+      "CBN-CRMS search report.", 
+      "Two clean credit reports.", 
+      "Board resolutions.", 
+      "IDs.", 
+      "CAC docs.", 
+      "Murabaha agency & line agreements.", 
+      "Promissory note.", 
+    ],
+  }
+];
+
+
+export const musharakaData: PageSection[] = [
+  {
+    id: 1,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Description",
+    content: [
+      "Equity-style partnership funding where returns are shared per agreement and losses borne in proportion to capital.",
+    ],
+  },
+  {
+    id: 2,
+    icon: <TargetIcon width={32} height={32} />,
+    section: "Target Market",
+    content: [
+      "Investors and businesses for industrial projects, mills, factories, Agri-farms, machinery, real estate, trade.",
+    ],
+  },
+  {
+    id: 3,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Features",
+    content: [
+      "Partnership financing where partners contribute capital and share profits/losses per agreed ratios.",
+    ],
+  },
+  {
+    id: 4,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Benefits",
+    content: [
+      "Enables joint capital projects with shared risk and profit alignment.",
+    ],
+  },
+  {
+    id: 5,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Documentation",
+    content: [
+      "Request letter.",
+      "Application form.",
+      "Approvals (IAM,MIC,BIC,BOD).",
+      "Executed offer letter.",
+      "Musharaka agreement.",
+      "Domiciliation undertaking.",
+      "Personal guarantees.",
+      "Valuation.",
+      "Security attestation.",
+      "Collateral visitation.",
+      "Legal search.",
+      "CRMS.",
+      "Axis report.",
+      "Two clean credit reports.",
+      "Board resolution.",
+      "IDs.",
+      "CAC docs.",
+    ],
+  },
+];
+
+export const salamData: PageSection[] = [
+  {
+    id: 1,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Description",
+    content: [
+      "Buyer prepays for commodity to be delivered later; bank can use parallel Salam to source matching goods for delivery.",
+    ],
+  },
+  {
+    id: 2,
+    icon: <TargetIcon width={32} height={32} />,
+    section: "Target Market",
+    content: [
+      "Farmers.",
+      "Manufacturers.",
+      "Traders.",
+      "Contractors.",
+      "Small producers needing working capital.",
+    ],
+  },
+  {
+    id: 3,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Features",
+    content: [
+      "Forward sale with full/partial advance payment for future delivery of specified commodities.",
+    ],
+  },
+  {
+    id: 4,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Benefits",
+    content: [
+      "Provides immediate cash to sellers and locks in price and supply for buyers.",
+    ],
+  },
+  {
+    id: 5,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Documentation",
+    content: [
+      "Request letter.",
+      "Application form.",
+      "Approvals (IAM,MIC,BIC,BOD).",
+      "Executed offer letter.",
+      "Invoice.",
+      "Application for sale of commodity.",
+      "Salam MOU.",
+      "Salam agreement.",
+      "Offer for purchase.",
+      "Salam agency agreement.",
+      "Notice of delivery.",
+      "Letter of pledge.",
+      "Insurance.",
+      "Domiciliation undertaking.",
+      "Facility undertaking.",
+      "PRU.",
+      "Letter of set-off.",
+      "Personal guarantees.",
+      "Valuation.",
+      "Security attestation.",
+      "Collateral visitation.",
+      "Legal search.",
+      "CRMS.",
+      "Axis report.",
+      "Two clean credit reports.",
+      "Board resolution.",
+      "IDs.",
+      "CAC docs.",
+    ],
+  },
+];
+
+export const wakalaData: PageSection[] = [
+  {
+    id: 1,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Description",
+    content: [
+      "Bank acts as agent to invest client funds in agreed assets/transactions and reports expected profit; losses accrue to principal per agency terms.",
+    ],
+  },
+  {
+    id: 2,
+    icon: <TargetIcon width={32} height={32} />,
+    section: "Target Market",
+    content: [
+      "Individuals.",
+      "Sole proprietors.",
+      "Partnerships.",
+      "Private and public companies seeking investment management.",
+    ],
+  },
+  {
+    id: 3,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Features",
+    content: [
+      "Agency arrangement where bank acts as agent to invest depositor/principal funds into specified ventures.",
+    ],
+  },
+  {
+    id: 4,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Benefits",
+    content: [
+      "Access to pooled investment management with defined expected profit.",
+      "Principal retains investment risk.",
+    ],
+  },
+  {
+    id: 5,
+    icon: <DocumentIcon width={32} height={32} />,
+    section: "Documentation",
+    content: [
+      "Wakala agreement.",
+      "Offer letter to investor.",
+      "Acceptance statement.",
+      "Investment request letter.",
+      "Bank offer with signed acceptance.",
+      "Executed underlying contracts (Murabaha/Istisna/Salam/Ijara).",
+      "Product and property documents.",
+      "Approvals (IAM,MIC,BIC,BOD).",
+      "Personal guarantees.",
+      "Valuation.",
+      "Security attestation.",
+      "Collateral visitation.",
+      "Legal search.",
+      "Axis report.",
+      "Two clean credit reports.",
+      "Board resolutions.",
+      "IDs.",
+      "CAC document.",
+    ],
+  },
+];
