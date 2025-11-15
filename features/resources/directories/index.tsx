@@ -28,13 +28,14 @@ type DirectoriesFunctionItemProps = {
 const DirectoriesFunctionItem = React.memo<DirectoriesFunctionItemProps>(
   ({ directoriesFunction, onPress }) => (
     <ListTile
-      leading={<SingleDirectoryIcon width={25} height={25} />}
+      leading={directoriesFunction.icon}
       title={directoriesFunction.text}
       onPress={() =>
         onPress(directoriesFunction.link, directoriesFunction.external || false)
       }
       trailing={directoriesFunction.external ? <LaunchUrlIcon /> : undefined}
       containerClassName="!pb-0"
+      starredItem={{ text: directoriesFunction.text, id: directoriesFunction.id, route: directoriesFunction.link, icon: <SingleDirectoryIcon width={25} height={25} /> }}
     />
   )
 );

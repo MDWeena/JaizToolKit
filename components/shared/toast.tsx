@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
@@ -11,6 +12,8 @@ interface ToastProps {
   onDismiss: () => void;
   duration?: number;
   position?: ToastPosition;
+  type?: "default" | "info" | "success" | "error" | "warning";
+  icon?: boolean;
 }
 
 export const Toast: React.FC<ToastProps> = ({
@@ -20,6 +23,8 @@ export const Toast: React.FC<ToastProps> = ({
   onDismiss,
   duration = 3000,
   position = "top",
+  type = "default",
+  icon = false,
 }) => {
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
@@ -27,7 +32,7 @@ export const Toast: React.FC<ToastProps> = ({
     // Fade in
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 300,
+      duration: 100,
       useNativeDriver: true,
     }).start();
 
@@ -36,7 +41,7 @@ export const Toast: React.FC<ToastProps> = ({
       // Fade out
       Animated.timing(fadeAnim, {
         toValue: 0,
-        duration: 300,
+        duration: 100,
         useNativeDriver: true,
       }).start(() => {
         onDismiss();
@@ -48,8 +53,13 @@ export const Toast: React.FC<ToastProps> = ({
 
   const positionStyle = position === "top" 
     ? { top: 60 }
-    : { bottom: 100 };
+    : { bottom: 110 };
 
+  const containerColor = type === "default" ? "bg-gray-200 border-gray-200" : type === "info" ? "border-primary/40 bg-blue-100" : type === "success" ? "border-success/40 bg-green-100" : type === "error" ? "border-error/40 bg-red-100" : "bg-gray-200 border-gray-200";
+  const textColor = type === "default" ? "text-gray-600" : type === "info" ? "text-primary" : type === "success" ? "text-success" : type === "error" ? "text-error" : "text-gray-600";
+  const iconColor = type === "default" ? "#9CA3AF" : type === "info" ? "#007AFF" : type === "success" ? "#00C853" : type === "error" ? "#FF0000" : "#9CA3AF"; 
+  const iconName = type === "default" ? "information-circle" : type === "info" ? "information-circle" : type === "success" ? "checkmark-circle" : type === "error" ? "alert-circle" : "information-circle"; 
+  
   return (
     <Animated.View
       style={{
@@ -61,10 +71,11 @@ export const Toast: React.FC<ToastProps> = ({
         zIndex: 9999,
       }}
     >
-      <View className="p-4 bg-gray-200 shadow-lg rounded-2xl">
+      <View className={cn("p-4", containerColor, "border rounded-2xl")}>
         <View className="flex-row items-center gap-3">
+          {icon && <Ionicons name={iconName} size={20} color={iconColor} />}
           <View className="flex-1">
-            <Text className="text-sm text-gray-600">{message}</Text>
+            <Text className={cn("text-sm", textColor)}>{message}</Text>
           </View>
           <Pressable onPress={onLinkPress}>
             <Text className="text-sm font-semibold text-error">
@@ -72,7 +83,7 @@ export const Toast: React.FC<ToastProps> = ({
             </Text>
           </Pressable>
           <Pressable onPress={onDismiss}>
-            <Ionicons name="close" size={20} color="#9CA3AF" />
+            <Ionicons name="close" size={20} color={iconColor} />
           </Pressable>
         </View>
       </View>

@@ -28,6 +28,7 @@ const ServiceRequestItem = React.memo<ServiceRequestItemProps>(
       leading={item.icon}
       title={item.text}
       onPress={() => onPress(item.route)}
+      starredItem={{ text: item.text, id: item.id, route: item.route, icon: item.icon }}
     />
   )
 );

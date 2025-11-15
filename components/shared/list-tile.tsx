@@ -1,7 +1,11 @@
 import { cn } from "@/lib/utils";
+import { Ionicons } from "@expo/vector-icons";
 import Feather from "@expo/vector-icons/Feather";
 import React, { useEffect, useRef } from "react";
 import { Animated, Pressable, View } from "react-native";
+
+import { useStarring } from "@/hooks/useStarring";
+import { StarredItem } from "@/types/page";
 import { Text } from "../ui/Text";
 
 type Position = "start" | "end";
@@ -25,6 +29,7 @@ interface ListTileProps {
   containerClassName?: string;
   contentClassName?: string;
   disabled?: boolean;
+  starredItem?: StarredItem;
 }
 
 // Define the component
@@ -41,11 +46,17 @@ const ListTileComponent: React.FC<ListTileProps> = ({
   containerClassName,
   contentClassName,
   disabled = false,
+  starredItem,
 }) => {
   const startAccessories = accessories.filter(
     (acc) => acc.position === "start"
   );
   const endAccessories = accessories.filter((acc) => acc.position === "end");
+
+  const { handleLongPress, isItemStarred } = useStarring({
+    starredItem,
+    onLongPress,
+  });
 
   const renderAccessory = (config: AccessoryConfig, index: number) => {
     if (config.onPress) {
@@ -63,6 +74,17 @@ const ListTileComponent: React.FC<ListTileProps> = ({
     return <View key={index}>{config.component}</View>;
   };
 
+  const starIcon = starredItem && starredItem.text && isItemStarred ? (
+    <Ionicons name="star" size={20} color="#FFA500" />
+  ) : null;
+
+  const finalTrailing = starredItem && starredItem.text && starIcon ? (
+    <View className="flex-row items-center gap-3">
+      {starIcon}
+      {trailing}
+    </View>
+  ) : trailing;
+
   return (
     <Pressable
       className={cn(
@@ -71,7 +93,7 @@ const ListTileComponent: React.FC<ListTileProps> = ({
         containerClassName
       )}
       onPress={onPress}
-      onLongPress={onLongPress}
+      onLongPress={handleLongPress}
       disabled={disabled}
     >
       <View
@@ -115,9 +137,9 @@ const ListTileComponent: React.FC<ListTileProps> = ({
         </View>
       </View>
 
-      {(trailing || endAccessories.length > 0) && (
+      {(finalTrailing || endAccessories.length > 0) && (
         <View className='flex-row items-center gap-2'>
-          {accessories.length === 0 && trailing}
+          {accessories.length === 0 && finalTrailing}
           {endAccessories.map(renderAccessory)}
         </View>
       )}
@@ -130,7 +152,7 @@ const Checkbox: React.FC<{
   checked: boolean;
   onPress: () => void;
   disabled?: boolean;
-}> = ({ checked, onPress, disabled }) => (
+}> = ({ checked, disabled }) => (
   <View
     className={cn(
       "w-6 h-6 rounded border items-center justify-center",
@@ -176,7 +198,7 @@ const Switch: React.FC<{
     >
     
         <Animated.View
-          className="w-7 h-7 bg-white rounded-full absolute"
+          className="absolute bg-white rounded-full w-7 h-7"
           style={{
             transform: [{ translateX: thumbTranslateX }],
             top: "50%",

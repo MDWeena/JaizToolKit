@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 import { Header } from "@/components/shared/header";
 import { ListTile } from "@/components/shared/list-tile";
@@ -13,6 +14,9 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Text } from "@/components/ui/Text";
 import { BiometricsIcon, HelpIcon, ThemeIcon } from "@/assets/images/svgs/settings";
 import { useAuthStore } from "@/store/auth.store";
+import { navigateToWebView } from "@/utils/navigateToWebView";
+
+const HELP_SUPPORT_URL = 'https://jaizbankplc.com/contact-us';
 
 const ThemeSelector: React.FC<{
   currentTheme: "system" | "light" | "dark";
@@ -77,7 +81,7 @@ const SettingsScreen = () => {
   const { user } = useAuthStore();
   const { theme: appTheme, setTheme: setAppTheme } = useTheme();
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
-
+  const router = useRouter();
   const handleThemeSheet = () => {
     showBottomSheet(
       <ThemeSelector
@@ -104,7 +108,7 @@ const SettingsScreen = () => {
             userNameClassName='text-xl'
             profileImage={Images.profileImagePlaceholder}
           />
-          <View className='bg-grey-0 border-grey-200 border rounded-lg'>
+          <View className='border rounded-lg bg-grey-0 border-grey-200'>
             <ListTile
               title='Enable Biometrics'
               leading={<BiometricsIcon />}
@@ -121,7 +125,7 @@ const SettingsScreen = () => {
                 },
               ]}
             />
-            <ListTile
+            {/* <ListTile
               title='Theme'
               leading={<ThemeIcon />}
               trailing={
@@ -133,10 +137,17 @@ const SettingsScreen = () => {
                 </View>
               }
               onPress={handleThemeSheet}
-            />
+            /> */}
             <ListTile
               title='Help and Support'
               leading={<HelpIcon />}
+              onPress={() => navigateToWebView(router, {
+                url: HELP_SUPPORT_URL,
+                title: 'Help and Support',
+                loadingText: 'Loading Jaiz Bank Help and Support...',
+                errorTitle: 'Failed to load help and support.',
+                errorMessage: 'Please check your internet connection or try again later.',
+              })}
             />
           </View>
         </ScrollView>

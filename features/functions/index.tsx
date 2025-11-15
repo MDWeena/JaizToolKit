@@ -27,6 +27,7 @@ const FunctionCard = React.memo<FunctionCardProps>(({ func, onPress }) => (
     text={func.text}
     className={func.class}
     onPress={() => onPress(func.route)}
+    starredItem={{ text: func.text, id: func.id, route: func.route, icon: func.icon }}
   />
 ));
 FunctionCard.displayName = 'FunctionCard';
@@ -70,7 +71,7 @@ const FunctionsScreen = () => {
           placeholder="Search..."
         />
 
-        <View className="mb-5 mt-5">
+        <View className="mt-5 mb-5">
           <FlatList<Function>
             data={filteredFunctions}
             renderItem={renderFunctionItem}

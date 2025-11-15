@@ -27,6 +27,7 @@ const RMFunctionItem = React.memo<RMFunctionItemProps>(
       leading={rmFunction.icon}
       title={rmFunction.text}
       onPress={() => onPress(rmFunction.route)}
+      starredItem={{ text: rmFunction.text, id: rmFunction.id, route: rmFunction.route, icon: rmFunction.icon }}
     />
   )
 );

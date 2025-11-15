@@ -2,11 +2,13 @@ import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
+import { usePathname } from 'expo-router';
 import React, {
   createContext,
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -70,6 +72,17 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
     setBottomSheetComponent(undefined);
     bottomSheetRef.current?.close();
   }, []);
+
+  const pathname = usePathname();
+  const prevPathnameRef = useRef<string>(pathname);
+
+  useEffect(() => {
+    // If pathname changed and bottom sheet is open, close it
+    if (prevPathnameRef.current !== pathname && bottomSheetComponent) {
+      hideBottomSheet();
+    }
+    prevPathnameRef.current = pathname;
+  }, [pathname, bottomSheetComponent, hideBottomSheet]);
 
   const contextValue: BottomSheetContextType = useMemo(
     () => ({

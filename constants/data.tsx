@@ -29,6 +29,9 @@ import {
   FormIcon,
   NIMCIcon,
   QuickLinks,
+  SingleDirectoryIcon,
+  SingleQuickLinkIcon,
+  UnitUserIcon,
   UsefulCodes,
 } from '@/assets/images/svgs/ressources';
 import {
@@ -83,35 +86,35 @@ export const categoriesData: PageItem[] = [
 export const productsData: PageItem[] = [
   {
     id: 1,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'Account Type',
     route: '/products/account-type' as const,
     keywords: ['account type', 'account'],
   },
   {
     id: 4,
-    icon: <LoanIcon width={44} height={44} />,
+    icon: <LoanIcon />,
     text: 'Loan',
     route: '/products/loan' as const,
     keywords: ['loan', 'credit', 'finance'],
   },
   {
     id: 2,
-    icon: <CardIcon width={44} height={44} />,
+    icon: <CardIcon />,
     text: 'Card',
     route: '/products/card' as const,
     keywords: ['card', 'debit', 'credit'],
   },
   {
     id: 3,
-    icon: <ChannelIcon width={44} height={44} />,
+    icon: <ChannelIcon />,
     text: 'Banking Channel',
     route: '/products/banking-channel' as const,
     keywords: ['banking channel', 'channel'],
   },
   {
     id: 5,
-    icon: <PieIcon width={44} height={44} />,
+    icon: <PieIcon />,
     text: 'Other Products',
     route: '/products/other-products' as const,
     keywords: ['other products', 'products'],
@@ -121,14 +124,14 @@ export const productsData: PageItem[] = [
 export const accountTypeData: PageItem[] = [
   {
     id: 1,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'Individual',
     route: '/products/account-type/individual' as const,
     keywords: ['individual', 'account'],
   },
   {
     id: 2,
-    icon: <CorporateIcon width={44} height={44} />,
+    icon: <CorporateIcon />,
     text: 'Corporate',
     route: '/products/account-type/corporate' as const,
     keywords: ['corporate', 'account'],
@@ -226,49 +229,49 @@ export const accountTypeData: PageItem[] = [
 export const individualAccountsData: PageItem[] = [
   {
     id: 1,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     route: '/products/account-type/individual/tier1' as const,
-    text: 'Tier 1',
+    text: 'Tier 1 Account',
     keywords: ['tier 1', 'tier one', 'jaiz'],
   },
   {
     id: 2,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     route: '/products/account-type/individual/tier3' as const,
-    text: 'Tier 3',
+    text: 'Tier 3 Account',
     keywords: ['tier 3', 'tier three', 'jaiz'],
   },
   {
     id: 3,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     route: '/products/account-type/individual/current-account' as const,
     text: ' Current Account',
     keywords: ['current account', 'current'],
   },
   {
     id: 4,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     route: '/products/account-type/individual/domicilliary-account' as const,
     text: 'Jaiz Domicilliary Account',
     keywords: ['easysavers', 'easy savers', 'jaiz'],
   },
   {
     id: 5,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     route: '/products/account-type/individual/japsa-term-deposit' as const,
     text: 'JAPSA Term Deposit(JTD)',
     keywords: ['japsa term deposit', 'jtd', 'jaiz'],
   },
   {
     id: 6,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'Teens Account',
     route: '/products/account-type/individual/teens-account' as const,
     keywords: ['teens account', 'teen', 'jaiz'],
   },
   {
     id: 7,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'Hajj Savings Account',
     route: '/products/account-type/individual/hajj-savings-account' as const,
     keywords: ['hajj savings account', 'hajj', 'savings'],
@@ -278,87 +281,87 @@ export const individualAccountsData: PageItem[] = [
 export const loansData: PageItem[] = [
   {
     id: 1,
-    icon: <LoanIcon width={44} height={44} />,
-    text: 'Jaiz Salary Advance',
-    route: '/products/loan' as const,
-    keywords: ['salary advance', 'jaiz'],
+    icon: <LoanIcon />,
+    text: 'Murabaha',
+    route: '/products/loan/murabaha' as const,
+    keywords: ['murabaha', 'murabaha loan'],
   },
   {
     id: 2,
-    icon: <LoanIcon width={44} height={44} />,
-    text: 'Max Advance',
-    route: '/products/loan' as const,
-    keywords: ['max advance', 'advance'],
+    icon: <LoanIcon />,
+    text: 'Ijara Muntahiya Bittamlik',
+    route: '/products/loan/ijara-muntahiya-bittamlik' as const,
+    keywords: ['ijara muntahiya bittamlik', 'ijara muntahiya bittamlik loan'],
   },
   {
     id: 3,
-    icon: <LoanIcon width={44} height={44} />,
-    text: 'MaxPlus',
-    route: '/products/loan' as const,
-    keywords: ['maxplus', 'max plus'],
+    icon: <LoanIcon />,
+    text: 'Ijara Service',
+    route: '/products/loan/ijara-service' as const,
+    keywords: ['ijara service', 'ijara loan service'],
   },
   {
     id: 4,
-    icon: <LoanIcon width={44} height={44} />,
-    text: 'Jaiz Auto',
-    route: '/products/loan' as const,
-    keywords: ['auto', 'jaiz auto'],
+    icon: <LoanIcon />,
+    text: 'Istisna',
+    route: '/products/loan/istisna' as const,
+    keywords: ['istisna', 'istisna loan'],
   },
   {
     id: 5,
-    icon: <LoanIcon width={44} height={44} />,
-    text: 'Jaiz Mortgage',
-    route: '/products/loan' as const,
-    keywords: ['mortgage', 'jaiz mortgage'],
+    icon: <LoanIcon />,
+    text: 'Bai\' Muajjal',
+    route: '/products/loan/bai-muajjal' as const,
+    keywords: ['bai\' muajjal', 'bai muajjal loan'],
   },
   {
     id: 6,
-    icon: <LoanIcon width={44} height={44} />,
-    text: 'School Fees Advance',
-    route: '/products/loan' as const,
-    keywords: ['school fees advance', 'school fees'],
+    icon: <LoanIcon />,
+    text: 'Salam',
+    route: '/products/loan/salam' as const,
+    keywords: ['salam', 'salam loan'],
   },
   {
     id: 7,
-    icon: <LoanIcon width={44} height={44} />,
-    text: 'CBN MSME Development Fund',
-    route: '/products/loan' as const,
-    keywords: ['cbn msme', 'development fund', 'msme'],
+    icon: <LoanIcon />,
+    text: 'Musharaka',
+    route: '/products/loan/musharaka' as const,
+    keywords: ['musharaka', 'musharaka loan'],
   },
   {
     id: 8,
-    icon: <LoanIcon width={44} height={44} />,
-    text: 'CBN SME Credit Guarantee Scheme',
-    route: '/products/loan' as const,
-    keywords: ['cbn sme', 'credit guarantee', 'scheme'],
+    icon: <LoanIcon />,
+    text: 'Wakala',
+    route: '/products/loan/wakala' as const,
+    keywords: ['wakala', 'wakala loan'],
   },
 ];
 
 export const cardsData: PageItem[] = [
   {
     id: 1,
-    icon: <CardIcon width={44} height={44} />,
+    icon: <CardIcon />,
     text: 'Verve Card',
     route: '/products/card/verve' as const,
     keywords: ['verve card'],
   },
   {
     id: 2,
-    icon: <CardIcon width={44} height={44} />,
+    icon: <CardIcon />,
     text: 'Visa Dollar Card',
     route: '/products/card/visa-dollar' as const,
     keywords: ['visa dollar card'],
   },
   {
     id: 3,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'Master Card',
     route: '/products/card/master' as const,
     keywords: ['master card'],
   },
   {
     id: 4,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'Afrigo Card',
     route: '/products/card/afrigo' as const,
     keywords: ['afrigo card'],
@@ -368,21 +371,21 @@ export const cardsData: PageItem[] = [
 export const bankingChannelsData: PageItem[] = [
   {
     id: 1,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'Mobile Banking',
     route: '/products/banking-channel/mobile' as const,
     keywords: ['mobile banking', 'banking app'],
   },
   {
     id: 2,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'Internet Banking',
     route: '/products/banking-channel/internet' as const,
     keywords: ['internet banking', 'online banking'],
   },
   {
     id: 3,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     text: 'USSD Banking',
     route: '/products/banking-channel/ussd' as const,
     keywords: ['ussd', 'banking'],
@@ -392,17 +395,17 @@ export const bankingChannelsData: PageItem[] = [
 export const otherProductsData: PageItem[] = [
   {
     id: 4,
-    icon: <PieIcon width={44} height={44} />,
+    icon: <PieIcon />,
     text: 'POS Terminals',
     route: '/products/other-products' as const,
     keywords: ['pos terminals', 'point of sale', 'mobile banking'],
   },
 ];
 
-export const functionsData = [
+export const functionsData: PageItem[] = [
   {
     id: 1,
-    icon: <FCardIcon width={44} height={44} />,
+    icon: <FCardIcon />,
     text: 'Cards',
     route: '/functions/cards' as const,
     keywords: ['link', 'pin', 'card'],
@@ -429,7 +432,7 @@ export const functionsData = [
 
   {
     id: 3,
-    icon: <LinkBvnIcon width={44} height={44} />,
+    icon: <LinkBvnIcon />,
     text: 'Link BVN/NIN',
     route: '/functions/linking' as const,
     keywords: ['bvn', 'nin', 'link', 'identification', 'id'],
@@ -438,15 +441,15 @@ export const functionsData = [
 
   {
     id: 4,
-    icon: <FacilityIcon width={44} height={44} />,
+    icon: <FacilityIcon />,
     text: 'Facility Repayment',
-    route: '/functions/repayment' as const,
+    route: '/functions' as const,
     keywords: ['facility', 'repayment'],
     class: 'border-grey-200',
   },
 ];
 
-export const rmData = [
+export const rmData : PageItem[] = [
   {
     id: 1,
     icon: <CustomerDetailsIcon width={25} height={25} />,
@@ -519,7 +522,7 @@ export const accounts: PageItem[] = [
   },
 ];
 
-export const serviceRequestData = [
+export const serviceRequestData : PageItem[] = [
   {
     id: 1,
     icon: <RequestTrackerIcon width={30} height={30} />,
@@ -549,28 +552,28 @@ export const serviceRequestData = [
 export const openAccountData: PageItem[] = [
   {
     id: 1,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     route: '/accounts/open/individual' as const,
     text: 'Individual Account',
     keywords: ['Individual', 'account'],
   },
   {
     id: 2,
-    icon: <CorporateIcon width={44} height={44} />,
+    icon: <CorporateIcon />,
     route: '/accounts/open/corporate' as const,
     text: 'Corporate Account',
     keywords: ['Corporate', 'account'],
   },
   {
     id: 3,
-    icon: <TeensAccountIcon width={44} height={44} />,
+    icon: <TeensAccountIcon />,
     route: '/accounts/open/teen' as const,
     text: 'Teens Account',
     keywords: ['Teens', 'account'],
   },
   {
     id: 4,
-    icon: <PieIcon width={44} height={44} />,
+    icon: <PieIcon />,
     route: '/accounts/open/jaiz3' as const,
     text: 'Jaiz 3 Account',
     keywords: ['Jaiz 3', 'account'],
@@ -580,14 +583,14 @@ export const openAccountData: PageItem[] = [
 export const IndividualAccountData: PageItem[] = [
   {
     id: 1,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     route: '/accounts/open/individual/tier1' as const,
     text: 'Tier 1',
     keywords: ['Tier 1', 'individual', 'account'],
   },
   {
     id: 2,
-    icon: <UserIcon width={44} height={44} />,
+    icon: <UserIcon />,
     route: '/accounts/open/individual/tier3' as const,
     text: 'Tier 3',
     keywords: ['Tier 3', 'individual', 'account'],
@@ -597,14 +600,14 @@ export const IndividualAccountData: PageItem[] = [
 export const TeenAccountData: PageItem[] = [
   {
     id: 1,
-    icon: <TeensAccountIcon width={44} height={44} />,
+    icon: <TeensAccountIcon />,
     route: '/accounts/open/teen/tier1' as const,
     text: 'Tier 1- Teen Account',
     keywords: ['Tier 1', 'teen', 'account'],
   },
   {
     id: 2,
-    icon: <TeensAccountIcon width={44} height={44} />,
+    icon: <TeensAccountIcon />,
     route: '/accounts/open/teen/tier3' as const,
     text: 'Tier 3 - Teen Account',
     keywords: ['Tier 3', 'teen', 'account'],
@@ -614,14 +617,14 @@ export const TeenAccountData: PageItem[] = [
 export const Jaiz3AccountData: PageItem[] = [
   {
     id: 1,
-    icon: <PieIcon width={44} height={44} />,
+    icon: <PieIcon />,
     route: '/accounts/open/jaiz3/tier1' as const,
     text: 'Tier 1 - Jaiz 3 Account',
     keywords: ['Tier 1', 'jaiz 3', 'account'],
   },
   {
     id: 2,
-    icon: <PieIcon width={44} height={44} />,
+    icon: <PieIcon />,
     route: '/accounts/open/jaiz3/tier3' as const,
     text: 'Tier 3 - Jaiz 3 Account',
     keywords: ['Tier 3', 'jaiz 3', 'account'],
@@ -753,31 +756,36 @@ export const resourcesData = [
   },
 ];
 
-export const quickLinksData = [
-  {
+export const quickLinksData : PageItem[] = [
+  { 
     id: 1,
     text: 'ProcessMaker',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
   {
     id: 2,
     text: 'Office 635',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
   {
     id: 3,
     text: 'CRM Portal',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
   {
     id: 4,
     text: 'Digital Skills',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
   {
     id: 5,
     text: 'E-Library',
     url: '',
+    icon: <SingleQuickLinkIcon width={25} height={25} />,
   },
 ];
 
@@ -786,17 +794,20 @@ export const directoriesData = [
     id: 1,
     text: 'Unit Directories',
     link: '/resources/directories/unit' as const,
+    icon: <SingleDirectoryIcon width={25} height={25} />,
   },
   {
     id: 2,
     text: 'Escalation Directories',
     link: '/resources/directories/escalation' as const,
+    icon: <SingleDirectoryIcon width={25} height={25} />,
     external: true,
   },
   {
     id: 3,
     text: 'HMO Directories',
     link: '/resources/directories/hmo' as const,
+    icon: <SingleDirectoryIcon width={25} height={25} />,
     external: true,
   },
 ];
@@ -840,16 +851,18 @@ export const directoryContacts = [
   },
 ];
 
-export const usefulCodesData = [
+export const usefulCodesData : PageItem[] = [
   {
     id: 1,
     text: 'Sort Codes',
     url: '',
+    icon: <UnitUserIcon width={25} height={25} />,
   },
   {
     id: 2,
     text: 'PC Codes',
     url: '',
+    icon: <UnitUserIcon width={25} height={25} />,
   },
 ];
 

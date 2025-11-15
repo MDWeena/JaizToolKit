@@ -73,6 +73,8 @@ const LoginScreen = () => {
           message: response?.message ?? 'Login failed. Please try again.',
           linkText: '',
           onLinkPress: () => {},
+          type: 'error',
+          icon: true,
         });
         return;
       }
@@ -83,6 +85,8 @@ const LoginScreen = () => {
           message: 'Unable to complete login.',
           linkText: '',
           onLinkPress: () => {},
+          type: 'error',
+          icon: true,
         });
         return;
       }
@@ -93,6 +97,8 @@ const LoginScreen = () => {
         message: 'Logged in successfully!',
         linkText: '',
         onLinkPress: () => {},
+        type: 'success',
+        icon: true,
       });
 
       if (!isConfigured && !hasOpenedBiometricsConfigSheet) {
@@ -111,6 +117,8 @@ const LoginScreen = () => {
         message,
         linkText: '',
         onLinkPress: () => {},
+        type: 'error',
+        icon: true,
       });
     },
   });
@@ -219,13 +227,13 @@ const LoginScreen = () => {
           className="mt-24 !min-w-full"
           size={'lg'}
         >
-          <Text className="text-white font-bold">Log In</Text>
+          <Text className="font-bold text-white">Log In</Text>
         </Button>
 
         {/* Biometrics Login */}
         {isConfigured && isUserLoggedIn && authMethods?.length > 0 && (
           <>
-            <View className="my-6 flex items-center gap-3 flex-row">
+            <View className="flex flex-row items-center gap-3 my-6">
               <View className="h-[.8px] flex-1 bg-gray-300" />
               <Text className="text-gray-500">or Login with</Text>
               <View className="h-[.8px] flex-1 bg-gray-300" />

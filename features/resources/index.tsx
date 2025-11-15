@@ -27,6 +27,7 @@ const ResourceCard = React.memo<ResourceCardProps>(({ func, onPress }) => (
     text={func.text}
     className={func.class}
     onPress={() => onPress(func.route)}
+    starredItem={{ text: func.text, id: func.id, route: func.route, icon: func.icon }}
   />
 ));
 ResourceCard.displayName = 'ResourceCard';
@@ -70,7 +71,7 @@ const ResourcesScreen = () => {
           placeholder="Search..."
         />
 
-        <View className="mb-5 mt-5">
+        <View className="mt-5 mb-5">
           <FlatList<Resource>
             data={filteredResources}
             renderItem={renderResourceItem}

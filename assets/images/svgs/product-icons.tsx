@@ -1,12 +1,7 @@
-import * as React from "react"
-import Svg, { ClipPath, Defs, G, Mask, Path, SvgProps } from "react-native-svg"
+import * as React from "react";
+import Svg, { ClipPath, Defs, G, Mask, Path, SvgProps } from "react-native-svg";
 export const CardIcon = (props: SvgProps) => (
-  <Svg
-    {...props}
-    width={24}
-    height={24}
-    fill="none"
-  >
+  <Svg viewBox="0 0 24 24" width={24} height={24} fill="none" {...props}>
     <Mask
       id="a"
       width={21}
@@ -33,30 +28,19 @@ export const CardIcon = (props: SvgProps) => (
       <Path fill="#004081" d="M0 0h24v24H0V0Z" />
     </G>
   </Svg>
-)
+);
 
 export const UserIcon = (props: SvgProps) => (
-  <Svg
-    {...props}
-    width={24}
-    height={24}
-    fill="none"
-  >
+  <Svg width={24} height={24} fill="none" {...props} viewBox="0 0 24 24">
     <Path
       fill="#004081"
       d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6Zm0 14c-2.03 0-4.43-.82-6.14-2.88a9.95 9.95 0 0 1 12.28 0C16.43 19.18 14.03 20 12 20Z"
     />
   </Svg>
-)
-
+);
 
 export const ChannelIcon = (props: SvgProps) => (
-  <Svg
-    {...props}
-    width={24}
-    height={24}
-    fill="none"
-  >
+  <Svg width={24} height={24} fill="none" {...props} viewBox="0 0 24 24">
     <G clipPath="url(#a)">
       <Path
         fill="#004081"
@@ -69,15 +53,10 @@ export const ChannelIcon = (props: SvgProps) => (
       </ClipPath>
     </Defs>
   </Svg>
-)
+);
 
 export const PieIcon = (props: SvgProps) => (
-  <Svg
-    {...props}
-    width={24}
-    height={24}
-    fill="none"
-  >
+  <Svg width={24} height={24} fill="none" {...props} viewBox="0 0 24 24">
     <G fill="#004081" clipPath="url(#a)">
       <Path d="M5.713 20.6a10.666 10.666 0 0 0 16.92-7.934H12.287L5.713 20.6Z" />
       <Path d="M22.633 11.333a10.65 10.65 0 0 0-.12-1.073H14.82a2.453 2.453 0 0 1-2.153-3.667l2.706-4.666A10.667 10.667 0 0 0 4.667 19.733l6.993-8.4h10.973Z" />
@@ -89,30 +68,19 @@ export const PieIcon = (props: SvgProps) => (
       </ClipPath>
     </Defs>
   </Svg>
-)
+);
 
 export const CorporateIcon = (props: SvgProps) => (
-  <Svg
-    {...props}
-    width={24}
-    height={24}
-    fill="none"
-  >
+  <Svg width={24} height={24} fill="none" {...props} viewBox="0 0 24 24">
     <Path
       fill="#004081"
       d="M18.75 10.5A2.25 2.25 0 0 1 21 12.75v.75h.75A2.25 2.25 0 0 1 24 15.75v6A2.25 2.25 0 0 1 21.75 24h-9a2.25 2.25 0 0 1-2.25-2.25v-6a2.25 2.25 0 0 1 2.25-2.25h.75v-.75a2.25 2.25 0 0 1 2.25-2.25h3Zm-3 1.5a.75.75 0 0 0-.75.75v.75h4.5v-.75a.75.75 0 0 0-.75-.75h-3Zm-3.687.063A3.75 3.75 0 0 0 9 15.75v5.139C5.204 20.32 3 17.628 3 15v-.75A2.25 2.25 0 0 1 5.25 12h6.828l-.015.063ZM10.5 2.25a4.125 4.125 0 1 1 0 8.25 4.125 4.125 0 0 1 0-8.25Z"
     />
   </Svg>
-)
+);
 
 export const DocumentIcon = (props: SvgProps) => (
-  <Svg
-    {...props}
-    width={32}
-    height={32}
-    viewBox="0 0 32 32"
-    fill="none"
-  >
+  <Svg width={32} height={32} fill="none" {...props} viewBox="0 0 32 32">
     <Path
       fill="#004081"
       fillRule="evenodd"
@@ -124,30 +92,19 @@ export const DocumentIcon = (props: SvgProps) => (
       d="M21 3.765c0-.245.257-.4.448-.248.162.131.305.283.43.456l4.018 5.596c.09.128-.008.294-.165.294h-4.398A.333.333 0 0 1 21 9.529V3.765Z"
     />
   </Svg>
-)
+);
 
 export const TargetIcon = (props: SvgProps) => (
-  <Svg
-    {...props}
-    width={32}
-    height={32}
-    viewBox="0 0 32 32"
-    fill="none"
-  >
+  <Svg width={32} height={32} fill="none" {...props} viewBox="0 0 32 32">
     <Path
       fill="#004081"
       d="M16 2.667c1.195 0 2.352.157 3.453.452L16.62 5.952a4.002 4.002 0 0 0-.566.715H16A9.334 9.334 0 1 0 25.333 16v-.053a3.96 3.96 0 0 0 .714-.567l2.834-2.834c.295 1.102.452 2.26.452 3.454 0 7.364-5.97 13.333-13.333 13.333-7.364 0-13.334-5.97-13.334-13.333C2.666 8.636 8.636 2.666 16 2.666Zm-.552 6.689c0 1.135-.056 2.285.005 3.418l-.72.72a2.666 2.666 0 1 0 3.772 3.773l.72-.72c1.133.06 2.283.005 3.419.005a6.667 6.667 0 1 1-7.196-7.196Zm9.224-6.52a1.333 1.333 0 0 1 .822 1.23v2.44h2.44a1.333 1.333 0 0 1 .942 2.277l-4.716 4.71c-.25.25-.59.39-.943.39H20l-2.438 2.44a1.334 1.334 0 0 1-1.886-1.887L18.114 12V8.78a1.335 1.335 0 0 1 .391-.944l4.713-4.713a1.334 1.334 0 0 1 1.454-.29"
     />
   </Svg>
-)
+);
 
 export const LoanIcon = (props: SvgProps) => (
-  <Svg
-    {...props}
-    width={24}
-    height={24}
-    fill="none"
-  >
+  <Svg width={24} height={24} fill="none" {...props} viewBox="0 0 24 24">
     <Path
       fill="#004081"
       d="M6.26 21.388H6c-.943 0-1.414 0-1.707-.293C4 20.804 4 20.332 4 19.389v-1.112c0-.518 0-.777.133-1.01.133-.231.334-.347.736-.581 2.646-1.54 6.403-2.405 8.91-.91.169.1.319.223.45.368a1.489 1.489 0 0 1-.126 2.134c-.12.114-.267.196-.427.24.12-.014.235-.03.345-.047.911-.145 1.676-.633 2.376-1.162l1.808-1.365a1.89 1.89 0 0 1 2.22 0c.573.433.749 1.146.386 1.728-.423.678-1.019 1.545-1.591 2.075-.572.53-1.426 1.004-2.122 1.34-.772.373-1.624.587-2.491.728-1.758.284-3.59.24-5.33-.118a15.004 15.004 0 0 0-3.017-.31Zm.326-18.802c-.367.367-.504.873-.555 1.664A2.25 2.25 0 0 0 8.25 2.03c-.79.052-1.297.189-1.664.556Zm10.828 0c-.367-.367-.873-.504-1.664-.555a2.25 2.25 0 0 0 2.22 2.219c-.052-.79-.189-1.297-.556-1.664Zm0 6.828c-.367.367-.873.504-1.664.555a2.25 2.25 0 0 1 2.22-2.22c-.052.79-.189 1.298-.556 1.665Zm-10.828 0c.367.367.873.504 1.664.555a2.25 2.25 0 0 0-2.22-2.22c.052.79.189 1.298.556 1.665Z"
@@ -159,4 +116,4 @@ export const LoanIcon = (props: SvgProps) => (
       clipRule="evenodd"
     />
   </Svg>
-)
+);

@@ -28,8 +28,6 @@ const AccountScreen = () => {
           onChangeText={setSearchQuery}
           placeholder='Search'
         />
-
-
         <FlatList<PageItem>
           data={filteredAccounts}
           renderItem={({ item }) => (
@@ -38,6 +36,12 @@ const AccountScreen = () => {
               icon={item.icon}
               text={item.text}
               onPress={() => router.navigate(item.route as Href)}
+              starredItem={{
+                id: item.id,
+                text: item.text,
+                route: item.route,
+                icon: item.icon,
+              }}
             />
           )}
           keyExtractor={(item) => item.id.toString()}
