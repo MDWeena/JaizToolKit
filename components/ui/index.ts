@@ -7,6 +7,7 @@ export * from './file-input';
 export * from './form-agreement';
 export * from './input';
 export * from './otp-field';
+export type { OtpFieldHandle } from "./otp-field";
 export * from './select';
 export * from './stepper';
 export * from './tab';

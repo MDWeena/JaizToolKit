@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import { WebView } from "react-native-webview";
 
-import { BackButton, Header } from "@/components/shared";
 import { Text } from "@/components/ui/Text";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { BackButton } from "./back-button";
+import { Header } from "./header";
 
 interface WebViewComponentProps {
   url: string;

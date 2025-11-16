@@ -144,9 +144,8 @@ const Select = React.forwardRef<View, SelectProps>(
         >
           <Text
             className={cn(
-              'text-xl px-2 flex-1',
-              !selectedValue && 'text-grey-900',
-              'text-grey-600'
+              'text-xl px-2 flex-1 text-grey-600',
+              selectedLabel && 'text-grey-900'
             )}
             numberOfLines={1}
           >

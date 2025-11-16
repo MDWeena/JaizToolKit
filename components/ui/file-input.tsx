@@ -3,10 +3,8 @@ import { View, Text, TouchableOpacity, Alert, ViewStyle } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import { Ionicons } from "@expo/vector-icons";
 
-// Define supported file types
 type FileType = "pdf" | "jpg" | "jpeg" | "png" | "doc" | "docx";
 
-// Define the file object structure
 interface SelectedFile {
   name: string;
   size: number;
@@ -14,40 +12,21 @@ interface SelectedFile {
   uri: string;
 }
 
-// Component props interface
+    
 interface DocumentUploadInputProps {
-  /** Label text displayed above the upload button */
   label?: string;
-
-  /** Callback function called when a file is selected */
   onFileSelect?: (file: SelectedFile) => void;
-
-  /** Callback function called when a file is removed */
   onFileRemove?: () => void;
-
-  /** Maximum file size in bytes (default: 1MB) */
   maxFileSize?: number;
-
-  /** Array of accepted file extensions */
   acceptedTypes?: FileType[];
-
-  /** Whether the field is required (shows asterisk) */
   required?: boolean;
-
-  /** Custom style for the container */
   style?: ViewStyle | string;
-
-  /** Whether the input is disabled */
   disabled?: boolean;
-
-  /** Initial file if component is controlled */
   initialFile?: SelectedFile | null;
 }
 
-// File size units for formatting
 const FILE_SIZE_UNITS = ["Bytes", "KB", "MB", "GB"] as const;
 
-// MIME type mapping for file extensions
 const MIME_TYPE_MAP: Record<FileType, string> = {
   pdf: "application/pdf",
   jpg: "image/jpeg",
@@ -61,7 +40,7 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
   label,
   onFileSelect,
   onFileRemove,
-  maxFileSize = 1048576, // 1MB in bytes
+  maxFileSize = 1048576,
   acceptedTypes = ["pdf", "jpg", "png"],
   required = false,
   style,
@@ -73,9 +52,6 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
   );
   const [loading, setLoading] = useState<boolean>(false);
 
-  /**
-   * Format file size from bytes to human readable format
-   */
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -85,23 +61,14 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
     );
   };
 
-  /**
-   * Get accepted file types as display string
-   */
   const getAcceptedTypesText = (): string => {
     return acceptedTypes.map((type) => type.toUpperCase()).join(" / ");
   };
 
-  /**
-   * Get file extension from filename
-   */
   const getFileExtension = (filename: string): string => {
     return filename.split(".").pop()?.toLowerCase() || "";
   };
 
-  /**
-   * Validate selected file against size and type constraints
-   */
   const validateFile = (file: DocumentPicker.DocumentPickerResult): boolean => {
     if (!file.assets || file.assets.length === 0) {
       Alert.alert("Error", "No file selected");
@@ -110,7 +77,6 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
 
     const asset = file.assets[0];
 
-    // Check file size
     if (asset.size && asset.size > maxFileSize) {
       Alert.alert(
         "File Too Large",
@@ -119,7 +85,6 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
       return false;
     }
 
-    // Check file type
     const fileExtension = getFileExtension(asset.name);
     if (!acceptedTypes.includes(fileExtension as FileType)) {
       Alert.alert(
@@ -131,17 +96,13 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
 
     return true;
   };
-
-  /**
-   * Handle file selection from document picker
-   */
+    
   const handleFileSelect = async (): Promise<void> => {
     if (disabled) return;
 
     setLoading(true);
 
     try {
-      // Get accepted MIME types
       const mimeTypes = acceptedTypes
         .map((type) => MIME_TYPE_MAP[type])
         .filter(Boolean);
@@ -163,7 +124,6 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
 
         setSelectedFile(file);
 
-        // Call parent callback if provided
         if (onFileSelect) {
           onFileSelect(file);
         }
@@ -176,9 +136,6 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
     }
   };
 
-  /**
-   * Handle file removal
-   */
   const handleRemoveFile = (): void => {
     setSelectedFile(null);
     if (onFileRemove) {
@@ -189,7 +146,7 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
   const isSelected = selectedFile !== null;
 
   return (
-    <View className={`mb-4 ${typeof style === "string" ? style : ""}`}>
+    <View className={`${typeof style === "string" ? style : ""}`}>
       {label && (
         <Text className='mb-2 text-base font-medium text-black'>
           {label}
@@ -199,7 +156,7 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
 
       <TouchableOpacity
         className={`
-           bg-grey-200 rounded-xl p-4 border-2 border-dashed min-h-20
+           bg-grey-200 rounded-xl p-4 border-2 border-dashed
           ${
             isSelected
               ? "border-green-500 bg-green-50 border-solid"
@@ -211,11 +168,11 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
         disabled={disabled || loading}
         activeOpacity={0.7}
       >
-        <View className='flex-col items-center flex-1 gap-4'>
+        <View className='flex-col items-center gap-4'>
           <View className="p-3 rounded-full bg-primary/20">
             <Ionicons name='camera' size={24} className="!text-primary" />
           </View>
-          <View className='flex-1'>
+          <View>
             <Text
               className={`
               text-base text-center mb-1 font-medium
