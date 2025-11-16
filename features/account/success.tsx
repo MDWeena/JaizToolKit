@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Images from "@/constants/Images";
 import { Feather } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -12,13 +12,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const AccountSuccessScreen = () => {
   const router = useRouter();
+  const { accountName, accountNumber } = useLocalSearchParams<{
+    accountName: string;
+    accountNumber: string;
+  }>();
   const [copied, setCopied] = useState(false);
-  const accountNumber = "1234567890";
 
   const handleCopy = async () => {
-    await Clipboard.setStringAsync(accountNumber);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (accountNumber) {
+      await Clipboard.setStringAsync(accountNumber);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -37,27 +42,27 @@ const AccountSuccessScreen = () => {
             Congratulations!
           </Text>
 
-          <Text className="mb-8 text-sm text-center text-grey-600 px-4">
+          <Text className="px-4 mb-8 text-sm text-center text-grey-600">
             Your Account has been successfully Opened. An SMS will be sent to
             the registered Phone number
           </Text>
 
           {/* Account Details Card */}
-          <View className="w-full p-4 mb-8 bg-white rounded-xl border border-secondary-foreground/10">
-            <View className="flex-col pb-4 mb-4">
+          <View className="w-full p-4 mb-8 bg-white border rounded-xl border-secondary-foreground/10">
+            <View className="flex-col pb-4">
               <Text className="text-sm font-medium text-grey-600">
                 Account Name
               </Text>
-              <Text className="text-base font-semibold text-right text-grey-900">
-                Micheal John Doe
+              <Text className="text-base font-semibold text-grey-900">
+                {accountName}
               </Text>
             </View>
             <View className="flex-col">
-              <Text className="text-sm font-medium text-grey-600 mb-1">
+              <Text className="text-sm font-medium text-grey-600">
                 Account Number
               </Text>
               <View className="flex-row items-center justify-between">
-                <Text className="flex-1 text-base font-semibold text-grey-900">
+                <Text className="text-base font-semibold text-grey-900">
                   {accountNumber}
                 </Text>
                 <Pressable
@@ -65,7 +70,7 @@ const AccountSuccessScreen = () => {
                   accessibilityRole="button"
                   accessibilityLabel="Copy Account Number"
                   onPress={handleCopy}
-                  className="ml-2 p-2"
+                  className="ml-2"
                 >
                   {copied ? (
                     <Feather name="check" size={18} color="#10B981" />
