@@ -33,10 +33,7 @@ import {
   StepperSteps,
 } from "@/components/ui/stepper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import {
-  BANK_OPTIONS,
-  GENDER_OPTIONS,
-} from "@/constants/form-options";
+import { BANK_OPTIONS, GENDER_OPTIONS } from "@/constants/form-options";
 import { useDebounce } from "@/features/account/hooks/useDebounce";
 import { useLocation } from "@/features/account/hooks/useLocation";
 import { useTier1Mutations } from "@/features/account/hooks/useTier1Mutations";
@@ -276,7 +273,10 @@ const Tier1Screen = () => {
           const { accountname, accountnumber } = response.data.customer;
           router.push({
             pathname: "/(app)/accounts/open/success",
-            params: { accountName: accountname!, accountNumber: accountnumber! },
+            params: {
+              accountName: accountname!,
+              accountNumber: accountnumber!,
+            },
           });
         }
       },
@@ -293,7 +293,6 @@ const Tier1Screen = () => {
       trigger("nin");
     }
   };
-
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -600,7 +599,10 @@ const Tier1Screen = () => {
                   name="lgaOfOrigin"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={lgasOfOrigin.map((lga) => ({ label: lga, value: lga }))}
+                      options={lgasOfOrigin.map((lga) => ({
+                        label: lga,
+                        value: lga,
+                      }))}
                       placeholder="LGA of Origin"
                       value={value as string}
                       onValueChange={onChange}
@@ -657,11 +659,16 @@ const Tier1Screen = () => {
                   name="lgaOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={lgasOfResidence.map((lga) => ({ label: lga, value: lga }))}
+                      options={lgasOfResidence.map((lga) => ({
+                        label: lga,
+                        value: lga,
+                      }))}
                       placeholder="LGA of Residence"
                       value={value as string}
                       onValueChange={onChange}
-                      disabled={!stateOfResidence || lgasOfResidence.length === 0}
+                      disabled={
+                        !stateOfResidence || lgasOfResidence.length === 0
+                      }
                     />
                   )}
                 />
@@ -676,11 +683,16 @@ const Tier1Screen = () => {
                   name="cityOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={citiesOfResidence.map((city) => ({ label: city, value: city }))}
+                      options={citiesOfResidence.map((city) => ({
+                        label: city,
+                        value: city,
+                      }))}
                       placeholder="City of Residence"
                       value={value as string}
                       onValueChange={onChange}
-                      disabled={!lgaOfResidence || citiesOfResidence.length === 0}
+                      disabled={
+                        !lgaOfResidence || citiesOfResidence.length === 0
+                      }
                     />
                   )}
                 />
