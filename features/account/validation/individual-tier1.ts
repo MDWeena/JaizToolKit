@@ -1,21 +1,63 @@
 import { FileUpload } from "@/types/file-upload";
+import {
+  getCountryByCca2,
+  ICountry,
+  isValidPhoneNumber,
+} from "react-native-international-phone-number";
 import { z } from "zod";
 
 // Step 1: Verification
-export const step1Schema = z.object({
-  agreement: z.boolean().refine((val) => val === true, {
-    message: "You must agree to the Data Privacy Policy",
-  }),
-  mobileNumber: z
-    .string()
-    .trim()
-    .regex(/^\d+$/, "Phone number must be numeric")
-    .length(11, "Phone number must be exactly 11 digits"),
-  otp: z
-    .string()
-    .length(6, "OTP must be 6 digits")
-    .regex(/^\d+$/, "OTP must be numeric"),
-});
+export const step1Schema = z
+  .object({
+    agreement: z.boolean().refine((val) => val === true, {
+      message: "You must agree to the Data Privacy Policy",
+    }),
+
+    selectedCountry: z.custom<ICountry>().optional(),
+
+    mobileNumber: z.string().trim().min(1, "Phone number is required"),
+
+    otp: z
+      .string()
+      .length(6, "OTP must be 6 digits")
+      .regex(/^\d+$/, "OTP must be numeric"),
+  })
+  .superRefine((data, ctx) => {
+    const { mobileNumber, selectedCountry } = data;
+
+    if (!selectedCountry) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["selectedCountry"],
+        message: "Please select a country.",
+      });
+      return;
+    }
+
+    // Validate phone number using selected country
+    const isValid = isValidPhoneNumber(mobileNumber, selectedCountry);
+
+    if (!isValid) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["mobileNumber"],
+        message: "Invalid phone number for the selected country.",
+      });
+    }
+    if (
+      selectedCountry &&
+      selectedCountry.cca2 === "NG" &&
+      mobileNumber &&
+      mobileNumber.replace(/\D/g, "").length !== 10
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["mobileNumber"],
+        message: "Phone number must be 10 digits for this country.",
+      });
+    }
+  });
+
 
 // Step 2: Personal Details (with conditional BVN/NIN using discriminated union)
 // Common fields for both BVN and NIN cases
@@ -131,9 +173,9 @@ export const step4Schema = z.object({
 
 // Combined schema - use intersection for discriminated union
 export const individualTier1Schema = step1Schema
-  .merge(step3Schema)
-  .merge(step4Schema)
-  .and(step2Schema);
+  .and(step2Schema)
+  .and(step3Schema)
+  .and(step4Schema)
 
 export type IndividualTier1FormData = z.infer<typeof individualTier1Schema>;
 
@@ -142,6 +184,7 @@ export const step1Fields: (keyof IndividualTier1FormData)[] = [
   "agreement",
   "mobileNumber",
   "otp",
+  "selectedCountry",
 ];
 
 export const step2Fields: (keyof IndividualTier1FormData)[] = [
@@ -171,18 +214,17 @@ export const step4Fields: (keyof IndividualTier1FormData)[] = [
   "amount",
   "passportPhotograph",
   "signature",
+  "selectedCountry",
 ];
 
 
-// Default values
-// Note: For discriminated union, when idType is "bvn", nin must be undefined, and vice versa
 export const getDefaultValues = (): Partial<IndividualTier1FormData> => ({
   agreement: false,
   mobileNumber: "",
   otp: "",
   idType: "bvn",
   bvn: "",
-  nin: undefined, // Must be undefined when idType is "bvn"
+  nin: undefined,
   email: "",
   firstName: "",
   middleName: "",
@@ -199,5 +241,6 @@ export const getDefaultValues = (): Partial<IndividualTier1FormData> => ({
   amount: "",
   passportPhotograph: null,
   signature: null,
+  selectedCountry: getCountryByCca2("NG"),
 });
 

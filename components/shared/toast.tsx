@@ -7,8 +7,8 @@ type ToastPosition = "top" | "bottom";
 
 interface ToastProps {
   message: string;
-  linkText: string;
-  onLinkPress: () => void;
+  linkText?: string;
+  onLinkPress?: () => void;
   onDismiss: () => void;
   duration?: number;
   position?: ToastPosition;

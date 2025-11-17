@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/store/auth.store';
 import axios from 'axios';
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -11,6 +12,19 @@ export const ApiService = axios.create({
     Accept: 'application/json',
   },
 });
+
+ApiService.interceptors.request.use(
+  (config) => {
+    const user = useAuthStore.getState().user;
+    if (user?.accessToken) {
+      config.headers.Authorization = `Bearer ${user.accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 ApiService.interceptors.response.use(
   (response) => response,

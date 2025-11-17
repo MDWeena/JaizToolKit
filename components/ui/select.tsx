@@ -1,4 +1,5 @@
 import { Drawer, useDrawer } from '@/components/shared/drawer';
+import Colors from '@/constants/Colors';
 import { cn } from '@/lib/utils';
 import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
@@ -144,9 +145,8 @@ const Select = React.forwardRef<View, SelectProps>(
         >
           <Text
             className={cn(
-              'text-xl px-2 flex-1',
-              !selectedValue && 'text-grey-900',
-              'text-grey-600'
+              'text-xl px-2 flex-1 text-grey-600',
+              selectedLabel && 'text-grey-900'
             )}
             numberOfLines={1}
           >
@@ -226,8 +226,8 @@ const SelectItem = React.forwardRef<typeof Pressable, SelectItemProps>(
         disabled={disabled}
         onPress={handlePress}
         className={cn(
-          'flex-row h-14 items-center justify-between px-6 py-2 active:bg-accent/50',
-          isSelected ? 'bg-accent' : '',
+          'flex-row h-14 items-center justify-between px-6 py-2 active:bg-grey-200/50',
+          isSelected ? 'bg-grey-200' : '',
           disabled && 'opacity-50',
           className
         )}
@@ -244,7 +244,7 @@ const SelectItem = React.forwardRef<typeof Pressable, SelectItemProps>(
           {children}
         </Text>
 
-        {isSelected && <Ionicons name="checkmark" size={20} color="#4F46E5" />}
+        {isSelected && <Ionicons name="checkmark" size={20} color={Colors.light.tint} />}
       </Pressable>
     );
   }
@@ -276,7 +276,7 @@ const SelectSeparator = React.forwardRef<View, SelectSeparatorProps>(
     return (
       <View
         ref={ref}
-        className={cn('h-px bg-muted mx-2 my-1', className)}
+        className={cn('h-px bg-grey-300 mx-2 my-1', className)}
         {...props}
       />
     );

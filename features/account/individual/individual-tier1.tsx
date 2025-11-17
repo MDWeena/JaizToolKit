@@ -1,8 +1,15 @@
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
-import { Alert, KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  View,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { ICountry } from "react-native-international-phone-number";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BackButton, Header } from "@/components/shared";
@@ -16,6 +23,8 @@ import {
   TextField,
 } from "@/components/ui";
 import CustomSelect from "@/components/ui/custom-select";
+import { OtpFieldHandle } from "@/components/ui/otp-field";
+import CustomPhoneInput from "@/components/ui/phone-input";
 import {
   Stepper,
   StepperContent,
@@ -24,11 +33,10 @@ import {
   StepperSteps,
 } from "@/components/ui/stepper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import {
-  BANK_OPTIONS,
-  GENDER_OPTIONS,
-  NIGERIAN_STATES,
-} from "@/constants/form-options";
+import { BANK_OPTIONS, GENDER_OPTIONS } from "@/constants/form-options";
+import { useDebounce } from "@/features/account/hooks/useDebounce";
+import { useLocation } from "@/features/account/hooks/useLocation";
+import { useTier1Mutations } from "@/features/account/hooks/useTier1Mutations";
 import { useTierForm } from "@/features/account/hooks/useTierForm";
 import {
   getDefaultValues,
@@ -39,18 +47,17 @@ import {
   step3Fields,
   step4Fields,
 } from "@/features/account/validation/individual-tier1";
-import {
-  sanitizeBVN,
-  sanitizeEmail,
-  sanitizeName,
-  sanitizeNIN,
-  sanitizePhone,
-} from "@/utils";
+import { sanitizeBVN, sanitizeEmail, sanitizeName, sanitizeNIN } from "@/utils";
+import { StateCodes } from "geo-ng";
+import { isValidPhoneNumber } from "react-native-international-phone-number";
 
 const TOTAL_STEPS = 4;
 
 const Tier1Screen = () => {
   const router = useRouter();
+  const [prospectId, setProspectId] = useState<string | null>(null);
+  const otpFieldRef = useRef<OtpFieldHandle>(null);
+
   const {
     form,
     activeStep,
@@ -73,27 +80,207 @@ const Tier1Screen = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors },
     watch,
     setValue,
     trigger,
   } = form;
 
+  const {
+    states,
+    lgas: lgasOfOrigin,
+    handleStateChange: handleStateOfOriginChange,
+  } = useLocation();
+  const {
+    lgas: lgasOfResidence,
+    cities: citiesOfResidence,
+    handleStateChange: handleStateOfResidenceChange,
+    handleLgaChange: handleLgaOfResidenceChange,
+  } = useLocation();
+
+  const {
+    sendOTPMutation,
+    verifyOTPMutation,
+    verifyBVNMutation,
+    verifyNINMutation,
+    updateAddressMutation,
+    finalSubmitMutation,
+  } = useTier1Mutations({ prospectId, setProspectId, form, handleNext });
+
+  const { mutate: doSendOTP, isPending: isSendingOTP } = sendOTPMutation;
+  const { mutate: doVerifyOTP, isPending: isVerifyingOTP } = verifyOTPMutation;
+  const { mutate: doVerifyBVN, isPending: isVerifyingBVN } = verifyBVNMutation;
+  const { mutate: doVerifyNIN, isPending: isVerifyingNIN } = verifyNINMutation;
+  const { mutate: doUpdateAddress, isPending: isUpdatingAddress } =
+    updateAddressMutation;
+  const { mutate: doFinalSubmit, isPending: isSubmitting } =
+    finalSubmitMutation;
+
   const idType = watch("idType");
   const activeTab = idType || "bvn";
+  const bvnValue = watch("bvn");
+  const ninValue = watch("nin");
+  const stateOfOrigin = watch("stateOfOrigin");
+  const stateOfResidence = watch("stateOfResidence");
+  const lgaOfResidence = watch("lgaOfResidence");
+  const debouncedBvn = useDebounce(bvnValue, 1000);
+  const debouncedNin = useDebounce(ninValue, 1000);
 
+  const [selectedCountry, setSelectedCountry] = useState<undefined | ICountry>(
+    undefined
+  );
 
-  const onSubmit = async (data: IndividualTier1FormData) => {
-    try {
-      const { idType: _idType, bvn, nin, ...rest } = data;
-      const payload = activeTab === "bvn" ? { ...rest, bvn } : { ...rest, nin };
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Submitting Individual Tier 1 Form", payload);
-      // router.push("/(app)/accounts/open/success");
-    } catch (error) {
-      console.error("Form submission error:", error);
-      Alert.alert("Error", "Failed to submit form. Please try again.");
+  function handleSelectedCountry(country: ICountry) {
+    setSelectedCountry(country);
+    setValue("selectedCountry", country);
+    trigger("mobileNumber");
+  }
+
+  useEffect(() => {
+    setValue("lgaOfOrigin", "");
+    handleStateOfOriginChange(stateOfOrigin as StateCodes);
+  }, [stateOfOrigin]);
+
+  useEffect(() => {
+    setValue("lgaOfResidence", "");
+    handleStateOfResidenceChange(stateOfResidence as StateCodes);
+  }, [stateOfResidence]);
+
+  useEffect(() => {
+    setValue("cityOfResidence", "");
+    handleLgaOfResidenceChange(stateOfResidence as StateCodes, lgaOfResidence);
+  }, [lgaOfResidence, stateOfResidence]);
+
+  useEffect(() => {
+    if (debouncedBvn && debouncedBvn.length === 11 && idType === "bvn") {
+      const { dateOfBirth } = form.getValues();
+      if (dateOfBirth) {
+        doVerifyBVN({ bvn: debouncedBvn, dob: dateOfBirth });
+      }
     }
+
+    if (debouncedNin && debouncedNin.length === 11 && idType === "nin") {
+      const { dateOfBirth, email } = form.getValues();
+      if (dateOfBirth && email) {
+        doVerifyNIN({ nin: debouncedNin, dob: dateOfBirth, email });
+      }
+    }
+  }, [debouncedNin, idType, debouncedBvn]);
+
+  const handleSendOTP = () => {
+    const mobileNumber = form.getValues("mobileNumber");
+    const country = form.getValues("selectedCountry");
+    setValue("otp", "");
+
+    if (!isValidPhoneNumber(mobileNumber, country as ICountry)) {
+      form.setError("mobileNumber", {
+        type: "manual",
+        message: "Please enter a valid phone number.",
+      });
+      return;
+    }
+    if (!form.getValues("agreement")) {
+      form.setError("agreement", {
+        type: "manual",
+        message: "You must agree to the Data Privacy Policy",
+      });
+      return;
+    }
+
+    const phoneDigits = mobileNumber.replace(/\D/g, "");
+    const countryCode = country?.idd?.root ?? "";
+
+    doSendOTP(
+      {
+        prospectDetails: { type: "IND", tier: 1 },
+        phone: phoneDigits,
+        country: countryCode,
+      },
+      {
+        onSuccess: () => {
+          otpFieldRef.current?.clear();
+          otpFieldRef.current?.focus();
+        },
+      }
+    );
+  };
+
+  const handleStep1Next = async () => {
+    const isValid = await form.trigger(step1Fields);
+    if (!prospectId) {
+      form.setError("otp", {
+        type: "manual",
+        message: "Invalid OTP. Please send an OTP first.",
+      });
+      if (!isValid) {
+        return;
+      }
+      return;
+    }
+
+    if (isValid) {
+      doVerifyOTP({ otp: form.getValues("otp") });
+    }
+  };
+
+  const handleStep2Next = async () => {
+    const isValid = await form.trigger(step2Fields);
+    if (isValid) {
+      handleNext();
+    }
+  };
+
+  const handleStep3Next = async () => {
+    const isValid = await form.trigger(step3Fields);
+    if (isValid) {
+      const {
+        gender,
+        mothersMaidenName,
+        stateOfOrigin,
+        lgaOfOrigin,
+        residentialAddress,
+        stateOfResidence,
+        lgaOfResidence,
+        cityOfResidence,
+      } = form.getValues();
+
+      const stateOfOriginName = states.find(
+        (s) => s.code === stateOfOrigin
+      )?.name;
+      const stateOfResidenceName = states.find(
+        (s) => s.code === stateOfResidence
+      )?.name;
+
+      const payload = {
+        gender: gender?.[0]?.toUpperCase(),
+        mothersmaidenname: mothersMaidenName,
+        origin: { state: stateOfOriginName!, lga: lgaOfOrigin },
+        residence: {
+          addressline: residentialAddress,
+          state: stateOfResidenceName!,
+          lga: lgaOfResidence,
+          city: cityOfResidence,
+        },
+      };
+      doUpdateAddress(payload);
+    }
+  };
+
+  const onSubmit = (data: IndividualTier1FormData) => {
+    doFinalSubmit(data, {
+      onSuccess: (response) => {
+        if (response.status === "success" && response.data) {
+          const { accountname, accountnumber } = response.data.customer;
+          router.push({
+            pathname: "/(app)/accounts/open/success",
+            params: {
+              accountName: accountname!,
+              accountNumber: accountnumber!,
+            },
+          });
+        }
+      },
+    });
   };
 
   const handleTabChange = (value: "bvn" | "nin") => {
@@ -145,32 +332,21 @@ const Tier1Screen = () => {
                 )}
 
                 <View>
-                  <Controller
-                    control={control}
+                  <CustomPhoneInput
                     name="mobileNumber"
-                    render={({ field: { value, onChange } }) => (
-                      <TextField
-                        className="w-full"
-                        InputProps={{
-                          placeholder: "Mobile Number",
-                          keyboardType: "phone-pad",
-                          value: value || "",
-                          onChangeText: (text) => onChange(sanitizePhone(text)),
-                          autoFocus: true,
-                        }}
-                        helperText={errors.mobileNumber?.message as string}
-                      />
-                    )}
+                    control={control}
+                    error={errors.mobileNumber}
+                    selectedCountry={selectedCountry}
+                    onChangeSelectedCountry={handleSelectedCountry}
+                    autoFocus={true}
                   />
                   <Pressable
-                    onPress={() => {
-                      // Handle OTP send action
-                      console.log("Send OTP");
-                    }}
+                    onPress={handleSendOTP}
+                    disabled={isSendingOTP}
                     className="mt-1 ml-auto"
                   >
                     <Text className="text-xs font-bold underline text-primary">
-                      Click to send OTP
+                      {isSendingOTP ? "Sending..." : "Click to send OTP"}
                     </Text>
                   </Pressable>
                 </View>
@@ -181,7 +357,11 @@ const Tier1Screen = () => {
                     control={control}
                     name="otp"
                     render={({ field: { onChange } }) => (
-                      <OtpField length={6} onOtpChange={onChange} />
+                      <OtpField
+                        ref={otpFieldRef}
+                        length={6}
+                        onOtpChange={onChange}
+                      />
                     )}
                   />
                   {errors.otp && (
@@ -194,7 +374,11 @@ const Tier1Screen = () => {
                   </Text>
                 </View>
 
-                <Button size={"lg"} onPress={handleNext}>
+                <Button
+                  size={"lg"}
+                  onPress={handleStep1Next}
+                  loading={isVerifyingOTP}
+                >
                   <Text className="text-sm font-semibold text-primary-foreground">
                     Next
                   </Text>
@@ -267,6 +451,7 @@ const Tier1Screen = () => {
                             value: value || "",
                             onChangeText: (text) => onChange(sanitizeNIN(text)),
                           }}
+                          inputSuffix={isVerifyingNIN && <ActivityIndicator />}
                           helperText={errors.nin?.message as string}
                         />
                       )}
@@ -285,6 +470,7 @@ const Tier1Screen = () => {
                             value: value || "",
                             onChangeText: (text) => onChange(sanitizeBVN(text)),
                           }}
+                          inputSuffix={isVerifyingBVN && <ActivityIndicator />}
                           helperText={errors.bvn?.message as string}
                         />
                       )}
@@ -301,6 +487,7 @@ const Tier1Screen = () => {
                         placeholder: "First Name",
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizeName(text)),
+                        editable: false,
                       }}
                       helperText={errors.firstName?.message as string}
                     />
@@ -316,6 +503,7 @@ const Tier1Screen = () => {
                         placeholder: "Middle Name",
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizeName(text)),
+                        editable: false,
                       }}
                       helperText={errors.middleName?.message as string}
                     />
@@ -331,13 +519,19 @@ const Tier1Screen = () => {
                         placeholder: "Last Name",
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizeName(text)),
+                        editable: false,
                       }}
                       helperText={errors.lastName?.message as string}
                     />
                   )}
                 />
 
-                <Button size={"lg"} onPress={handleNext} className="flex-1">
+                <Button
+                  size={"lg"}
+                  onPress={handleStep2Next}
+                  className="flex-1"
+                  loading={isVerifyingBVN || isVerifyingNIN}
+                >
                   <Text className="text-sm font-semibold text-primary-foreground">
                     Next
                   </Text>
@@ -384,7 +578,10 @@ const Tier1Screen = () => {
                   name="stateOfOrigin"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={states.map((state) => ({
+                        label: state.name,
+                        value: state.code,
+                      }))}
                       placeholder="State of Origin"
                       value={value as string}
                       onValueChange={onChange}
@@ -402,10 +599,14 @@ const Tier1Screen = () => {
                   name="lgaOfOrigin"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={lgasOfOrigin.map((lga) => ({
+                        label: lga,
+                        value: lga,
+                      }))}
                       placeholder="LGA of Origin"
                       value={value as string}
                       onValueChange={onChange}
+                      disabled={!stateOfOrigin || lgasOfOrigin.length === 0}
                     />
                   )}
                 />
@@ -437,7 +638,10 @@ const Tier1Screen = () => {
                   name="stateOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={states.map((state) => ({
+                        label: state.name,
+                        value: state.code,
+                      }))}
                       placeholder="State of Residence"
                       value={value as string}
                       onValueChange={onChange}
@@ -455,10 +659,16 @@ const Tier1Screen = () => {
                   name="lgaOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={lgasOfResidence.map((lga) => ({
+                        label: lga,
+                        value: lga,
+                      }))}
                       placeholder="LGA of Residence"
                       value={value as string}
                       onValueChange={onChange}
+                      disabled={
+                        !stateOfResidence || lgasOfResidence.length === 0
+                      }
                     />
                   )}
                 />
@@ -473,10 +683,16 @@ const Tier1Screen = () => {
                   name="cityOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={citiesOfResidence.map((city) => ({
+                        label: city,
+                        value: city,
+                      }))}
                       placeholder="City of Residence"
                       value={value as string}
                       onValueChange={onChange}
+                      disabled={
+                        !lgaOfResidence || citiesOfResidence.length === 0
+                      }
                     />
                   )}
                 />
@@ -486,7 +702,12 @@ const Tier1Screen = () => {
                   </Text>
                 )}
 
-                <Button size={"lg"} onPress={handleNext} className="flex-1">
+                <Button
+                  size={"lg"}
+                  onPress={handleStep3Next}
+                  className="flex-1"
+                  loading={isUpdatingAddress}
+                >
                   <Text className="text-sm font-semibold text-primary-foreground">
                     Next
                   </Text>
@@ -530,33 +751,36 @@ const Tier1Screen = () => {
                   )}
                 />
 
-                <FileInput
-                  label="Passport Photograph"
-                  onFileSelect={(file) =>
-                    setValue("passportPhotograph", file as any)
-                  }
-                />
-                {errors.passportPhotograph && (
-                  <Text className="-mt-2 text-sm text-red-500">
-                    {String(errors.passportPhotograph.message)}
-                  </Text>
-                )}
+                <View>
+                  <FileInput
+                    label="Passport Photograph"
+                    onFileSelect={(file) =>
+                      setValue("passportPhotograph", file as any)
+                    }
+                  />
+                  {errors.passportPhotograph && (
+                    <Text className="-mt-2 text-sm text-red-500">
+                      {String(errors.passportPhotograph.message)}
+                    </Text>
+                  )}
+                </View>
 
-                <FileInput
-                  label="Signature"
-                  onFileSelect={(file) => setValue("signature", file as any)}
-                />
-                {errors.signature && (
-                  <Text className="-mt-2 text-sm text-red-500">
-                    {String(errors.signature.message)}
-                  </Text>
-                )}
+                <View>
+                  <FileInput
+                    label="Signature"
+                    onFileSelect={(file) => setValue("signature", file as any)}
+                  />
+                  {errors.signature && (
+                    <Text className="-mt-2 text-sm text-red-500">
+                      {String(errors.signature.message)}
+                    </Text>
+                  )}
+                </View>
 
                 <Button
                   size={"lg"}
                   className="flex-1"
                   onPress={handleSubmit(onSubmit)}
-                  // disabled={isSubmitting || !isValid}
                   loading={isSubmitting}
                 >
                   <Text className="text-sm font-semibold text-primary-foreground">
