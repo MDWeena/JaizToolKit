@@ -1,12 +1,12 @@
 import {
-    ApiResponse,
-    SendProspectOTPData,
-    SendProspectOTPRequest,
-    SubmitProspectData,
-    UpdateAODetailsData,
-    UpdateAddressDetailsRequest,
-    VerifyBVNData,
-    VerifyNINData,
+  ApiResponse,
+  SendProspectOTPData,
+  SendProspectOTPRequest,
+  SubmitProspectData,
+  UpdateAODetailsData,
+  UpdateAddressDetailsRequest,
+  VerifyBVNData,
+  VerifyNINData,
 } from "@/types/api";
 import { ApiService } from ".";
 
