@@ -13,7 +13,6 @@ import {
 import { SendProspectOTPRequest, UpdateAddressDetailsRequest } from "@/types/api";
 import { useMutation } from "@tanstack/react-query";
 import { UseFormReturn } from "react-hook-form";
-import { ICountry } from "react-native-international-phone-number";
 
 interface UseTier1MutationsProps {
   prospectId: string | null;
