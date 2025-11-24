@@ -179,13 +179,12 @@ const Tier1Screen = () => {
       return;
     }
 
-    const phoneDigits = mobileNumber.replace(/\D/g, "");
     const countryCode = country?.idd?.root ?? "";
 
     doSendOTP(
       {
         prospectDetails: { type: "IND", tier: 1 },
-        phone: phoneDigits,
+        phone: mobileNumber,
         country: countryCode,
       },
       {
@@ -249,7 +248,7 @@ const Tier1Screen = () => {
         residence: {
           addressline: residentialAddress,
           state: stateOfResidenceName!,
-          lga: lgaOfResidence
+          lga: lgaOfResidence,
         },
       };
       doUpdateAddress(payload);
@@ -257,7 +256,7 @@ const Tier1Screen = () => {
   };
 
   const onSubmit = (data: IndividualTier1FormData) => {
-    console.log({data});
+    console.log({ data });
     doFinalSubmit(data, {
       onSuccess: (response) => {
         if (response.status === "success" && response.data) {
@@ -375,13 +374,12 @@ const Tier1Screen = () => {
                       {String(errors.otp.message)}
                     </Text>
                   )}
-                  {
-                    prospectId && (
-                      <Text className="text-[.9rem] mt-3 text-grey-600">
-                        Enter 6-Digit code sent to {selectedCountry?.idd?.root} {form.getValues("mobileNumber")}
-                      </Text>
-                    )
-                  }
+                  {prospectId && (
+                    <Text className="text-[.9rem] mt-3 text-grey-600">
+                      Enter 6-Digit code sent to {selectedCountry?.idd?.root}{" "}
+                      {form.getValues("mobileNumber")}
+                    </Text>
+                  )}
                 </View>
 
                 <Button
@@ -687,7 +685,6 @@ const Tier1Screen = () => {
                     {String(errors.lgaOfResidence.message)}
                   </Text>
                 )}
-
 
                 <Button
                   size={"lg"}

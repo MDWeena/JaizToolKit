@@ -2,7 +2,14 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Controller } from "react-hook-form";
-import { Alert, KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -75,7 +82,6 @@ const Tier3Screen = () => {
     formState: { errors, isSubmitting, isValid },
     setValue,
   } = form;
-
 
   const onSubmit = async (data: IndividualTier3FormData) => {
     try {
@@ -471,7 +477,9 @@ const Tier3Screen = () => {
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizePhone(text)),
                       }}
-                      helperText={errors.nextOfKinMobileNumber?.message as string}
+                      helperText={
+                        errors.nextOfKinMobileNumber?.message as string
+                      }
                     />
                   )}
                 />
@@ -486,7 +494,9 @@ const Tier3Screen = () => {
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizeName(text)),
                       }}
-                      helperText={errors.nextOfKinRelationship?.message as string}
+                      helperText={
+                        errors.nextOfKinRelationship?.message as string
+                      }
                     />
                   )}
                 />
@@ -500,8 +510,10 @@ const Tier3Screen = () => {
                         value={value}
                         onChange={onChange}
                         placeholder="Next of Kin Date of Birth"
-                        maximumDate={new Date() }
-                        minimumDate={new Date(new Date().getFullYear() - 100, 0, 1)}
+                        maximumDate={new Date()}
+                        minimumDate={
+                          new Date(new Date().getFullYear() - 100, 0, 1)
+                        }
                       />
                       {fieldState.error && (
                         <Text className="mt-1 text-sm text-red-500">
@@ -540,7 +552,9 @@ const Tier3Screen = () => {
                         value: value || "",
                         onChangeText: onChange,
                       }}
-                      helperText={errors.purposeOfAccountOpening?.message as string}
+                      helperText={
+                        errors.purposeOfAccountOpening?.message as string
+                      }
                     />
                   )}
                 />
