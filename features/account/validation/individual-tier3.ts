@@ -1,20 +1,62 @@
 import { FileUpload } from "@/types/file-upload";
+import { ICountry } from "react-native-international-phone-number";
+import { isValidPhoneNumber } from "react-native-international-phone-number";
 import { z } from "zod";
 
+export const step1Schema = z
+  .object({
+    agreement: z.boolean().refine((val) => val === true, {
+      message: "You must agree to the Data Privacy Policy",
+    }),
+
+    selectedCountry: z.custom<ICountry>().optional(),
+
+    mobileNumber: z.string().trim().min(1, "Phone number is required"),
+
+    otp: z
+      .string()
+      .length(6, "OTP must be 6 digits")
+      .regex(/^\d+$/, "OTP must be numeric"),
+  })
+  .superRefine((data, ctx) => {
+    const { mobileNumber, selectedCountry } = data;
+
+    if (!selectedCountry) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["selectedCountry"],
+        message: "Please select a country.",
+      });
+      return;
+    }
+
+    // Validate phone number using selected country
+    const isValid = isValidPhoneNumber(mobileNumber, selectedCountry);
+
+    if (!isValid) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["mobileNumber"],
+        message: "Invalid phone number for the selected country.",
+      });
+    }
+    if (
+      selectedCountry &&
+      selectedCountry.cca2 === "NG" &&
+      mobileNumber &&
+      mobileNumber.replace(/\D/g, "").length !== 10
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["mobileNumber"],
+        message: "Phone number must be 10 digits for this country.",
+      });
+    }
+  });
+
+
 // Step 1: Verification and Personal Details
-export const step1Schema = z.object({
-  agreement: z.boolean().refine((val) => val === true, {
-    message: "You must agree to the Data Privacy Policy",
-  }),
-  mobileNumber: z
-    .string()
-    .trim()
-    .regex(/^\d+$/, "Phone number must be numeric")
-    .length(11, "Phone number must be exactly 11 digits"),
-  otp: z
-    .string()
-    .length(6, "OTP must be 6 digits")
-    .regex(/^\d+$/, "OTP must be numeric"),
+export const step2Schema = z.object({
   email: z
     .string()
     .trim()
@@ -52,7 +94,7 @@ export const step1Schema = z.object({
 });
 
 // Step 2: Address and Additional Info
-export const step2Schema = z.object({
+export const step3Schema = z.object({
   gender: z.string().min(1, "Gender is required"),
   maritalStatus: z.string().min(1, "Marital status is required"),
   mothersMaidenName: z
@@ -70,11 +112,10 @@ export const step2Schema = z.object({
     .max(200, "Residential address is too long"),
   stateOfResidence: z.string().min(1, "State of residence is required"),
   lgaOfResidence: z.string().min(1, "LGA of residence is required"),
-  cityOfResidence: z.string().min(1, "City of residence is required"),
 });
 
 // Step 3: Next of Kin and Account Details
-export const step3Schema = z.object({
+export const step4Schema = z.object({
   nextOfKinFullName: z
     .string()
     .trim()
@@ -121,7 +162,16 @@ export const step3Schema = z.object({
 });
 
 // Step 4: Documents
-export const step4Schema = z.object({
+export const step5Schema = z.object({
+  bank: z.string().min(1, "Please select a bank"),
+  amount: z
+    .string()
+    .min(1, "Amount is required")
+    .regex(/^\d+(\.\d{1,2})?$/, "Amount must be a valid number")
+    .refine(
+      (val) => parseFloat(val) >= 100,
+      { message: "Minimum amount is ₦100" }
+    ),
   validId: z.custom<FileUpload>((val) => val !== null && val !== undefined, {
     message: "Valid ID is required",
   }),
@@ -147,17 +197,21 @@ export const step4Schema = z.object({
 
 // Combined schema
 export const individualTier3Schema = step1Schema
-  .merge(step2Schema)
-  .merge(step3Schema)
-  .merge(step4Schema);
+  .and(step2Schema)
+  .and(step3Schema)
+  .and(step4Schema)
+  .and(step5Schema);
 
 export type IndividualTier3FormData = z.infer<typeof individualTier3Schema>;
 
-// Field groups for step validation
 export const step1Fields: (keyof IndividualTier3FormData)[] = [
-  "agreement",
+  "selectedCountry",
   "mobileNumber",
   "otp",
+];
+
+// Field groups for step validation
+export const step2Fields: (keyof IndividualTier3FormData)[] = [
   "email",
   "bvn",
   "nin",
@@ -166,7 +220,7 @@ export const step1Fields: (keyof IndividualTier3FormData)[] = [
   "lastName",
 ];
 
-export const step2Fields: (keyof IndividualTier3FormData)[] = [
+export const step3Fields: (keyof IndividualTier3FormData)[] = [
   "gender",
   "maritalStatus",
   "mothersMaidenName",
@@ -174,11 +228,10 @@ export const step2Fields: (keyof IndividualTier3FormData)[] = [
   "lgaOfOrigin",
   "residentialAddress",
   "stateOfResidence",
-  "lgaOfResidence",
-  "cityOfResidence",
+  "lgaOfResidence"
 ];
 
-export const step3Fields: (keyof IndividualTier3FormData)[] = [
+export const step4Fields: (keyof IndividualTier3FormData)[] = [
   "nextOfKinFullName",
   "nextOfKinMobileNumber",
   "nextOfKinRelationship",
@@ -187,7 +240,9 @@ export const step3Fields: (keyof IndividualTier3FormData)[] = [
   "purposeOfAccountOpening",
 ];
 
-export const step4Fields: (keyof IndividualTier3FormData)[] = [
+export const step5Fields: (keyof IndividualTier3FormData)[] = [
+  "bank",
+  "amount",
   "validId",
   "passportPhotograph",
   "utilityBill",
@@ -199,36 +254,37 @@ export const step4Fields: (keyof IndividualTier3FormData)[] = [
 
 // Default values
 export const getDefaultValues = (): Partial<IndividualTier3FormData> => ({
-  agreement: false,
-  mobileNumber: "",
-  otp: "",
-  email: "",
-  bvn: "",
-  nin: "",
-  firstName: "",
+  agreement: true,
+  mobileNumber: "8123456789",
+  otp: "123456",
+  email: "Adeoluwa@gmail.com",
+  bvn: "12345678901",
+  nin: "12345678901",
+  firstName: "John",
   middleName: "",
-  lastName: "",
-  gender: "",
-  maritalStatus: "",
-  mothersMaidenName: "",
-  stateOfOrigin: "",
-  lgaOfOrigin: "",
-  residentialAddress: "",
-  stateOfResidence: "",
-  lgaOfResidence: "",
-  cityOfResidence: "",
-  nextOfKinFullName: "",
-  nextOfKinMobileNumber: "",
-  nextOfKinRelationship: "",
+  lastName: "Doe",
+  gender: "male",
+  maritalStatus: "single",
+  mothersMaidenName: "Jane Doe",
+  stateOfOrigin: "Lagos",
+  lgaOfOrigin: "Lagos",
+  residentialAddress: "123 Main St, Lagos",
+  stateOfResidence: "Lagos",
+  lgaOfResidence: "Lagos",
+  nextOfKinFullName: "John Doe",
+  nextOfKinMobileNumber: "08123456789",
+  nextOfKinRelationship: "brother",
   nextOfKinDateOfBirth: undefined,
-  annualTurnover: "",
-  purposeOfAccountOpening: "",
-  validId: undefined,
-  passportPhotograph: undefined,
-  utilityBill: undefined,
-  signature: undefined,
-  kyc: undefined,
-  edd: undefined,
-  riskAssessmentForm: undefined,
+  annualTurnover: "1000000",
+  purposeOfAccountOpening: "Business",
+  bank: "044",
+  amount: "1000000",
+  validId: null,
+  passportPhotograph: null,
+  utilityBill: null,
+  signature: null,
+  kyc: null,
+  edd: null,
+  riskAssessmentForm: null,
 });
 

@@ -51,6 +51,5 @@ export const GENDER_OPTIONS: SelectOption[] = [
 export const MARITAL_STATUS_OPTIONS: SelectOption[] = [
   { value: "single", label: "Single" },
   { value: "married", label: "Married" },
-  { value: "divorced", label: "Divorced" },
-  { value: "widowed", label: "Widowed" },
+  { value: "other", label: "Other" },
 ];
