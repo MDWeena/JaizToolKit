@@ -21,7 +21,7 @@ export const buttonVariants = cva(
         destructive: 'bg-destructive text-destructive-foreground shadow-sm',
         outline: 'border border-grey-300 bg-transparent text-foreground',
         secondary: 'bg-secondary text-secondary-foreground shadow-sm',
-        ghost: 'text-foreground',
+        ghost: 'text-primary',
         link: 'text-primary underline',
         selection: 'border-2 border-border bg-background',
       },

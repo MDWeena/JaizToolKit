@@ -54,16 +54,3 @@ export const MARITAL_STATUS_OPTIONS: SelectOption[] = [
   { value: "divorced", label: "Divorced" },
   { value: "widowed", label: "Widowed" },
 ];
-
-// Bank Options
-export const BANK_OPTIONS: SelectOption[] = [
-  { label: "Access Bank", value: "access" },
-  { label: "GTBank", value: "gtb" },
-  { label: "Zenith Bank", value: "zenith" },
-  { label: "First Bank", value: "firstbank" },
-  { label: "UBA", value: "uba" },
-  { label: "Union Bank", value: "union" },
-  { label: "Fidelity Bank", value: "fidelity" },
-  { label: "Jaiz Bank", value: "jaiz" },
-];
-

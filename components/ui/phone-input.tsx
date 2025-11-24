@@ -3,7 +3,7 @@ import React from "react";
 import { Control, Controller, FieldError, useWatch } from "react-hook-form";
 import { Text, View } from "react-native";
 import PhoneInput, {
-    ICountry,
+  ICountry,
 } from "react-native-international-phone-number";
 
 interface CustomPhoneInputProps {
@@ -15,6 +15,7 @@ interface CustomPhoneInputProps {
   selectedCountry: ICountry | undefined;
   onChangeSelectedCountry: (country: ICountry) => void;
   autoFocus?: boolean;
+  onPhoneNumberChange?: () => void;
 }
 
 const CustomPhoneInput: React.FC<CustomPhoneInputProps> = ({
@@ -26,6 +27,7 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProps> = ({
   selectedCountry,
   onChangeSelectedCountry,
   autoFocus = false,
+  onPhoneNumberChange,
 }) => {
   const value = useWatch({ control, name });
 
@@ -63,7 +65,10 @@ const CustomPhoneInput: React.FC<CustomPhoneInputProps> = ({
             defaultCountry={defaultCountry}
             autoFocus={autoFocus}
             value={fieldValue}
-            onChangePhoneNumber={onChange}
+            onChangePhoneNumber={(val) => {
+              onChange(val);
+              if (onPhoneNumberChange) onPhoneNumberChange();
+            }}
             selectedCountry={selectedCountry}
             onChangeSelectedCountry={onChangeSelectedCountry}
           />

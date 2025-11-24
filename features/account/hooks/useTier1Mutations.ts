@@ -1,16 +1,18 @@
 import { useToast } from "@/components/shared";
 import { IndividualTier1FormData } from "@/features/account/validation/individual-tier1";
 import {
-    sendProspectOTP,
-    submitProspect,
-    updateAddressDetails,
-    updatePassport,
-    updateSignature,
-    verifyBVN,
-    verifyNIN,
-    verifyOTP,
-} from "@/services/api";
-import { SendProspectOTPRequest, UpdateAddressDetailsRequest } from "@/types/api";
+  sendProspectOTP,
+  submitProspect,
+  updateAddressDetails,
+  updateFile,
+  verifyBVN,
+  verifyNIN,
+  verifyOTP,
+} from "@/services/account.service";
+import {
+  SendProspectOTPRequest,
+  UpdateAddressDetailsRequest,
+} from "@/types/api";
 import { useMutation } from "@tanstack/react-query";
 import { UseFormReturn } from "react-hook-form";
 
@@ -124,7 +126,8 @@ export function useTier1Mutations({
   });
 
   const updateAddressMutation = useMutation({
-    mutationFn: (data: UpdateAddressDetailsRequest) => updateAddressDetails(prospectId!, data),
+    mutationFn: (data: UpdateAddressDetailsRequest) =>
+      updateAddressDetails(prospectId!, data),
     onSuccess: (response) => {
       if (response.code === 204 || response.status === "success") {
         showToast({
@@ -149,8 +152,8 @@ export function useTier1Mutations({
 
   const finalSubmitMutation = useMutation({
     mutationFn: async (data: IndividualTier1FormData) => {
-      await updatePassport(prospectId!, data.passportPhotograph as any);
-      await updateSignature(prospectId!, data.signature as any);
+      await updateFile(prospectId!, data.passportPhotograph as any, "passport");
+      await updateFile(prospectId!, data.signature as any, "signature");
       const finalResponse = await submitProspect(prospectId!);
       return finalResponse;
     },

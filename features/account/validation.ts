@@ -10,10 +10,15 @@ export const phoneSchema = z.object({
 });
 
 export const nameSchema = z.object({
-  name: z
+  firstName: z
     .string()
     .trim()
-    .min(3, "Enter full name")
+    .min(3, "Enter first name")
+    .max(100, "Too long"),
+  lastName: z
+    .string()
+    .trim()
+    .min(3, "Enter last name")
     .max(100, "Too long"),
 });
 

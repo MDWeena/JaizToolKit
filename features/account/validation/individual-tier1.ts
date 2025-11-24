@@ -149,7 +149,6 @@ export const step3Schema = z.object({
     .max(200, "Residential address is too long"),
   stateOfResidence: z.string().min(1, "State of residence is required"),
   lgaOfResidence: z.string().min(1, "LGA of residence is required"),
-  cityOfResidence: z.string().min(1, "City of residence is required"),
 });
 
 // Step 4: Documents and Funding
@@ -205,8 +204,7 @@ export const step3Fields: (keyof IndividualTier1FormData)[] = [
   "lgaOfOrigin",
   "residentialAddress",
   "stateOfResidence",
-  "lgaOfResidence",
-  "cityOfResidence",
+  "lgaOfResidence"
 ];
 
 export const step4Fields: (keyof IndividualTier1FormData)[] = [
@@ -236,7 +234,6 @@ export const getDefaultValues = (): Partial<IndividualTier1FormData> => ({
   residentialAddress: "",
   stateOfResidence: "",
   lgaOfResidence: "",
-  cityOfResidence: "",
   bank: "",
   amount: "",
   passportPhotograph: null,
