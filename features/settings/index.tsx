@@ -1,30 +1,30 @@
-import { Feather } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header } from "@/components/shared/header";
-import { ListTile } from "@/components/shared/list-tile";
-import { Button } from "@/components/ui/button";
-import Images from "@/constants/Images";
-import { useBottomSheet } from "@/contexts/BottomSheetContext";
-import { useTheme } from "@/contexts/ThemeContext";
-import { Text } from "@/components/ui/Text";
-import { BiometricsIcon, HelpIcon, ThemeIcon } from "@/assets/images/svgs/settings";
-import { useAuthStore } from "@/store/auth.store";
-import { navigateToWebView } from "@/utils/navigateToWebView";
+import { BiometricsIcon, HelpIcon } from '@/assets/images/svgs/settings';
+import { Header } from '@/components/shared/header';
+import { ListTile } from '@/components/shared/list-tile';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/ui/Text';
+import Images from '@/constants/Images';
+import { useBottomSheet } from '@/contexts/BottomSheetContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useBiometrics } from '@/hooks/useBiometrics';
+import { useAuthStore } from '@/store/auth.store';
+import { navigateToWebView } from '@/utils/navigateToWebView';
 
 const HELP_SUPPORT_URL = 'https://jaizbankplc.com/contact-us';
 
 const ThemeSelector: React.FC<{
-  currentTheme: "system" | "light" | "dark";
-  onApply: (theme: "system" | "light" | "dark") => void;
+  currentTheme: 'system' | 'light' | 'dark';
+  onApply: (theme: 'system' | 'light' | 'dark') => void;
   onClose: () => void;
 }> = ({ currentTheme, onApply, onClose }) => {
   const [selectedTheme, setSelectedTheme] = useState<
-    "system" | "light" | "dark"
+    'system' | 'light' | 'dark'
   >(currentTheme);
 
   const handleApply = () => {
@@ -33,32 +33,32 @@ const ThemeSelector: React.FC<{
   };
 
   return (
-    <View className='px-2 pt-2 pb-6'>
-      <View className='items-center mb-4'>
-        <Text className='text-xl font-semibold text-grey-900'>
+    <View className="px-2 pt-2 pb-6">
+      <View className="items-center mb-4">
+        <Text className="text-xl font-semibold text-grey-900">
           Choose Theme
         </Text>
       </View>
-      <View className='gap-4 mb-6'>
-        {(["system", "light", "dark"] as const).map((option) => (
+      <View className="gap-4 mb-6">
+        {(['system', 'light', 'dark'] as const).map((option) => (
           <Button
             key={option}
-            variant='outline'
+            variant="outline"
             selected={selectedTheme === option}
             onPress={() => setSelectedTheme(option)}
-            className='h-16'
+            className="h-16"
           >
-            <View className='flex-row items-center justify-between w-full px-4'>
-              <Text className='text-lg font-bold text-text'>
+            <View className="flex-row items-center justify-between w-full px-4">
+              <Text className="text-lg font-bold text-text">
                 {option.charAt(0).toUpperCase() + option.slice(1)}
               </Text>
               {selectedTheme === option ? (
-                <View className='items-center justify-center w-6 h-6 border-2 rounded-full border-primary'>
-                  <View className='w-3 h-3 rounded-full bg-primary' />
+                <View className="items-center justify-center w-6 h-6 border-2 rounded-full border-primary">
+                  <View className="w-3 h-3 rounded-full bg-primary" />
                 </View>
               ) : (
-                <View className='items-center justify-center w-6 h-6 border-2 rounded-full border-grey-200'>
-                  <View className='w-3 h-3 rounded-full bg-grey-200' />
+                <View className="items-center justify-center w-6 h-6 border-2 rounded-full border-grey-200">
+                  <View className="w-3 h-3 rounded-full bg-grey-200" />
                 </View>
               )}
             </View>
@@ -66,19 +66,21 @@ const ThemeSelector: React.FC<{
         ))}
       </View>
       <Button
-        variant='default'
-        className='h-14 rounded-2xl'
+        variant="default"
+        className="h-14 rounded-2xl"
         onPress={handleApply}
       >
-        <Text className='text-lg font-interSemiBold text-text-foreground'>Apply</Text>
+        <Text className="text-lg font-interSemiBold text-text-foreground">
+          Apply
+        </Text>
       </Button>
     </View>
   );
 };
 
 const SettingsScreen = () => {
-  const [enabled, setEnabled] = useState(false);
-  const { user } = useAuthStore();
+  const { user, biometricsEnabled, setBiometricsEnabled } = useAuthStore();
+  const { isConfigured, bioAuth } = useBiometrics();
   const { theme: appTheme, setTheme: setAppTheme } = useTheme();
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
   const router = useRouter();
@@ -92,36 +94,53 @@ const SettingsScreen = () => {
         }}
         onClose={hideBottomSheet}
       />,
-      { cornerRadius: "small" }
+      { cornerRadius: 'small' }
     );
+  };
+
+  const handleBiometricsToggle = async () => {
+    if (biometricsEnabled && isConfigured) {
+      setBiometricsEnabled(false);
+    } else {
+      if (isConfigured) {
+        setBiometricsEnabled(true);
+      } else {
+        const result = await bioAuth();
+
+        if (result.success) {
+          setBiometricsEnabled(true);
+        }
+      }
+    }
   };
 
   return (
     <>
-      <SafeAreaView className='flex-1 bg-background'>
-        <StatusBar style='auto' />
-        <ScrollView className='flex-1 px-5'>
-          <Header title='Settings' />
+      <SafeAreaView className="flex-1 bg-background">
+        <StatusBar style="auto" />
+        <ScrollView className="flex-1 px-5">
+          <Header title="Settings" />
           <Header
             title={user?.name ?? ''}
             subtitle={user?.email ?? ''}
-            userNameClassName='text-xl'
+            userNameClassName="text-xl"
             profileImage={Images.profileImagePlaceholder}
           />
-          <View className='border rounded-lg bg-grey-0 border-grey-200'>
+          <View className="border rounded-lg bg-grey-0 border-grey-200">
             <ListTile
-              title='Enable Biometrics'
+              title="Enable Biometrics"
               leading={<BiometricsIcon />}
               accessories={[
                 {
                   component: (
                     <ListTile.Switch
-                      value={enabled}
-                      onValueChange={setEnabled}
+                      value={
+                        !isConfigured ? false : (biometricsEnabled ?? false)
+                      }
+                      onValueChange={() => handleBiometricsToggle()}
                     />
                   ),
-                  position: "end",
-                  onPress: () => setEnabled(!enabled),
+                  position: 'end',
                 },
               ]}
             />
@@ -139,15 +158,18 @@ const SettingsScreen = () => {
               onPress={handleThemeSheet}
             /> */}
             <ListTile
-              title='Help and Support'
+              title="Help and Support"
               leading={<HelpIcon />}
-              onPress={() => navigateToWebView(router, {
-                url: HELP_SUPPORT_URL,
-                title: 'Help and Support',
-                loadingText: 'Loading Jaiz Bank Help and Support...',
-                errorTitle: 'Failed to load help and support.',
-                errorMessage: 'Please check your internet connection or try again later.',
-              })}
+              onPress={() =>
+                navigateToWebView(router, {
+                  url: HELP_SUPPORT_URL,
+                  title: 'Help and Support',
+                  loadingText: 'Loading Jaiz Bank Help and Support...',
+                  errorTitle: 'Failed to load help and support.',
+                  errorMessage:
+                    'Please check your internet connection or try again later.',
+                })
+              }
             />
           </View>
         </ScrollView>

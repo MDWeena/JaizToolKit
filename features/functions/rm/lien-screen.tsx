@@ -8,7 +8,6 @@ import { BackButton, Header } from '@/components/shared';
 import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
-import { cn } from '@/lib/utils';
 import { Text } from 'react-native';
 
 export default function LienScreen() {
@@ -36,28 +35,12 @@ export default function LienScreen() {
           onValueChange={setActiveTab}
           className="w-full max-w-[400px] mx-auto flex-col gap-1.5"
         >
-          <TabsList className="flex-row w-full bg-white">
+          <TabsList className="flex-row w-full">
             <TabsTrigger value="lien" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'lien' ? '!text-primary' : '!text-darkGray'
-                )}
-              >
-                Lien
-              </Text>
+              <Text>Lien</Text>
             </TabsTrigger>
             <TabsTrigger value="restrictions" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'restrictions'
-                    ? '!text-primary'
-                    : '!text-darkGray'
-                )}
-              >
-                Restrictions
-              </Text>
+              <Text>Restrictions</Text>
             </TabsTrigger>
           </TabsList>
           <TabsContent value="lien">

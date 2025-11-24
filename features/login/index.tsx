@@ -37,7 +37,7 @@ const LoginScreen = () => {
     useState(false);
 
   const { authMethods, bioAuth, isConfigured } = useBiometrics();
-  const { setUser, user } = useAuthStore();
+  const { setUser, user, biometricsEnabled } = useAuthStore();
   const isUserLoggedIn = useMemo(() => !!user, [user]);
   const { setLoginState } = useLoginState();
   const { showBottomSheet } = useBottomSheet();
@@ -49,6 +49,7 @@ const LoginScreen = () => {
     formState: { errors },
     watch,
     reset,
+    setValue,
   } = useForm<Inputs>({
     defaultValues: {
       staffId: user?.id ?? '',
@@ -130,6 +131,7 @@ const LoginScreen = () => {
   const onBiometricClick = async () => {
     const result = await bioAuth();
     if (result.success) {
+      setValue('password', user?.password || '');
       onSubmit({
         staffId: user?.id!,
         password: user?.password!,
@@ -170,6 +172,7 @@ const LoginScreen = () => {
                 value: value ?? '',
                 onChangeText: onChange,
                 onBlur: onBlur,
+                editable: !loggingIn,
               }}
               helperText={errors?.staffId?.message}
             />
@@ -214,6 +217,7 @@ const LoginScreen = () => {
                 onChangeText: onChange,
                 onBlur: onBlur,
                 secureTextEntry: !showPassword,
+                editable: !loggingIn,
               }}
               helperText={errors?.password?.message}
             />
@@ -231,47 +235,50 @@ const LoginScreen = () => {
         </Button>
 
         {/* Biometrics Login */}
-        {isConfigured && isUserLoggedIn && authMethods?.length > 0 && (
-          <>
-            <View className="flex flex-row items-center gap-3 my-6">
-              <View className="h-[.8px] flex-1 bg-gray-300" />
-              <Text className="text-gray-500">or Login with</Text>
-              <View className="h-[.8px] flex-1 bg-gray-300" />
-            </View>
+        {isConfigured &&
+          isUserLoggedIn &&
+          authMethods?.length > 0 &&
+          biometricsEnabled && (
+            <>
+              <View className="flex flex-row items-center gap-3 my-6">
+                <View className="h-[.8px] flex-1 bg-gray-300" />
+                <Text className="text-gray-500">or Login with</Text>
+                <View className="h-[.8px] flex-1 bg-gray-300" />
+              </View>
 
-            <View className="flex-row items-center justify-center gap-4">
-              {authMethods.includes(
-                LocalAuthentication.AuthenticationType.FINGERPRINT
-              ) && (
-                <View>
-                  <Pressable onPress={onBiometricClick}>
-                    <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
-                      <Ionicons name="finger-print-outline" size={25} />
-                    </View>
-                  </Pressable>
-                  <Text className="mt-2 text-center text-gray-500">
-                    Touch ID
-                  </Text>
-                </View>
-              )}
+              <View className="flex-row items-center justify-center gap-4">
+                {authMethods.includes(
+                  LocalAuthentication.AuthenticationType.FINGERPRINT
+                ) && (
+                  <View>
+                    <Pressable onPress={onBiometricClick}>
+                      <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
+                        <Ionicons name="finger-print-outline" size={25} />
+                      </View>
+                    </Pressable>
+                    <Text className="mt-2 text-center text-gray-500">
+                      Touch ID
+                    </Text>
+                  </View>
+                )}
 
-              {authMethods.includes(
-                LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
-              ) && (
-                <View>
-                  <Pressable onPress={onBiometricClick}>
-                    <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
-                      <FaceIdIcon />
-                    </View>
-                  </Pressable>
-                  <Text className="mt-2 text-center text-gray-500">
-                    Face ID
-                  </Text>
-                </View>
-              )}
-            </View>
-          </>
-        )}
+                {authMethods.includes(
+                  LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+                ) && (
+                  <View>
+                    <Pressable onPress={onBiometricClick}>
+                      <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
+                        <FaceIdIcon />
+                      </View>
+                    </Pressable>
+                    <Text className="mt-2 text-center text-gray-500">
+                      Face ID
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </>
+          )}
       </View>
     </SafeAreaView>
   );

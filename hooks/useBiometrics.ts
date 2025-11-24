@@ -61,7 +61,7 @@ export const useBiometrics = () => {
     };
 
     checkBiometricSetup();
-  }, []);
+  });
 
   return {
     authMethods,

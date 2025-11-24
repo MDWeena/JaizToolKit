@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import Images from '@/constants/Images';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
 import { useBiometrics } from '@/hooks/useBiometrics';
+import { useAuthStore } from '@/store/auth.store';
 import { AuthenticationType } from 'expo-local-authentication';
 import React, { FC, useState } from 'react';
 import { Image, Text, View } from 'react-native';
@@ -16,16 +17,19 @@ const BiometricsBottomSheet: FC<Props> = ({ onSuccess }) => {
   const [state, setState] = useState<BiometricsState>('enable');
   const { hideBottomSheet } = useBottomSheet();
   const { authMethods, bioAuth } = useBiometrics();
+  const { setBiometricsEnabled } = useAuthStore();
   const isTouchId = authMethods.includes(AuthenticationType.FINGERPRINT)
     ? true
     : false;
   const idText = isTouchId ? 'Touch ID' : 'Face ID';
 
   const enable = async () => {
-    const isEnabled = await bioAuth();
+    const result = await bioAuth();
 
-    if (!isEnabled) setState('successful');
-    else setState('failed');
+    if (result.success) {
+      setBiometricsEnabled(true);
+      setState('successful');
+    } else setState('failed');
   };
 
   return (

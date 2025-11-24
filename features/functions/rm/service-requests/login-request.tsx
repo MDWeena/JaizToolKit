@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
-import { cn } from '@/lib/utils';
 import { Text } from 'react-native';
 
 export default function LoginInRequestScreen() {
@@ -30,30 +29,12 @@ export default function LoginInRequestScreen() {
           onValueChange={setActiveTab}
           className="w-full max-w-[400px] mx-auto flex-col gap-1.5"
         >
-          <TabsList className="flex-row w-full bg-white">
+          <TabsList className="flex-row w-full">
             <TabsTrigger value="customer-name" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'customer-name'
-                    ? '!text-primary'
-                    : '!text-darkGray'
-                )}
-              >
-                Customer Name
-              </Text>
+              <Text>Customer Name</Text>
             </TabsTrigger>
             <TabsTrigger value="access-code" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'access-code'
-                    ? '!text-primary'
-                    : '!text-darkGray'
-                )}
-              >
-                Access Code
-              </Text>
+              <Text>Access Code</Text>
             </TabsTrigger>
           </TabsList>
           <TabsContent className="gap-5" value="customer-name">

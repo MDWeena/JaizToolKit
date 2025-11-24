@@ -5,11 +5,13 @@ import { secureStorage } from '.';
 
 type AuthState = {
   user?: User;
+  biometricsEnabled?: boolean;
 };
 
 type AuthActions = {
   setUser: (user: User) => void;
   clearUser: VoidFunction;
+  setBiometricsEnabled: (enabled: boolean) => void;
 };
 
 type AuthStore = AuthState & AuthActions;
@@ -18,11 +20,16 @@ export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
       user: undefined,
+      biometricsEnabled: false,
+
       setUser(user) {
         set({ user });
       },
       clearUser() {
         set({ user: undefined });
+      },
+      setBiometricsEnabled(enabled: boolean) {
+        set({ biometricsEnabled: enabled });
       },
     }),
     {

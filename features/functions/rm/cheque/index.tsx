@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
-import { cn } from '@/lib/utils';
 import { Text } from 'react-native';
 import DeleteChequeSheet from './delete-cheque-sheet';
 
@@ -32,26 +31,12 @@ export default function ChequeScreen() {
           onValueChange={setActiveTab}
           className="w-full max-w-[400px] mx-auto flex-col gap-1.5"
         >
-          <TabsList className="flex-row w-full bg-white">
+          <TabsList className="flex-row w-full">
             <TabsTrigger value="confirm" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'confirm' ? '!text-primary' : '!text-darkGray'
-                )}
-              >
-                Confirm
-              </Text>
+              <Text>Confirm</Text>
             </TabsTrigger>
             <TabsTrigger value="delete" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'delete' ? '!text-primary' : '!text-darkGray'
-                )}
-              >
-                Delete
-              </Text>
+              <Text>Delete</Text>
             </TabsTrigger>
           </TabsList>
           <TabsContent className="gap-5" value="confirm">
