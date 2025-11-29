@@ -2,7 +2,7 @@ import {
   Select,
   SelectGroup,
   SelectItem,
-  SelectLabel,
+  SelectLabel
 } from '@/components/ui/select';
 import React from 'react';
 import { Text, View } from 'react-native';
@@ -21,6 +21,7 @@ interface CustomSelectProps {
   className?: string;
   disabled?: boolean;
   groupLabel?: string;
+  size?: 'small' | 'medium' | 'large' | 'full' | number[];
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -30,12 +31,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   onValueChange,
   placeholder = 'Select an option',
   className = '',
-  disabled = false
+  disabled = false,
+  size = 'medium',
 }) => {
   return (
     <View className={`mb-4 ${className}`}>
       {/* Label */}
-      {label && <Text className="mb-2 font-medium text-gray-700">{label}</Text>}
+      {label && <SelectLabel className="mb-2 font-medium text-gray-700">{label}</SelectLabel>}
 
       {/* Select Component */}
       <Select
@@ -45,14 +47,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         disabled={disabled}
         className="w-full"
         triggerClassName="rounded-xl px-3 py-2 min-h-[60px]"
+        size={size}
       >
-        <SelectGroup>
           {options.map((option, index) => (
-            <SelectItem key={index} className='flex-1' value={option.value}>
+            <SelectItem key={index} value={option.value}>
               {option.label}
             </SelectItem>
           ))}
-        </SelectGroup>
       </Select>
     </View>
   );

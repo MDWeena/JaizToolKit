@@ -11,7 +11,6 @@ import { TextField } from '@/components/ui/input';
 import SuccessSheet from '@/components/ui/success-sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
-import { cn } from '@/lib/utils';
 import { Text } from 'react-native';
 
 export default function LinkingScreen() {
@@ -32,26 +31,12 @@ export default function LinkingScreen() {
           onValueChange={setActiveTab}
           className="w-full max-w-[400px] mx-auto flex-col gap-1.5"
         >
-          <TabsList className="flex-row w-full bg-white">
+          <TabsList className="flex-row w-full">
             <TabsTrigger value="bvn" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'bvn' ? '!text-primary' : '!text-darkGray'
-                )}
-              >
-                BVN
-              </Text>
+              <Text>BVN</Text>
             </TabsTrigger>
             <TabsTrigger value="nin" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'nin' ? '!text-primary' : '!text-darkGray'
-                )}
-              >
-                NIN
-              </Text>
+              <Text>NIN</Text>
             </TabsTrigger>
           </TabsList>
           <TabsContent className="gap-5" value="bvn">

@@ -33,7 +33,8 @@ import {
   StepperSteps,
 } from "@/components/ui/stepper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import { BANK_OPTIONS, GENDER_OPTIONS } from "@/constants/form-options";
+import { GENDER_OPTIONS } from "@/constants/form-options";
+import { USSD_CODES } from "@/constants/ussd-codes";
 import { useDebounce } from "@/features/account/hooks/useDebounce";
 import { useLocation } from "@/features/account/hooks/useLocation";
 import { useTier1Mutations } from "@/features/account/hooks/useTier1Mutations";
@@ -48,7 +49,6 @@ import {
   step4Fields,
 } from "@/features/account/validation/individual-tier1";
 import { sanitizeBVN, sanitizeEmail, sanitizeName, sanitizeNIN } from "@/utils";
-import { StateCodes } from "geo-ng";
 import { isValidPhoneNumber } from "react-native-international-phone-number";
 
 const TOTAL_STEPS = 4;
@@ -93,9 +93,7 @@ const Tier1Screen = () => {
   } = useLocation();
   const {
     lgas: lgasOfResidence,
-    cities: citiesOfResidence,
     handleStateChange: handleStateOfResidenceChange,
-    handleLgaChange: handleLgaOfResidenceChange,
   } = useLocation();
 
   const {
@@ -122,7 +120,6 @@ const Tier1Screen = () => {
   const ninValue = watch("nin");
   const stateOfOrigin = watch("stateOfOrigin");
   const stateOfResidence = watch("stateOfResidence");
-  const lgaOfResidence = watch("lgaOfResidence");
   const debouncedBvn = useDebounce(bvnValue, 1000);
   const debouncedNin = useDebounce(ninValue, 1000);
 
@@ -138,18 +135,13 @@ const Tier1Screen = () => {
 
   useEffect(() => {
     setValue("lgaOfOrigin", "");
-    handleStateOfOriginChange(stateOfOrigin as StateCodes);
+    handleStateOfOriginChange(stateOfOrigin);
   }, [stateOfOrigin]);
 
   useEffect(() => {
     setValue("lgaOfResidence", "");
-    handleStateOfResidenceChange(stateOfResidence as StateCodes);
+    handleStateOfResidenceChange(stateOfResidence);
   }, [stateOfResidence]);
-
-  useEffect(() => {
-    setValue("cityOfResidence", "");
-    handleLgaOfResidenceChange(stateOfResidence as StateCodes, lgaOfResidence);
-  }, [lgaOfResidence, stateOfResidence]);
 
   useEffect(() => {
     if (debouncedBvn && debouncedBvn.length === 11 && idType === "bvn") {
@@ -187,13 +179,12 @@ const Tier1Screen = () => {
       return;
     }
 
-    const phoneDigits = mobileNumber.replace(/\D/g, "");
     const countryCode = country?.idd?.root ?? "";
 
     doSendOTP(
       {
         prospectDetails: { type: "IND", tier: 1 },
-        phone: phoneDigits,
+        phone: mobileNumber,
         country: countryCode,
       },
       {
@@ -241,7 +232,6 @@ const Tier1Screen = () => {
         residentialAddress,
         stateOfResidence,
         lgaOfResidence,
-        cityOfResidence,
       } = form.getValues();
 
       const stateOfOriginName = states.find(
@@ -259,7 +249,6 @@ const Tier1Screen = () => {
           addressline: residentialAddress,
           state: stateOfResidenceName!,
           lga: lgaOfResidence,
-          city: cityOfResidence,
         },
       };
       doUpdateAddress(payload);
@@ -267,15 +256,28 @@ const Tier1Screen = () => {
   };
 
   const onSubmit = (data: IndividualTier1FormData) => {
+    console.log({ data });
     doFinalSubmit(data, {
       onSuccess: (response) => {
         if (response.status === "success" && response.data) {
           const { accountname, accountnumber } = response.data.customer;
+
+          const bankName = data.bank;
+          const amount = data.amount;
+          let ussdString = "";
+
+          if (bankName && USSD_CODES[bankName]) {
+            ussdString = USSD_CODES[bankName]
+              .replace("AMOUNT", amount || "")
+              .replace("ACCOUNT", accountnumber || "");
+          }
+
           router.push({
             pathname: "/(app)/accounts/open/success",
             params: {
               accountName: accountname!,
               accountNumber: accountnumber!,
+              ussdString,
             },
           });
         }
@@ -339,6 +341,9 @@ const Tier1Screen = () => {
                     selectedCountry={selectedCountry}
                     onChangeSelectedCountry={handleSelectedCountry}
                     autoFocus={true}
+                    onPhoneNumberChange={() => {
+                      setProspectId(null);
+                    }}
                   />
                   <Pressable
                     onPress={handleSendOTP}
@@ -369,9 +374,12 @@ const Tier1Screen = () => {
                       {String(errors.otp.message)}
                     </Text>
                   )}
-                  <Text className="text-[.9rem] mt-3 text-grey-600">
-                    Enter 6-Digit code sent to +234 123 456 7890
-                  </Text>
+                  {prospectId && (
+                    <Text className="text-[.9rem] mt-3 text-grey-600">
+                      Enter 6-Digit code sent to {selectedCountry?.idd?.root}{" "}
+                      {form.getValues("mobileNumber")}
+                    </Text>
+                  )}
                 </View>
 
                 <Button
@@ -678,30 +686,6 @@ const Tier1Screen = () => {
                   </Text>
                 )}
 
-                <Controller
-                  control={control}
-                  name="cityOfResidence"
-                  render={({ field: { value, onChange } }) => (
-                    <CustomSelect
-                      options={citiesOfResidence.map((city) => ({
-                        label: city,
-                        value: city,
-                      }))}
-                      placeholder="City of Residence"
-                      value={value as string}
-                      onValueChange={onChange}
-                      disabled={
-                        !lgaOfResidence || citiesOfResidence.length === 0
-                      }
-                    />
-                  )}
-                />
-                {errors.cityOfResidence && (
-                  <Text className="-mt-4 text-sm text-red-500">
-                    {String(errors.cityOfResidence.message)}
-                  </Text>
-                )}
-
                 <Button
                   size={"lg"}
                   onPress={handleStep3Next}
@@ -722,7 +706,10 @@ const Tier1Screen = () => {
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
                       label="Fund Account Instantly"
-                      options={BANK_OPTIONS}
+                      options={Object.keys(USSD_CODES).map((bank: string) => ({
+                        label: bank,
+                        value: bank,
+                      }))}
                       placeholder="Select Bank"
                       value={value as string}
                       onValueChange={onChange}

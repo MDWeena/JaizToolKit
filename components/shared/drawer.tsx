@@ -48,7 +48,7 @@ const DRAG = {
 };
 
 // Drawer sizes - Definition of preset snap points
-const DRAWER_SIZES = {
+export const DRAWER_SIZES = {
   SMALL: [0.3, 0.5], // Small drawer that can be extended to 50%
   MEDIUM: [0.5, 0.8], // Medium drawer that can be extended to 80%
   LARGE: [0.6, 0.8, 0.95], // Large drawer with size options
@@ -59,7 +59,7 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export type DrawerSize = 'small' | 'medium' | 'large' | 'full' | number[];
 
-const resolveSnapPoints = (size: DrawerSize): number[] => {
+export const resolveSnapPoints = (size: DrawerSize): number[] => {
   if (Array.isArray(size)) return size;
 
   switch (size) {
@@ -459,10 +459,8 @@ const Drawer = React.forwardRef<View, DrawerProps>(
               )}
             </View>
 
-            <SafeAreaView className="flex-1" edges={['bottom']}>
-              <View ref={ref} className="flex-1">
-                {children}
-              </View>
+            <SafeAreaView ref={ref} className="flex-1">
+              {children}
             </SafeAreaView>
           </Animated.View>
         </View>

@@ -1,9 +1,16 @@
-import { Drawer, useDrawer } from '@/components/shared/drawer';
+import {
+  Drawer,
+  DrawerSize,
+  resolveSnapPoints,
+  useDrawer,
+} from '@/components/shared/drawer';
 import Colors from '@/constants/Colors';
 import { cn } from '@/lib/utils';
 import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface SelectProps {
   value?: string;
@@ -131,6 +138,14 @@ const Select = React.forwardRef<View, SelectProps>(
       [selectedValue, handleSelect]
     );
 
+    const snapPoints = React.useMemo(
+      () => resolveSnapPoints(size as DrawerSize),
+      [size]
+    );
+
+    const initialSnapPoint = snapPoints[initialSnapIndex] || snapPoints[0];
+    const paddingBottom = SCREEN_HEIGHT * (1 - initialSnapPoint);
+
     return (
       <View ref={ref} className={cn('w-full', className)}>
         <Pressable
@@ -175,9 +190,10 @@ const Select = React.forwardRef<View, SelectProps>(
             closeOnBackdropPress={true}
           >
             <ScrollView
-              className="px-1 pt-2 pb-6"
+              className="flex-1 px-1 pt-2 pb-6"
               keyboardShouldPersistTaps="handled"
               nestedScrollEnabled={true}
+              contentContainerStyle={{ paddingBottom: paddingBottom + 50 }}
             >
               {children}
             </ScrollView>

@@ -1,10 +1,18 @@
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
-import { Alert, KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ICountry } from "react-native-international-phone-number";
 
 import { BackButton, Header } from "@/components/shared";
 import {
@@ -13,6 +21,7 @@ import {
   DatePicker,
   FileInput,
   OtpField,
+  OtpFieldHandle,
   TextField,
 } from "@/components/ui";
 import CustomSelect from "@/components/ui/custom-select";
@@ -37,6 +46,7 @@ import {
   step2Fields,
   step3Fields,
   step4Fields,
+  step5Fields,
 } from "@/features/account/validation/individual-tier3";
 import {
   sanitizeBVN,
@@ -45,10 +55,19 @@ import {
   sanitizeNIN,
   sanitizePhone,
 } from "@/utils";
+import { useLocation } from "../hooks/useLocation";
+import CustomPhoneInput from "@/components/ui/phone-input";
+import { USSD_CODES } from "@/constants/ussd-codes";
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 const Tier3Screen = () => {
+  const [prospectId, setProspectId] = useState<string | null>(null);
+  const otpFieldRef = useRef<OtpFieldHandle>(null);
+  const [selectedCountry, setSelectedCountry] = useState<undefined | ICountry>(
+    undefined
+  );
+
   const router = useRouter();
   const {
     form,
@@ -66,6 +85,7 @@ const Tier3Screen = () => {
       2: step2Fields as (keyof IndividualTier3FormData)[],
       3: step3Fields as (keyof IndividualTier3FormData)[],
       4: step4Fields as (keyof IndividualTier3FormData)[],
+      5: step5Fields as (keyof IndividualTier3FormData)[],
     },
   });
 
@@ -74,14 +94,50 @@ const Tier3Screen = () => {
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
     setValue,
+    watch,
+    trigger,
   } = form;
+  const stateOfOrigin = watch("stateOfOrigin");
+  const stateOfResidence = watch("stateOfResidence");
 
+  const {
+    states,
+    lgas: lgasOfOrigin,
+    handleStateChange: handleStateOfOriginChange,
+  } = useLocation();
+  const {
+    lgas: lgasOfResidence,
+    handleStateChange: handleStateOfResidenceChange,
+  } = useLocation();
+
+  function handleSelectedCountry(country: ICountry) {
+    setSelectedCountry(country);
+    setValue("selectedCountry", country);
+    trigger("mobileNumber");
+  }
+
+  useEffect(() => {
+    setValue("lgaOfOrigin", "");
+    handleStateOfOriginChange(stateOfOrigin);
+  }, [stateOfOrigin]);
+
+  useEffect(() => {
+    setValue("lgaOfResidence", "");
+    handleStateOfResidenceChange(stateOfResidence);
+  }, [stateOfResidence]);
 
   const onSubmit = async (data: IndividualTier3FormData) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       console.log("Submitting Individual Tier 3 Form", data);
-      router.push("/(app)/accounts/open/success");
+      router.push({
+        pathname: "/(app)/accounts/open/success",
+        params: {
+          accountName: "John Doe",
+          accountNumber: "12345678901",
+          ussdString: "*044*1000000*12345678901#"
+      }},
+      );
     } catch (error) {
       console.error("Form submission error:", error);
       Alert.alert("Error", "Failed to submit form. Please try again.");
@@ -107,11 +163,11 @@ const Tier3Screen = () => {
               <StepperStep step={2} />
               <StepperStep step={3} />
               <StepperStep step={4} />
+              <StepperStep step={5} />
             </StepperSteps>
             <Header title="Tier 3 Account" />
 
             <StepperContent>
-              {/* Step 1: Verification and Personal Details */}
               <StepperStepContent className="gap-6" step={1}>
                 <Controller
                   control={control}
@@ -127,30 +183,18 @@ const Tier3Screen = () => {
                 )}
 
                 <View>
-                  <Controller
-                    control={control}
+                  <CustomPhoneInput
                     name="mobileNumber"
-                    render={({ field: { value, onChange } }) => (
-                      <TextField
-                        className="w-full"
-                        InputProps={{
-                          placeholder: "Mobile Number",
-                          keyboardType: "phone-pad",
-                          value: value || "",
-                          onChangeText: (text) => onChange(sanitizePhone(text)),
-                          autoFocus: true,
-                        }}
-                        helperText={errors.mobileNumber?.message as string}
-                      />
-                    )}
-                  />
-                  <Pressable
-                    onPress={() => {
-                      // Handle OTP send action
-                      console.log("Send OTP");
+                    control={control}
+                    error={errors.mobileNumber}
+                    selectedCountry={selectedCountry}
+                    onChangeSelectedCountry={handleSelectedCountry}
+                    autoFocus={true}
+                    onPhoneNumberChange={() => {
+                      setProspectId(null);
                     }}
-                    className="mt-1 ml-auto"
-                  >
+                  />
+                  <Pressable className="mt-1 ml-auto">
                     <Text className="text-xs font-bold underline text-primary">
                       Click to send OTP
                     </Text>
@@ -163,7 +207,11 @@ const Tier3Screen = () => {
                     control={control}
                     name="otp"
                     render={({ field: { onChange } }) => (
-                      <OtpField length={6} onOtpChange={onChange} />
+                      <OtpField
+                        ref={otpFieldRef}
+                        length={6}
+                        onOtpChange={onChange}
+                      />
                     )}
                   />
                   {errors.otp && (
@@ -172,10 +220,18 @@ const Tier3Screen = () => {
                     </Text>
                   )}
                   <Text className="text-[.9rem] mt-3 text-grey-600">
-                    Enter 6-Digit code sent to +234 123 456 7890
+                    Enter 6-Digit code sent to +23
                   </Text>
                 </View>
 
+                <Button size={"lg"} onPress={handleNext}>
+                  <Text className="text-sm font-semibold text-primary-foreground">
+                    Next
+                  </Text>
+                </Button>
+              </StepperStepContent>
+
+              <StepperStepContent className="gap-6" step={2}>
                 <Controller
                   control={control}
                   name="email"
@@ -277,7 +333,7 @@ const Tier3Screen = () => {
               </StepperStepContent>
 
               {/* Step 2: Address and Additional Info */}
-              <StepperStepContent className="gap-6" step={2}>
+              <StepperStepContent className="gap-6" step={3}>
                 <Controller
                   control={control}
                   name="gender"
@@ -334,7 +390,10 @@ const Tier3Screen = () => {
                   name="stateOfOrigin"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={states.map((state) => ({
+                        label: state.name,
+                        value: state.code,
+                      }))}
                       placeholder="State of Origin"
                       value={value as string}
                       onValueChange={onChange}
@@ -352,10 +411,14 @@ const Tier3Screen = () => {
                   name="lgaOfOrigin"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={lgasOfOrigin.map((lga) => ({
+                        label: lga,
+                        value: lga,
+                      }))}
                       placeholder="LGA of Origin"
                       value={value as string}
                       onValueChange={onChange}
+                      disabled={!stateOfOrigin || lgasOfOrigin.length === 0}
                     />
                   )}
                 />
@@ -387,7 +450,10 @@ const Tier3Screen = () => {
                   name="stateOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={states.map((state) => ({
+                        label: state.name,
+                        value: state.code,
+                      }))}
                       placeholder="State of Residence"
                       value={value as string}
                       onValueChange={onChange}
@@ -405,34 +471,22 @@ const Tier3Screen = () => {
                   name="lgaOfResidence"
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
-                      options={NIGERIAN_STATES}
+                      options={lgasOfResidence.map((lga) => ({
+                        label: lga,
+                        value: lga,
+                      }))}
                       placeholder="LGA of Residence"
                       value={value as string}
                       onValueChange={onChange}
+                      disabled={
+                        !stateOfResidence || lgasOfResidence.length === 0
+                      }
                     />
                   )}
                 />
                 {errors.lgaOfResidence && (
                   <Text className="-mt-4 text-sm text-red-500">
                     {String(errors.lgaOfResidence.message)}
-                  </Text>
-                )}
-
-                <Controller
-                  control={control}
-                  name="cityOfResidence"
-                  render={({ field: { value, onChange } }) => (
-                    <CustomSelect
-                      options={NIGERIAN_STATES}
-                      placeholder="City of Residence"
-                      value={value as string}
-                      onValueChange={onChange}
-                    />
-                  )}
-                />
-                {errors.cityOfResidence && (
-                  <Text className="-mt-4 text-sm text-red-500">
-                    {String(errors.cityOfResidence.message)}
                   </Text>
                 )}
 
@@ -444,7 +498,7 @@ const Tier3Screen = () => {
               </StepperStepContent>
 
               {/* Step 3: Next of Kin and Account Details */}
-              <StepperStepContent className="gap-6" step={3}>
+              <StepperStepContent className="gap-6" step={4}>
                 <Controller
                   control={control}
                   name="nextOfKinFullName"
@@ -471,7 +525,9 @@ const Tier3Screen = () => {
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizePhone(text)),
                       }}
-                      helperText={errors.nextOfKinMobileNumber?.message as string}
+                      helperText={
+                        errors.nextOfKinMobileNumber?.message as string
+                      }
                     />
                   )}
                 />
@@ -486,7 +542,9 @@ const Tier3Screen = () => {
                         value: value || "",
                         onChangeText: (text) => onChange(sanitizeName(text)),
                       }}
-                      helperText={errors.nextOfKinRelationship?.message as string}
+                      helperText={
+                        errors.nextOfKinRelationship?.message as string
+                      }
                     />
                   )}
                 />
@@ -500,8 +558,10 @@ const Tier3Screen = () => {
                         value={value}
                         onChange={onChange}
                         placeholder="Next of Kin Date of Birth"
-                        maximumDate={new Date() }
-                        minimumDate={new Date(new Date().getFullYear() - 100, 0, 1)}
+                        maximumDate={new Date()}
+                        minimumDate={
+                          new Date(new Date().getFullYear() - 100, 0, 1)
+                        }
                       />
                       {fieldState.error && (
                         <Text className="mt-1 text-sm text-red-500">
@@ -540,7 +600,9 @@ const Tier3Screen = () => {
                         value: value || "",
                         onChangeText: onChange,
                       }}
-                      helperText={errors.purposeOfAccountOpening?.message as string}
+                      helperText={
+                        errors.purposeOfAccountOpening?.message as string
+                      }
                     />
                   )}
                 />
@@ -553,7 +615,44 @@ const Tier3Screen = () => {
               </StepperStepContent>
 
               {/* Step 4: Documents */}
-              <StepperStepContent className="gap-6" step={4}>
+              <StepperStepContent className="gap-6" step={5}>
+              <Controller
+                  control={control}
+                  name="bank"
+                  render={({ field: { value, onChange } }) => (
+                    <CustomSelect
+                      label="Fund Account Instantly"
+                      options={Object.keys(USSD_CODES).map((bank: string) => ({
+                        label: bank,
+                        value: bank,
+                      }))}
+                      placeholder="Select Bank"
+                      value={value as string}
+                      onValueChange={onChange}
+                    />
+                  )}
+                />
+                {errors.bank && (
+                  <Text className="-mt-4 text-sm text-red-500">
+                    {String(errors.bank.message)}
+                  </Text>
+                )}
+
+                <Controller
+                  control={control}
+                  name="amount"
+                  render={({ field: { value, onChange } }) => (
+                    <TextField
+                      InputProps={{
+                        placeholder: "Amount",
+                        keyboardType: "numeric",
+                        value: (value as string) || "",
+                        onChangeText: onChange,
+                      }}
+                      helperText={errors.amount?.message as string}
+                    />
+                  )}
+                />
                 <FileInput
                   label="Valid ID"
                   onFileSelect={(file) => setValue("validId", file as any)}

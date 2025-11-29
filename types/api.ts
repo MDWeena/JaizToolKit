@@ -1,3 +1,5 @@
+import { NameForm, PhoneForm } from "@/features/account/validation";
+
 export interface ApiResponse<T> {
   status: "success" | "Failed";
   message: string;
@@ -5,15 +7,6 @@ export interface ApiResponse<T> {
   data: T | null;
   timestamp: string;
   traceId: string;
-}
-
-export interface UpdateAODetailsRequest {
-  aocode: string;
-}
-export interface UpdateAODetailsData {
-  user: {
-    teamname: string;
-  };
 }
 
 export interface SendProspectOTPRequest {
@@ -70,7 +63,6 @@ export interface UpdateAddressDetailsRequest {
     addressline: string;
     state: string;
     lga: string;
-    city: string;
   };
 }
 
@@ -84,4 +76,17 @@ export interface SubmitProspectData {
   };
 }
 
+export type VerifyAccountRequest = NameForm | PhoneForm
+
+export interface VerifyAccountData {
+  accountName: string;
+  accountNumber: string;
+  branchCodeCif: string; // e.g., "123/123456789"
+  bvn: string;
+  idType: string;
+  branch: string;
+  accountType: string;
+  currency: string;
+  accountOfficer: string; // e.g., "FG000123 | MICHAEL JOHN"
+};
 

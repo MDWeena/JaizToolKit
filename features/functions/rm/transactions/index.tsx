@@ -11,7 +11,6 @@ import { TextField } from '@/components/ui/input';
 import SuccessSheet from '@/components/ui/success-sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
 import { useBottomSheet } from '@/contexts/BottomSheetContext';
-import { cn } from '@/lib/utils';
 import { Text } from 'react-native';
 
 export default function TransactionsScreen() {
@@ -32,26 +31,12 @@ export default function TransactionsScreen() {
           onValueChange={setActiveTab}
           className="w-full max-w-[400px] mx-auto flex-col gap-1.5"
         >
-          <TabsList className="flex-row w-full bg-white">
+          <TabsList className="flex-row w-full">
             <TabsTrigger value="statement" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'statement' ? '!text-primary' : '!text-darkGray'
-                )}
-              >
-                Statement
-              </Text>
+              <Text>Statement</Text>
             </TabsTrigger>
             <TabsTrigger value="history" className="flex-1">
-              <Text
-                className={cn(
-                  '!text-primary !font-medium',
-                  activeTab === 'history' ? '!text-primary' : '!text-darkGray'
-                )}
-              >
-                History
-              </Text>
+              <Text>History</Text>
             </TabsTrigger>
           </TabsList>
           <TabsContent className="gap-5" value="statement">

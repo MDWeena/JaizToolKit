@@ -1,20 +1,22 @@
-import { CopyIcon } from "@/assets/images/svgs/account";
-import { Button } from "@/components/ui/button";
-import Images from "@/constants/Images";
 import { Feather } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Alert, Image, Linking, Pressable, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { CopyIcon } from "@/assets/images/svgs/account";
+import { Button } from "@/components/ui/button";
+import Images from "@/constants/Images";
+
 const AccountSuccessScreen = () => {
   const router = useRouter();
-  const { accountName, accountNumber } = useLocalSearchParams<{
+  const { accountName, accountNumber, ussdString } = useLocalSearchParams<{
     accountName: string;
     accountNumber: string;
+    ussdString: string;
   }>();
   const [copied, setCopied] = useState(false);
 
@@ -23,6 +25,17 @@ const AccountSuccessScreen = () => {
       await Clipboard.setStringAsync(accountNumber);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleDial = () => {
+    if (ussdString) {
+      const isUssdCode = /^[*#][\d*#]+$/.test(ussdString);
+      if (isUssdCode) {
+        Linking.openURL(`tel:${ussdString}`);
+      } else {
+        Alert.alert("Fund Account", ussdString);
+      }
     }
   };
 
@@ -81,14 +94,18 @@ const AccountSuccessScreen = () => {
               </View>
             </View>
           </View>
-
-          {/* Back to Home Button */}
+          <Button size="lg" className="w-full" onPress={handleDial}>
+            <Text className="text-sm font-semibold text-primary-foreground">
+              Fund Account
+            </Text>
+          </Button>
           <Button
             size="lg"
             className="w-full"
+            variant="ghost"
             onPress={() => router.push("/(tabs)/(home)")}
           >
-            <Text className="text-sm font-semibold text-primary-foreground">
+            <Text className="text-sm font-semibold text-pretty">
               Back to Home
             </Text>
           </Button>
