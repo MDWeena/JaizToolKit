@@ -19,6 +19,7 @@
     "axios": "^1.13.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "expo": "~54.0.25",
     "expo-clipboard": "~8.0.7",
     "expo-constants": "~18.0.10",
@@ -53,6 +54,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@types/date-fns": "^2.5.3",
     "@types/react": "~19.1.0",
     "react-test-renderer": "19.1.0",
     "typescript": "~5.9.2"
