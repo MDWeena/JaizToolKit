@@ -40,7 +40,7 @@ export interface VerifyBVNData {
 }
 
 export interface VerifyNINRequest {
-  dob: string; 
+  dob: string;
   email: string;
   nin: string;
 }
@@ -76,7 +76,7 @@ export interface SubmitProspectData {
   };
 }
 
-export type VerifyAccountRequest = NameForm | PhoneForm
+export type VerifyAccountRequest = NameForm | PhoneForm;
 
 export interface VerifyAccountData {
   accountName: string;
@@ -88,5 +88,50 @@ export interface VerifyAccountData {
   accountType: string;
   currency: string;
   accountOfficer: string; // e.g., "FG000123 | MICHAEL JOHN"
-};
+}
 
+export interface LoginData {
+  staffid: string;
+  password: string;
+  deviceId?: string;
+}
+
+export interface LoginResponse {
+  expiresIn: number;
+  token: string;
+  user: {
+    email: string;
+    id: string;
+    name: string;
+  };
+}
+
+export interface LinkBVNData {
+  bvn: string;
+  accountNumber: string;
+  dob: string;
+  firstname: string;
+  lastname: string;
+  phone: string;
+}
+
+export interface LinkNINData {
+  nin: string;
+  accountNumber: string;
+  dob: string;
+  firstname: string;
+  lastname: string;
+  phone: string;
+}
+
+export interface GetCustomerDetails {
+  dob: string;
+  accountNumber: string;
+}
+
+export interface CustomerDetails {
+  accountname: string;
+  phone: string;
+  firstname: string;
+  lastname: string;
+}
