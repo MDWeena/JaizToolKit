@@ -79,7 +79,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <ThemeContext.Provider value={value}>
             <NavThemeProvider value={navTheme}>
-                <StatusBar style={theme === "dark" ? "light" : "dark"} />
+                <StatusBar style="dark" />
                 <View style={themes[colorScheme]} className={`flex-1 ${isDark ? 'dark' : ''}`}>
                     {children}
                 </View>

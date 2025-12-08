@@ -48,7 +48,7 @@ import {
   step3Fields,
   step4Fields,
 } from "@/features/account/validation/individual-tier1";
-import { sanitizeBVN, sanitizeEmail, sanitizeName, sanitizeNIN } from "@/utils";
+import { sanitizeBVN, sanitizeEmail, sanitizeName, sanitizeNIN, sanitizePhone } from "@/utils";
 import { isValidPhoneNumber } from "react-native-international-phone-number";
 
 const TOTAL_STEPS = 4;
@@ -103,7 +103,9 @@ const Tier1Screen = () => {
     verifyNINMutation,
     updateAddressMutation,
     finalSubmitMutation,
-  } = useTier1Mutations({ prospectId, setProspectId, form, handleNext });
+    pendingLgaValues,
+    clearPendingLga,
+  } = useTier1Mutations({ prospectId, setProspectId, form, handleNext, states });
 
   const { mutate: doSendOTP, isPending: isSendingOTP } = sendOTPMutation;
   const { mutate: doVerifyOTP, isPending: isVerifyingOTP } = verifyOTPMutation;
@@ -143,11 +145,38 @@ const Tier1Screen = () => {
     handleStateOfResidenceChange(stateOfResidence);
   }, [stateOfResidence]);
 
+  
+ useEffect(() => {
+    if (pendingLgaValues.lgaOfOrigin && lgasOfOrigin.length > 0) {
+      // Find LGA code by matching the name from API response
+      const matchedLga = lgasOfOrigin.find(
+        (lga) => lga.name.toLowerCase() === pendingLgaValues.lgaOfOrigin?.toLowerCase()
+      );
+      if (matchedLga) {
+        setValue("lgaOfOrigin", matchedLga.code);
+      }
+      clearPendingLga("lgaOfOrigin");
+    }
+  }, [lgasOfOrigin, pendingLgaValues.lgaOfOrigin]);
+
+  useEffect(() => {
+    if (pendingLgaValues.lgaOfResidence && lgasOfResidence.length > 0) {
+      // Find LGA code by matching the name from API response
+      const matchedLga = lgasOfResidence.find(
+        (lga) => lga.name.toLowerCase() === pendingLgaValues.lgaOfResidence?.toLowerCase()
+      );
+      if (matchedLga) {
+        setValue("lgaOfResidence", matchedLga.code);
+      }
+      clearPendingLga("lgaOfResidence");
+    }
+  }, [lgasOfResidence, pendingLgaValues.lgaOfResidence]);
+
   useEffect(() => {
     if (debouncedBvn && debouncedBvn.length === 11 && idType === "bvn") {
-      const { dateOfBirth } = form.getValues();
-      if (dateOfBirth) {
-        doVerifyBVN({ bvn: debouncedBvn, dob: dateOfBirth });
+      const { dateOfBirth, email } = form.getValues();
+      if (dateOfBirth && email) {
+        doVerifyBVN({ bvn: debouncedBvn, dob: dateOfBirth, email });
       }
     }
 
@@ -180,11 +209,12 @@ const Tier1Screen = () => {
     }
 
     const countryCode = country?.idd?.root ?? "";
+    const sanitizedPhoneNumber = sanitizePhone(mobileNumber);
 
     doSendOTP(
       {
         prospectDetails: { type: "IND", tier: 1 },
-        phone: mobileNumber,
+        phone: sanitizedPhoneNumber,
         country: countryCode,
       },
       {
@@ -234,20 +264,20 @@ const Tier1Screen = () => {
         lgaOfResidence,
       } = form.getValues();
 
-      const stateOfOriginName = states.find(
-        (s) => s.code === stateOfOrigin
-      )?.name;
-      const stateOfResidenceName = states.find(
-        (s) => s.code === stateOfResidence
-      )?.name;
+      // const stateOfOriginName = states.find(
+      //   (s) => s.code === stateOfOrigin
+      // )?.name;
+      // const stateOfResidenceName = states.find(
+      //   (s) => s.code === stateOfResidence
+      // )?.name;
 
       const payload = {
         gender: gender?.[0]?.toUpperCase(),
         mothersmaidenname: mothersMaidenName,
-        origin: { state: stateOfOriginName!, lga: lgaOfOrigin },
+        origin: { state: stateOfOrigin, lga: lgaOfOrigin },
         residence: {
           addressline: residentialAddress,
-          state: stateOfResidenceName!,
+          state: stateOfResidence!,
           lga: lgaOfResidence,
         },
       };
@@ -259,7 +289,7 @@ const Tier1Screen = () => {
     console.log({ data });
     doFinalSubmit(data, {
       onSuccess: (response) => {
-        if (response.status === "success" && response.data) {
+        if (response.status === "Success" && response.data) {
           const { accountname, accountnumber } = response.data.customer;
 
           const bankName = data.bank;
@@ -608,8 +638,8 @@ const Tier1Screen = () => {
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
                       options={lgasOfOrigin.map((lga) => ({
-                        label: lga,
-                        value: lga,
+                        label: lga.name,
+                        value: lga.code,
                       }))}
                       placeholder="LGA of Origin"
                       value={value as string}
@@ -668,8 +698,8 @@ const Tier1Screen = () => {
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
                       options={lgasOfResidence.map((lga) => ({
-                        label: lga,
-                        value: lga,
+                        label: lga.name,
+                        value: lga.code,
                       }))}
                       placeholder="LGA of Residence"
                       value={value as string}
@@ -738,31 +768,43 @@ const Tier1Screen = () => {
                   )}
                 />
 
-                <View>
-                  <FileInput
-                    label="Passport Photograph"
-                    onFileSelect={(file) =>
-                      setValue("passportPhotograph", file as any)
-                    }
-                  />
-                  {errors.passportPhotograph && (
-                    <Text className="-mt-2 text-sm text-red-500">
-                      {String(errors.passportPhotograph.message)}
-                    </Text>
+                <Controller
+                  control={control}
+                  name="passportPhotograph"
+                  render={({ field: { value, onChange } }) => (
+                    <View>
+                      <FileInput
+                        label="Passport Photograph"
+                        value={value as any}
+                        onFileSelect={(file) => onChange(file)}
+                      />
+                      {errors.passportPhotograph && (
+                        <Text className="-mt-2 text-sm text-red-500">
+                          {String(errors.passportPhotograph.message)}
+                        </Text>
+                      )}
+                    </View>
                   )}
-                </View>
+                />
 
-                <View>
-                  <FileInput
-                    label="Signature"
-                    onFileSelect={(file) => setValue("signature", file as any)}
-                  />
-                  {errors.signature && (
-                    <Text className="-mt-2 text-sm text-red-500">
-                      {String(errors.signature.message)}
-                    </Text>
+                <Controller
+                  control={control}
+                  name="signature"
+                  render={({ field: { value, onChange } }) => (
+                    <View>
+                      <FileInput
+                        label="Signature"
+                        value={value as any}
+                        onFileSelect={(file) => onChange(file)}
+                      />
+                      {errors.signature && (
+                        <Text className="-mt-2 text-sm text-red-500">
+                          {String(errors.signature.message)}
+                        </Text>
+                      )}
+                    </View>
                   )}
-                </View>
+                />
 
                 <Button
                   size={"lg"}
