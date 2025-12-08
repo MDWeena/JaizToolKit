@@ -18,5 +18,5 @@ export async function getOrCreateDeviceId() {
 }
 
 export function formatDate(date: Date) {
-  return format(date, "yyyy-MM-dd");
+  return format(date, "dd-MM-yyyy");
 }
