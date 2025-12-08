@@ -14,7 +14,7 @@ export const useLocation = () => {
     queryFn: async () => {
       const response =  await getStates();
       console.log("States response:", response);
-      if (response.status === "success" && response.data) {
+      if (response.status === "Success" && response.data) {
         return response.data.map((s) => ({
           code: s.state_code,
           name: s.state_name,
@@ -30,8 +30,11 @@ export const useLocation = () => {
     queryFn: async () => {
       if (!selectedStateCode) return [];
       const response = await getLGAs(selectedStateCode);
-      if (response.status === "success" && response.data) {
-        return response.data.map((l) => l.lga_name);
+      if (response.status === "Success" && response.data) {
+        return response.data.map((l) => ({
+          code: l.lga_code,
+          name: l.lga_name,
+        }));
       }
       return [];
     },
@@ -47,15 +50,6 @@ export const useLocation = () => {
     }
     setCities([]);
   };
-
-  // const handleLgaChange = (stateCode: StateCodes, lgaValue: string) => {
-  //   if (stateCode && lgaValue) {
-  //     const cities = getLgaSubAreas(stateCode, lgaValue);
-  //     setCities(cities);
-  //   } else {
-  //     setCities([]);
-  //   }
-  // };
 
   return {
     states,

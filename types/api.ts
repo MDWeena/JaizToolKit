@@ -1,7 +1,7 @@
 import { NameForm, PhoneForm } from "@/features/account/validation";
 
 export interface ApiResponse<T> {
-  status: "success" | "Failed";
+  status: "Success" | "Failed";
   message: string;
   code: number;
   data: T | null;
@@ -19,7 +19,7 @@ export interface SendProspectOTPRequest {
 }
 export interface SendProspectOTPData {
   prospect: {
-    Id: string;
+    id: string;
   };
 }
 
@@ -27,29 +27,67 @@ export interface VerifyOTPRequest {
   OTP: string;
 }
 
-export interface VerifyBVNRequest {
-  bvn: string;
-  dob: string;
-}
-export interface VerifyBVNData {
-  prospect: {
-    firstname: string;
-    middlename: string;
-    lastname: string;
-  };
+// Base request for identity verification (BVN/NIN)
+interface VerifyIdentityBaseRequest {
+  prospectId: string;
+  dob: Date;
+  email: string;
 }
 
-export interface VerifyNINRequest {
-  dob: string;
-  email: string;
+export interface VerifyBvnRequest extends VerifyIdentityBaseRequest {
+  bvn: string;
+}
+
+export interface VerifyNinRequest extends VerifyIdentityBaseRequest {
   nin: string;
 }
-export interface VerifyNINData {
-  prospect: {
-    firstname: string;
-    middlename: string;
-    lastname: string;
-  };
+
+export type VerifyIdentityRequest = VerifyBvnRequest | VerifyNinRequest;
+
+export interface VerifyBvnData {
+  base64Image: string;
+  bvn: string;
+  dateOfBirth: string;
+  email: string;
+  enrollmentBank: string;
+  enrollmentBranch: string;
+  firstName: string;
+  gender: string;
+  lastName: string;
+  localGovernmentOfOrigin: string | null;
+  localGovernmentOfResidence: string | null;
+  maritalStatus: string;
+  middleName: string;
+  nameOnCard: string;
+  nationalIdentificationNumber: string | null;
+  nationality: string;
+  phoneNumber1: string;
+  phoneNumber2: string;
+  registrationDate: string;
+  requestId: string;
+  residentialAddress: string;
+  responseCode: string;
+  responseMessage: string;
+  stateOfOrigin: string;
+  stateOfResidence: string;
+  title: string;
+  watchListed: string;
+}
+
+export interface VerifyNinData {
+  birthdate: string;
+  firstName: string;
+  gender: string;
+  middleName: string;
+  nin: string;
+  otherName: string;
+  photoBase64: string;
+  requestId: string;
+  residenceAddressLine1: string;
+  responseCode: string;
+  responseMessage: string;
+  surName: string;
+  telephoneNo: string;
 }
 
 export interface UpdateAddressDetailsRequest {

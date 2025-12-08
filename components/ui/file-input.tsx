@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Alert, ViewStyle } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
 import { Ionicons } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
+import React, { useEffect, useState } from "react";
+import { Alert, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 
 type FileType = "pdf" | "jpg" | "jpeg" | "png" | "doc" | "docx";
 
@@ -23,6 +23,7 @@ interface DocumentUploadInputProps {
   style?: ViewStyle | string;
   disabled?: boolean;
   initialFile?: SelectedFile | null;
+  value?: SelectedFile | null;
 }
 
 const FILE_SIZE_UNITS = ["Bytes", "KB", "MB", "GB"] as const;
@@ -46,11 +47,18 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
   style,
   disabled = false,
   initialFile = null,
+  value,
 }) => {
   const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(
     initialFile
   );
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedFile(value);
+    }
+  }, [value]);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return "0 Bytes";
@@ -232,3 +240,4 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
 };
 
 export { FileInput };
+
