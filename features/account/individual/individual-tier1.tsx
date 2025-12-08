@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/stepper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
 import { GENDER_OPTIONS } from "@/constants/form-options";
-import { USSD_CODES } from "@/constants/ussd-codes";
+import { useBanksUssdCodes } from "@/features/account/hooks/useBanksUssdCodes";
 import { useDebounce } from "@/features/account/hooks/useDebounce";
 import { useLocation } from "@/features/account/hooks/useLocation";
 import { useTier1Mutations } from "@/features/account/hooks/useTier1Mutations";
@@ -57,6 +57,7 @@ const Tier1Screen = () => {
   const router = useRouter();
   const [prospectId, setProspectId] = useState<string | null>(null);
   const otpFieldRef = useRef<OtpFieldHandle>(null);
+  const { banks, getUssdCode, isLoading: isBanksLoading } = useBanksUssdCodes();
 
   const {
     form,
@@ -264,13 +265,6 @@ const Tier1Screen = () => {
         lgaOfResidence,
       } = form.getValues();
 
-      // const stateOfOriginName = states.find(
-      //   (s) => s.code === stateOfOrigin
-      // )?.name;
-      // const stateOfResidenceName = states.find(
-      //   (s) => s.code === stateOfResidence
-      // )?.name;
-
       const payload = {
         gender: gender?.[0]?.toUpperCase(),
         mothersmaidenname: mothersMaidenName,
@@ -286,7 +280,6 @@ const Tier1Screen = () => {
   };
 
   const onSubmit = (data: IndividualTier1FormData) => {
-    console.log({ data });
     doFinalSubmit(data, {
       onSuccess: (response) => {
         if (response.status === "Success" && response.data) {
@@ -294,13 +287,9 @@ const Tier1Screen = () => {
 
           const bankName = data.bank;
           const amount = data.amount;
-          let ussdString = "";
-
-          if (bankName && USSD_CODES[bankName]) {
-            ussdString = USSD_CODES[bankName]
-              .replace("AMOUNT", amount || "")
-              .replace("ACCOUNT", accountnumber || "");
-          }
+          const ussdString = bankName
+            ? getUssdCode(bankName, amount || "", accountnumber || "")
+            : "";
 
           router.push({
             pathname: "/(app)/accounts/open/success",
@@ -736,13 +725,14 @@ const Tier1Screen = () => {
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
                       label="Fund Account Instantly"
-                      options={Object.keys(USSD_CODES).map((bank: string) => ({
-                        label: bank,
-                        value: bank,
+                      options={banks.map((bank) => ({
+                        label: bank.bankName,
+                        value: bank.bankName,
                       }))}
                       placeholder="Select Bank"
                       value={value as string}
                       onValueChange={onChange}
+                      disabled={isBanksLoading}
                     />
                   )}
                 />

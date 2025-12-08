@@ -13,10 +13,7 @@ import {
 } from "@/types/api";
 import { FileUpload } from "@/types/file-upload";
 import { ApiService } from ".";
-
-/** Formats Date to dd-MM-yyyy string */
-const formatDate = (date: Date): string => 
-  date.toLocaleDateString('en-GB').split('/').join('-');
+import { formatDate } from "@/lib/utils";
 
 const USE_MOCK_API = true;
 
@@ -45,6 +42,18 @@ export const getLGAs = async (
     throw error;
   }
 };
+
+export const getBanksUssdCodes = async (): Promise<
+  ApiResponse<{ ussdTransferCode: string; bankName: string }[]>
+> => { 
+  try {
+    const response = await ApiService.get("/static/banks/ussdcodes");
+    return response.data;
+  } catch (error) {
+    console.error("Error getting banks:", error);
+    throw error;
+  }
+}
 
 export const sendProspectOTP = async (
   prospectDetails: SendProspectOTPRequest["prospectDetails"],
