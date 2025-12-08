@@ -218,7 +218,7 @@ export const step4Fields: (keyof IndividualTier1FormData)[] = [
 
 export const getDefaultValues = (): Partial<IndividualTier1FormData> => ({
   agreement: false,
-  mobileNumber: "8135666555",
+  mobileNumber: "",
   otp: "",
   idType: "bvn",
   bvn: "",
