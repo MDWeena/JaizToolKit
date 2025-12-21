@@ -1,14 +1,28 @@
-import { BackButton, Header, ListTile } from '@/components/shared';
-import { Text } from '@/components/ui';
-import { transactionHistoryData } from '@/constants/data';
-import { Ionicons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { ScrollView, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { BackButton, Header, ListTile } from "@/components/shared";
+import { Text } from "@/components/ui";
+import { formatNaira, groupTransactionsByDay } from "@/lib/utils";
+import { Transaction } from "@/types/api";
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React, { useMemo } from "react";
+import { ScrollView, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TransactionHistoryScreen = () => {
+  const { transactions: jsonTransactions } = useLocalSearchParams<{
+    transactions: string;
+  }>();
+
+  const groupedTransactions = useMemo(() => {
+    if (!jsonTransactions) return [];
+
+    const transactions = JSON.parse(jsonTransactions) as Transaction[];
+
+    return groupTransactionsByDay(transactions);
+  }, [jsonTransactions]);
+
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
       <BackButton />
@@ -19,10 +33,10 @@ const TransactionHistoryScreen = () => {
 
         <FlatList
           scrollEnabled={false}
-          data={transactionHistoryData}
+          data={groupedTransactions}
           renderItem={({ item, index }) => (
             <View className="mb-5">
-              <Text>{item.period}</Text>
+              <Text>{item.date}</Text>
               <View className="bg-white rounded-lg mt-2">
                 <FlatList
                   scrollEnabled={false}
@@ -31,33 +45,33 @@ const TransactionHistoryScreen = () => {
                     <>
                       <ListTile
                         containerClassName="pb-0"
-                        title={transaction.actor}
-                        subtitle={transaction.type}
+                        title={transaction.narration}
+                        subtitle={
+                          transaction.transType === "CR" ? "Credit" : "Debit"
+                        }
                         titleClassName="!font-bold"
                         leading={
                           <View className="w-[40px] h-[40px] border rounded-full flex items-center justify-center">
-                            {transaction.direction === 'debit' ? (
+                            {transaction.transType === "DR" ? (
                               <Ionicons
                                 name="caret-up"
                                 size={18}
-                                color={'red'}
+                                color={"red"}
                               />
                             ) : (
                               <Ionicons
                                 name="caret-down"
                                 size={18}
-                                color={'#36B37E'}
+                                color={"#36B37E"}
                               />
                             )}
                           </View>
                         }
                         trailing={
                           <Text
-                            className={`${transaction.direction === 'debit' ? '' : 'text-green-600'} !font-bold`}
+                            className={`${transaction.transType === "DR" ? "" : "text-green-600"} !font-bold`}
                           >
-                            {transaction.direction === 'debit'
-                              ? `${transaction.amount}`
-                              : `${transaction.amount}`}
+                            {formatNaira(transaction.amount)}
                           </Text>
                         }
                       />

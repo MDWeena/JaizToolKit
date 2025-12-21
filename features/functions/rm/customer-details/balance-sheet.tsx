@@ -2,18 +2,24 @@ import {
   UserAccountIcon,
   UserIcon,
   WalletIcon,
-} from '@/assets/images/svgs/customer-details';
-import { Button } from '@/components/ui/button';
-import { FieldRow } from '@/features/account/components/field-row';
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+} from "@/assets/images/svgs/customer-details";
+import { Button } from "@/components/ui/button";
+import { FieldRow } from "@/features/account/components/field-row";
+import { formatNaira } from "@/lib/utils";
+import { CustomerBalance } from "@/types/api";
+import React, { useState } from "react";
+import { Text, View } from "react-native";
 
-type Props = {
+interface Props extends CustomerBalance {
   onCopy?: (text: string) => void;
   onClose: () => void;
-};
+}
 
-export const BalanceSheet: React.FC<Props> = ({ onCopy, onClose }) => {
+export const BalanceSheet: React.FC<Props> = ({
+  onCopy,
+  onClose,
+  ...props
+}) => {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const handleCopy = async (key: string, text: string) => {
@@ -31,40 +37,40 @@ export const BalanceSheet: React.FC<Props> = ({ onCopy, onClose }) => {
         <FieldRow
           leadingIcon={<UserIcon width={20} height={20} />}
           label="Account Name"
-          value={'JOHN DOE MICHEAL'}
+          value={props.accountName}
         />
         <FieldRow
           label="Account Number"
-          value={'0123456789'}
+          value={props.accountNumber}
           leadingIcon={<UserAccountIcon width={20} height={20} />}
           canCopy
-          onCopy={() => handleCopy('accountNumber', '0123456789')}
-          copied={copiedKey === 'accountNumber'}
+          onCopy={() => handleCopy("accountNumber", props.accountNumber)}
+          copied={copiedKey === "accountNumber"}
         />
         <FieldRow
           leadingIcon={<WalletIcon width={20} height={20} />}
           label="Available Balance"
-          value={'#45,000.00'}
+          value={formatNaira(props.availableBalance)}
         />
         <FieldRow
           leadingIcon={<WalletIcon width={20} height={20} />}
           label="Cleared Balance"
-          value={'#40,000.00'}
+          value={formatNaira(props.clearedBalance)}
         />
         <FieldRow
           leadingIcon={<WalletIcon width={20} height={20} />}
           label="Book Balance"
-          value={'#42,000.00'}
+          value={formatNaira(props.bookBalance)}
         />
         <FieldRow
           leadingIcon={<WalletIcon width={20} height={20} />}
           label="Uncleared Balance"
-          value={'#42,000.00'}
+          value={formatNaira(props.unclearedBalance)}
         />
         <FieldRow
           leadingIcon={<WalletIcon width={20} height={20} />}
           label="Total Blocked Funds"
-          value={'#0.00'}
+          value={formatNaira(props.totalBlockedFunds)}
         />
       </View>
       <View className="mt-4">

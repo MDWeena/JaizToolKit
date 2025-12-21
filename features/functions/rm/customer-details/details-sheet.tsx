@@ -4,18 +4,23 @@ import {
   GlobeIcon,
   UserAccountIcon,
   UserIcon,
-} from '@/assets/images/svgs/customer-details';
-import { Button } from '@/components/ui/button';
-import { FieldRow } from '@/features/account/components/field-row';
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+} from "@/assets/images/svgs/customer-details";
+import { Button } from "@/components/ui/button";
+import { FieldRow } from "@/features/account/components/field-row";
+import { GetCustomerDetailsResponse } from "@/types/api";
+import React, { useState } from "react";
+import { Text, View } from "react-native";
 
-type Props = {
+interface Props extends GetCustomerDetailsResponse {
   onCopy?: (text: string) => void;
   onClose: () => void;
-};
+}
 
-export const CustomerDetailsSheet: React.FC<Props> = ({ onCopy, onClose }) => {
+export const CustomerDetailsSheet: React.FC<Props> = ({
+  onCopy,
+  onClose,
+  ...props
+}) => {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const handleCopy = async (key: string, text: string) => {
@@ -33,64 +38,64 @@ export const CustomerDetailsSheet: React.FC<Props> = ({ onCopy, onClose }) => {
         <FieldRow
           leadingIcon={<UserIcon width={20} height={20} />}
           label="Account Name"
-          value={'JOHN DOE MICHEAL'}
+          value={props.accountName}
         />
         <FieldRow
           label="Account Number"
-          value={'0123456789'}
+          value={props.accountNumber}
           leadingIcon={<UserAccountIcon width={20} height={20} />}
           canCopy
-          onCopy={() => handleCopy('accountNumber', '0123456789')}
-          copied={copiedKey === 'accountNumber'}
+          onCopy={() => handleCopy("accountNumber", props.accountNumber)}
+          copied={copiedKey === "accountNumber"}
         />
         <FieldRow
           leadingIcon={<GlobeIcon width={20} height={20} />}
           label="Account Nature"
-          value={'CUST'}
+          value={props.accountType}
         />
         <FieldRow
           leadingIcon={<AccountManagerIcon width={20} height={20} />}
           label="Account Manager"
-          value="FG000123 | MICHAEL JOHN"
+          value={props.accountManager}
         />
         <FieldRow
           leadingIcon={<UserIcon width={20} height={20} />}
           label="Address"
-          value={'Somewhere street, anywhere town, Earth'}
+          value={props.address}
         />
         <FieldRow
           leadingIcon={<UserAccountIcon width={20} height={20} />}
           label="Email"
-          value={'john.doe@example.com'}
+          value={props.email}
         />
         <FieldRow
           leadingIcon={<UserAccountIcon width={20} height={20} />}
           label="Mobile"
-          value={'08012345678'}
+          value={props.phone}
         />
 
         <FieldRow
           leadingIcon={<BankIcon width={20} height={20} />}
           label="Date Opened"
-          value={'Sept 17, 2015'}
+          value={props.accountOpenDate}
         />
 
         <FieldRow
           leadingIcon={<BankIcon width={20} height={20} />}
           label="PC Code"
-          value={'PC123456'}
+          value={props.marketingID}
         />
 
         <FieldRow
           leadingIcon={<BankIcon width={20} height={20} />}
           label="Status"
-          value={'A'}
+          value={props.status}
         />
 
         <FieldRow
           leadingIcon={<BankIcon width={20} height={20} />}
           label="Occupation"
-          value={'Software Engineer'}
+          value={props.occupation}
         />
       </View>
       <View className="mt-4">
