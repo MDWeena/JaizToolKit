@@ -173,3 +173,63 @@ export interface CustomerDetails {
   firstname: string;
   lastname: string;
 }
+
+export interface CustomerDetailsWithAccountNumberResponse {
+  accountName: string;
+  dateOfBirth: Date;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}
+
+export interface CustomerBalance {
+  accountNumber: string;
+  accountName: string;
+  availableBalance: number;
+  clearedBalance: number;
+  unclearedBalance: number;
+  bookBalance: number;
+  totalBlockedFunds: number;
+}
+
+export interface Transaction {
+  transDate: string;
+  narration: string;
+  amount: number;
+  transType: "CR" | "DR";
+  isMobileTransaction: boolean;
+  transactionRef: string;
+}
+
+export interface GroupedTransactions {
+  date: string;
+  transactions: Transaction[];
+}
+
+export interface GetCustomerDetailsResponse {
+  accountNumber: string;
+  accountName: string;
+  phone: string;
+  email: string;
+  accountType: string;
+  accountManager: string;
+  address: string;
+  accountOpenDate: string;
+  marketingID: string;
+  status: string;
+  occupation: string;
+}
+
+export interface TransactionHistoryQuery {
+  accountNumber: string;
+  startDate: Date | string;
+  endDate: Date | string;
+}
+
+export interface SendStatementDto {
+  accountNumber: string;
+  startDate: Date | string;
+  endDate: Date | string;
+  email: string;
+}

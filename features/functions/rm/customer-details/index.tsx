@@ -1,24 +1,83 @@
-import { useRouter } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useState } from "react";
+import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { BackButton, Header } from '@/components/shared';
-import { Button } from '@/components/ui/button';
-import { TextField } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tab';
-import { useBottomSheet } from '@/contexts/BottomSheetContext';
-import { Text } from 'react-native';
-import { BalanceSheet } from './balance-sheet';
-import { CustomerDetailsSheet } from './details-sheet';
+import { BackButton, Header, useToast } from "@/components/shared";
+import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
+import { useBottomSheet } from "@/contexts/BottomSheetContext";
+import {
+  getCustomerBalance,
+  getCustomerDetailsWithAccountNumber,
+  getFullCustomerDetails,
+} from "@/services/functions.service";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Text } from "react-native";
+import { BalanceSheet } from "./balance-sheet";
+import { CustomerDetailsSheet } from "./details-sheet";
 
 export default function CustomerDetailsScreen() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = React.useState('balance');
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { showToast } = useToast();
+  const [activeTab, setActiveTab] = useState("balance");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [accountName, setAccountName] = useState<string | undefined>(undefined);
 
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
+
+  const { isLoading: fetchingCustomerDetails, data: customerDetails } =
+    useQuery({
+      queryKey: ["customer-details", accountNumber],
+      queryFn: () => getCustomerDetailsWithAccountNumber(accountNumber),
+      enabled: accountNumber.length === 10,
+    });
+
+  const {
+    isPending: fetchingCustomerBalance,
+    mutateAsync: fetchCustomerBalance,
+  } = useMutation({
+    mutationKey: ["customer-balance", accountNumber],
+    mutationFn: () => getCustomerBalance(accountNumber),
+    onSuccess(data) {
+      showBottomSheet(<BalanceSheet onClose={hideBottomSheet} {...data} />);
+    },
+    onError(error) {
+      showToast({
+        message: error?.message || "Error fetching customer balance",
+        type: "error",
+      });
+    },
+  });
+
+  const {
+    isPending: fetchingFullCustomerDetails,
+    mutateAsync: fetchFullCustomerDetails,
+  } = useMutation({
+    mutationKey: ["full-customer-details", accountNumber],
+    mutationFn: () => getFullCustomerDetails(accountNumber),
+    onSuccess(data) {
+      showBottomSheet(
+        <CustomerDetailsSheet onClose={hideBottomSheet} {...data} />
+      );
+    },
+    onError(error) {
+      showToast({
+        message: error?.message || "Error fetching customer details",
+        type: "error",
+      });
+    },
+  });
+
+  useEffect(() => {
+    setAccountName(undefined);
+  }, [accountNumber]);
+
+  useEffect(() => {
+    setAccountName(customerDetails?.accountName);
+  }, [customerDetails]);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
@@ -44,22 +103,28 @@ export default function CustomerDetailsScreen() {
             <TextField
               className="!mt-5 w-full"
               InputProps={{
-                placeholder: 'Account Number',
+                placeholder: "Account Number",
+                value: accountNumber,
+                keyboardType: "number-pad",
+                maxLength: 10,
+                onChangeText(text) {
+                  setAccountNumber(text);
+                },
               }}
             />
             <TextField
               className="!mt-5 w-full"
+              loading={fetchingCustomerDetails}
               InputProps={{
-                placeholder: 'Account Name',
+                placeholder: "Account Name",
                 editable: false,
+                value: accountName,
               }}
             />
             <Button
-              onPress={() =>
-                showBottomSheet(<BalanceSheet onClose={hideBottomSheet} />)
-              }
+              onPress={() => fetchCustomerBalance()}
               className="mt-12 !min-w-full"
-              disabled={isLoading}
+              loading={fetchingCustomerBalance}
             >
               Search
             </Button>
@@ -68,24 +133,28 @@ export default function CustomerDetailsScreen() {
             <TextField
               className="!mt-5 w-full"
               InputProps={{
-                placeholder: 'Account Number',
+                placeholder: "Account Number",
+                value: accountNumber,
+                keyboardType: "number-pad",
+                maxLength: 10,
+                onChangeText(text) {
+                  setAccountNumber(text);
+                },
               }}
             />
             <TextField
               className="!mt-5 w-full"
+              loading={fetchingCustomerDetails}
               InputProps={{
-                placeholder: 'Account Name',
+                placeholder: "Account Name",
                 editable: false,
+                value: accountName,
               }}
             />
             <Button
-              onPress={() =>
-                showBottomSheet(
-                  <CustomerDetailsSheet onClose={hideBottomSheet} />
-                )
-              }
+              onPress={() => fetchFullCustomerDetails()}
               className="mt-12 !min-w-full"
-              disabled={isLoading}
+              loading={fetchingFullCustomerDetails}
             >
               Search
             </Button>
