@@ -1,8 +1,7 @@
 import { Feather } from "@expo/vector-icons";
-import * as Clipboard from "expo-clipboard";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React from "react";
 import { Alert, Image, Linking, Pressable, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CopyIcon } from "@/assets/images/svgs/account";
 import { Button } from "@/components/ui/button";
 import Images from "@/constants/Images";
+import { useClipboard } from "@/hooks/useClipboard";
 
 const AccountSuccessScreen = () => {
   const router = useRouter();
@@ -18,15 +18,15 @@ const AccountSuccessScreen = () => {
     accountNumber: string;
     ussdString: string;
   }>();
-  const [copied, setCopied] = useState(false);
+  const { copyToClipboard, copiedKey } = useClipboard();
 
   const handleCopy = async () => {
     if (accountNumber) {
-      await Clipboard.setStringAsync(accountNumber);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await copyToClipboard('accountNumber', accountNumber);
     }
   };
+
+  const copied = copiedKey === 'accountNumber';
 
   const handleDial = () => {
     if (ussdString) {
@@ -51,7 +51,7 @@ const AccountSuccessScreen = () => {
           <Image source={Images.successAlert} resizeMode="contain" />
 
           {/* Success Message */}
-          <Text className="mb-2 text-3xl font-bold text-center text-grey-900">
+          <Text className="mb-2 text-3xl text-center font-interBold text-grey-900">
             Congratulations!
           </Text>
 
@@ -63,19 +63,19 @@ const AccountSuccessScreen = () => {
           {/* Account Details Card */}
           <View className="w-full p-4 mb-8 bg-white border rounded-xl border-secondary-foreground/10">
             <View className="flex-col pb-4">
-              <Text className="text-sm font-medium text-grey-600">
+              <Text className="text-sm font-interMedium text-grey-600">
                 Account Name
               </Text>
-              <Text className="text-base font-semibold text-grey-900">
+              <Text className="text-base font-interSemiBold text-grey-900">
                 {accountName}
               </Text>
             </View>
             <View className="flex-col">
-              <Text className="text-sm font-medium text-grey-600">
+              <Text className="text-sm font-interMedium text-grey-600">
                 Account Number
               </Text>
               <View className="flex-row items-center justify-between">
-                <Text className="text-base font-semibold text-grey-900">
+                <Text className="text-base font-interSemiBold text-grey-900">
                   {accountNumber}
                 </Text>
                 <Pressable
@@ -95,7 +95,7 @@ const AccountSuccessScreen = () => {
             </View>
           </View>
           <Button size="lg" className="w-full" onPress={handleDial}>
-            <Text className="text-sm font-semibold text-primary-foreground">
+            <Text className="text-sm font-interSemiBold text-primary-foreground">
               Fund Account
             </Text>
           </Button>
@@ -105,7 +105,7 @@ const AccountSuccessScreen = () => {
             variant="ghost"
             onPress={() => router.push("/(tabs)/(home)")}
           >
-            <Text className="text-sm font-semibold text-pretty">
+            <Text className="text-sm font-interSemiBold text-pretty">
               Back to Home
             </Text>
           </Button>

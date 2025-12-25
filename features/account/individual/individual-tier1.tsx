@@ -369,14 +369,14 @@ const Tier1Screen = () => {
                     disabled={isSendingOTP}
                     className="mt-1 ml-auto"
                   >
-                    <Text className="text-xs font-bold underline text-primary">
+                    <Text className="text-xs underline font-interBold text-primary">
                       {isSendingOTP ? "Sending..." : "Click to send OTP"}
                     </Text>
                   </Pressable>
                 </View>
 
                 <View>
-                  <Text className="font-[500] mb-2 text-text">OTP</Text>
+                  <Text className="mb-2 font-interMedium text-text">OTP</Text>
                   <Controller
                     control={control}
                     name="otp"
@@ -406,7 +406,7 @@ const Tier1Screen = () => {
                   onPress={handleStep1Next}
                   loading={isVerifyingOTP}
                 >
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Next
                   </Text>
                 </Button>
@@ -559,7 +559,7 @@ const Tier1Screen = () => {
                   className="flex-1"
                   loading={isVerifyingBVN || isVerifyingNIN}
                 >
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Next
                   </Text>
                 </Button>
@@ -711,7 +711,7 @@ const Tier1Screen = () => {
                   className="flex-1"
                   loading={isUpdatingAddress}
                 >
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Next
                   </Text>
                 </Button>
@@ -802,7 +802,7 @@ const Tier1Screen = () => {
                   onPress={handleSubmit(onSubmit)}
                   loading={isSubmitting}
                 >
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Submit
                   </Text>
                 </Button>

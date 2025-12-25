@@ -452,7 +452,7 @@ const Drawer = React.forwardRef<View, DrawerProps>(
 
               {title && (
                 <View className="px-4 pt-1 pb-3 border-b border-border">
-                  <Text className="text-xl font-medium text-center text-foreground">
+                  <Text className="text-xl text-center font-interMedium text-foreground">
                     {title}
                   </Text>
                 </View>

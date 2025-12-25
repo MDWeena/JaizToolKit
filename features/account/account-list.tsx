@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useMemo } from "react";
 import { FlatList, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,10 +11,12 @@ import type { VerifyAccountData } from "@/types/api";
 import { ListTile } from "@/components/shared/list-tile";
 import { Text } from "@/components/ui/Text";
 import { AccountDetailsSheet } from "./components/account-details-sheet";
+import { Button } from "@/components/ui";
 
 export default function AccountVerifySuccessScreen() {
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
   const params = useLocalSearchParams();
+  const router = useRouter();
 
   const accounts: VerifyAccountData[] = useMemo(() => {
     try {
@@ -25,15 +27,10 @@ export default function AccountVerifySuccessScreen() {
     return [];
   }, [params.accounts]);
 
-  // Memoize handler to avoid unnecessary re-renders
   const handleAccountPress = useCallback(
     (account: VerifyAccountData) => {
       showBottomSheet(
-        <AccountDetailsSheet
-          details={account}
-          onCopy={async (text) => navigator.clipboard.writeText(text)}
-          onClose={hideBottomSheet}
-        />,
+        <AccountDetailsSheet details={account} onClose={hideBottomSheet} />,
         { cornerRadius: "large", snapPoints: ["50%", "85%"] }
       );
     },
@@ -76,6 +73,15 @@ export default function AccountVerifySuccessScreen() {
           removeClippedSubviews={true}
           contentContainerStyle={{ paddingBottom: 24 }}
         />
+        <Button
+          size="lg"
+          className="w-full"
+          onPress={() => router.push("/(tabs)/(home)")}
+        >
+          <Text className="text-sm font-interSemiBold text-primary-foreground">
+            Back to Home
+          </Text>
+        </Button>
       </ScrollView>
     </SafeAreaView>
   );

@@ -30,7 +30,7 @@ const LogoutBottomSheet = () => {
         <View className="p-5 mb-6 border rounded-xl border-error/20 bg-error/10">
           <WarningIcon />
         </View>
-        <Text className="text-2xl font-semibold text-center text-grey-900">
+        <Text className="text-2xl text-center font-interSemiBold text-grey-900">
           Logout?
         </Text>
         <Text className="text-base text-center text-grey-600">
@@ -39,13 +39,13 @@ const LogoutBottomSheet = () => {
       </View>
       <View className="gap-4">
         <Button size="lg" onPress={handleLogout}>
-          <Text className="text-base font-semibold text-primary-foreground">
+          <Text className="text-base font-interSemiBold text-primary-foreground">
             Logout
           </Text>
         </Button>
 
         <Button variant="outline" size="lg" onPress={hideBottomSheet}>
-          <Text className="text-base font-semibold text-grey-900">Cancel</Text>
+          <Text className="text-base font-interSemiBold text-grey-900">Cancel</Text>
         </Button>
       </View>
     </>

@@ -23,7 +23,7 @@ export const SearchNotFound: React.FC<SearchNotFoundProps> = ({
       {searchQuery && !hideResult && (
         <Text className=" text-darkGray">
           Search result{' '}
-          <Text className="font-bold !text-primary">
+          <Text className="font-interBold !text-primary">
             &apos;{searchQuery}&apos;
           </Text>
         </Text>
@@ -32,8 +32,8 @@ export const SearchNotFound: React.FC<SearchNotFoundProps> = ({
       <View className="items-center">
         <ErrorIcon />
 
-        <Text className="mb-3 text-2xl font-medium text-center">
-          Search <Text className="text-2xl font-bold">not found</Text>
+        <Text className="mb-3 text-2xl text-center font-interMedium">
+          Search <Text className="text-2xl font-interBold">not found</Text>
         </Text>
 
         {suggestions && (

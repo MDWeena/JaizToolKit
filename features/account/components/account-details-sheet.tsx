@@ -1,47 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, View } from "react-native";
 
-import { Button } from "@/components/ui/button";
-import { FieldRow } from "@/features/account/components/field-row";
 import {
   AccountManagerIcon,
+  AccountNameIcon,
+  AccountTypeIcon,
   BankIcon,
   GlobeIcon,
-  UserAccountIcon,
-  AccountNameIcon,
   LocationIcon,
-  AccountTypeIcon,
+  UserAccountIcon,
 } from "@/assets/images/svgs/customer-details";
-import type { VerifyAccountData } from "@/types/api";
-import { getCurrencyName } from "@/lib/utils";
-import { useRouter } from "expo-router";
+import { Button } from "@/components/ui/button";
+import { FieldRow } from "@/features/account/components/field-row";
 import { useClipboard } from "@/hooks/useClipboard";
+import { getCurrencyName } from "@/lib/utils";
+import type { VerifyAccountData } from "@/types/api";
+import { useRouter } from "expo-router";
 
 type Props = {
   details: VerifyAccountData;
-  onCopy: (text: string) => void;
   onClose: () => void;
 };
 
 export const AccountDetailsSheet: React.FC<Props> = ({
   details,
-  onCopy,
   onClose,
 }) => {
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const router = useRouter();
-  const handleCopy = (key: string, text: string) => {
-    onCopy(text);
-    setCopiedKey(key);
-    setTimeout(
-      () => setCopiedKey((prev) => (prev === key ? null : prev)),
-      1200
-    );
+  const { copyToClipboard, copiedKey } = useClipboard();
+
+  const handleCopy = async (key: string, text: string) => {
+    await copyToClipboard(key, text);
   };
 
   const handleClose = () => {
     onClose();
-    router.push("/(tabs)/(home)");
   };
 
   return (
@@ -107,7 +100,7 @@ export const AccountDetailsSheet: React.FC<Props> = ({
       <View className="mt-4">
         <Button size="lg" onPress={handleClose}>
           <Text className="text-sm font-interSemiBold text-primary-foreground">
-            Back to Home
+            Close
           </Text>
         </Button>
       </View>

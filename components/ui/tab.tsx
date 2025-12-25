@@ -99,7 +99,7 @@ const TabsTrigger = React.forwardRef<View, TabsTriggerProps>(
       >
         <Text
           className={cn(
-            'text-primary font-medium',
+            'text-primary font-interMedium',
             isSelected ? 'text-grey-900' : 'text-grey-600'
           )}
         >

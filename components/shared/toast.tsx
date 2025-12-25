@@ -78,7 +78,7 @@ export const Toast: React.FC<ToastProps> = ({
             <Text className={cn("text-sm", textColor)}>{message}</Text>
           </View>
           <Pressable onPress={onLinkPress}>
-            <Text className="text-sm font-semibold text-error">
+            <Text className="text-sm font-interSemiBold text-error">
               {linkText}
             </Text>
           </Pressable>
