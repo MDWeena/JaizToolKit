@@ -1,4 +1,4 @@
-import { NameForm, PhoneForm } from "@/features/account/validation";
+import { PhoneForm } from "@/features/account/validation";
 
 export interface ApiResponse<T> {
   status: "Success" | "Failed";
@@ -114,18 +114,20 @@ export interface SubmitProspectData {
   };
 }
 
-export type VerifyAccountRequest = NameForm | PhoneForm;
+export type VerifyAccountRequest = PhoneForm;
 
 export interface VerifyAccountData {
   accountName: string;
   accountNumber: string;
-  branchCodeCif: string; // e.g., "123/123456789"
+  cif: string;
+  branchCode: string;
   bvn: string;
   idType: string;
   branch: string;
   accountType: string;
   currency: string;
-  accountOfficer: string; // e.g., "FG000123 | MICHAEL JOHN"
+  accountOfficerId: string;
+  accountOfficerName: string;
 }
 
 export interface LoginData {

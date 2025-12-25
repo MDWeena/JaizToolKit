@@ -4,38 +4,9 @@ export const phoneSchema = z.object({
   phoneNumber: z
     .string()
     .trim()
-    .min(10, "Enter at least 10 digits")
-    .max(15, "Phone number must not be more than 15 digits")
+    .min(11, "Enter at least 11 digits")
+    .max(14, "Phone number must not be more than 14 digits")
     .regex(/^[0-9+\s()-]+$/, "Invalid phone number"),
 });
 
-export const nameSchema = z.object({
-  firstName: z
-    .string()
-    .trim()
-    .min(3, "Enter first name")
-    .max(100, "Too long"),
-  lastName: z
-    .string()
-    .trim()
-    .min(3, "Enter last name")
-    .max(100, "Too long"),
-});
-
-export const sanitizePhone = (input: string) =>
-  input.replace(/[^0-9+\s()-]/g, "");
-
-export const sanitizeName = (input: string) =>
-  input.replace(/\s+/g, " ").trim();
-
 export type PhoneForm = z.infer<typeof phoneSchema>;
-export type NameForm = z.infer<typeof nameSchema>;
-
-export type VerifyInput =
-  | ({ mode: "phone" } & PhoneForm)
-  | ({ mode: "name" } & NameForm);
-
-export const verifySchema = z.discriminatedUnion("mode", [
-  phoneSchema.extend({ mode: z.literal("phone") }),
-  nameSchema.extend({ mode: z.literal("name") }),
-]);

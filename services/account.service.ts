@@ -193,30 +193,8 @@ export const submitProspect = async (
 export const verifyAccount = async (
   data: VerifyAccountRequest
 ): Promise<ApiResponse<VerifyAccountData>> => {
-  if (USE_MOCK_API) {
-    await sleep(1000);
-    console.log("MOCK API: Verifying account for prospect:", { data });
-    return {
-      status: "Success",
-      message: "Account verified successfully",
-      code: 200,
-      data: {
-        accountName: "John Doe",
-        accountNumber: "0123456789",
-        branchCodeCif: "123/123456789",
-        bvn: "1234567890",
-        idType: "NIN",
-        branch: "Lagos",
-        accountType: "Current",
-        currency: "Naira",
-        accountOfficer: "FG000123 | MICHAEL JOHN",
-      },
-      timestamp: new Date().toISOString(),
-      traceId: "xyz789abc",
-    };
-  }
   try {
-    const response = await ApiService.post(`/prospect/verify`, data);
+    const response = await ApiService.get(`/customer/${data.phoneNumber}/verifyaccount`);
     return response.data;
   } catch (error) {
     console.error("Error verifying account:", error);
