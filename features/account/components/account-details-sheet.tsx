@@ -15,7 +15,6 @@ import { FieldRow } from "@/features/account/components/field-row";
 import { useClipboard } from "@/hooks/useClipboard";
 import { getCurrencyName } from "@/lib/utils";
 import type { VerifyAccountData } from "@/types/api";
-import { useRouter } from "expo-router";
 
 type Props = {
   details: VerifyAccountData;
@@ -26,7 +25,6 @@ export const AccountDetailsSheet: React.FC<Props> = ({
   details,
   onClose,
 }) => {
-  const router = useRouter();
   const { copyToClipboard, copiedKey } = useClipboard();
 
   const handleCopy = async (key: string, text: string) => {
