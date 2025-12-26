@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/utils";
 import {
   ApiResponse,
   SendProspectOTPData,
@@ -13,11 +14,6 @@ import {
 } from "@/types/api";
 import { FileUpload } from "@/types/file-upload";
 import { ApiService } from ".";
-import { formatDate } from "@/lib/utils";
-
-const USE_MOCK_API = true;
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const getStates = async (): Promise<
   ApiResponse<{ state_code: string; state_name: string }[]>
@@ -45,7 +41,7 @@ export const getLGAs = async (
 
 export const getBanksUssdCodes = async (): Promise<
   ApiResponse<{ ussdTransferCode: string; bankName: string }[]>
-> => { 
+> => {
   try {
     const response = await ApiService.get("/static/banks/ussdcodes");
     return response.data;
@@ -155,7 +151,7 @@ export const updateFile = async (
   fileName: string
 ): Promise<ApiResponse<null>> => {
   try {
-    const formData = new FormData();    
+    const formData = new FormData();
     formData.append("formFile", {
       uri: file.uri,
       name: file.name,
@@ -192,7 +188,7 @@ export const submitProspect = async (
 
 export const verifyAccount = async (
   data: VerifyAccountRequest
-): Promise<ApiResponse<VerifyAccountData>> => {
+): Promise<ApiResponse<VerifyAccountData[]>> => {
   try {
     const response = await ApiService.get(`/customer/${data.phoneNumber}/verifyaccount`);
     return response.data;

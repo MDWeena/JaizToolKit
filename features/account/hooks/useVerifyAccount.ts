@@ -2,16 +2,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
-import { Keyboard } from "react-native";
 import { useForm } from "react-hook-form";
+import { Keyboard } from "react-native";
 
 import { useToast } from "@/components/shared";
 import { PhoneForm, phoneSchema } from "@/features/account/validation";
 import { verifyAccount } from "@/services/account.service";
+import { ApiError } from "@/types/api";
+import { useAccountStore } from "./useAccountStore";
 
 export function useVerifyAccount() {
   const { showToast } = useToast();
   const router = useRouter();
+  const setVerifiedAccounts = useAccountStore((state) => state.setVerifiedAccounts);
 
   const form = useForm<PhoneForm>({
     resolver: zodResolver(phoneSchema),
@@ -19,13 +22,11 @@ export function useVerifyAccount() {
     mode: "onChange",
   });
 
-  const phoneNumber = form.watch("phoneNumber");
-
   const mutation = useMutation({
-    mutationKey: ["verifyAccount", phoneNumber],
+    mutationKey: ["verifyAccount"],
     mutationFn: verifyAccount,
     onSuccess: (response) => {
-      if (response.status === "Success" && response.data) {
+      if (response.status === "Success" && response.data && response.data.length > 0) {
         Keyboard.dismiss();
 
         showToast({
@@ -33,15 +34,21 @@ export function useVerifyAccount() {
           type: "success",
         });
 
+        setVerifiedAccounts(response.data);
+
         router.push({
           pathname: "/(app)/accounts/verify/success",
-          params: { accounts: JSON.stringify(response.data) },
         });
 
         form.reset();
+      } else {
+        showToast({
+          message: "No accounts found.",
+          type: "error",
+        });
       }
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       showToast({
         type: "error",
         message: error?.message || "Verification failed.",

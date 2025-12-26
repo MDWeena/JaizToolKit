@@ -9,6 +9,17 @@ export interface ApiResponse<T> {
   traceId: string;
 }
 
+export interface ApiError {
+  message: string;
+  status: number;
+  data?: unknown;
+}
+
+export interface StateOption {
+  code: string;
+  name: string;
+}
+
 export interface SendProspectOTPRequest {
   prospectDetails: {
     type: "IND";
@@ -17,6 +28,7 @@ export interface SendProspectOTPRequest {
   country: string;
   phone: string;
 }
+
 export interface SendProspectOTPData {
   prospect: {
     id: string;

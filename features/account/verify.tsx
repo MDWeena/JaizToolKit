@@ -40,7 +40,7 @@ export default function VerifyAccountScreen() {
             name="phoneNumber"
             render={({ field: { value, onChange } }) => (
               <TextField
-                className="!mt-3 w-full"
+                className="mt-3 w-full"
                 InputProps={{
                   placeholder: "Phone Number",
                   keyboardType: "phone-pad",

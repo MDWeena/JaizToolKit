@@ -1,6 +1,6 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useCallback, useMemo } from "react";
-import { FlatList, ScrollView } from "react-native";
+import { useRouter } from "expo-router";
+import React, { useCallback, useEffect } from "react";
+import { FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BackButton } from "@/components/shared/back-button";
@@ -9,23 +9,20 @@ import { useBottomSheet } from "@/contexts/BottomSheetContext";
 import type { VerifyAccountData } from "@/types/api";
 
 import { ListTile } from "@/components/shared/list-tile";
+import { Button } from "@/components/ui";
 import { Text } from "@/components/ui/Text";
 import { AccountDetailsSheet } from "./components/account-details-sheet";
-import { Button } from "@/components/ui";
+import { useAccountStore } from "./hooks/useAccountStore";
 
 export default function AccountVerifySuccessScreen() {
   const { showBottomSheet, hideBottomSheet } = useBottomSheet();
-  const params = useLocalSearchParams();
   const router = useRouter();
+  const { verifiedAccounts: accounts, clearAccounts } = useAccountStore();
 
-  const accounts: VerifyAccountData[] = useMemo(() => {
-    try {
-      if (params.accounts) {
-        return JSON.parse(params.accounts as string);
-      }
-    } catch (e) {}
-    return [];
-  }, [params.accounts]);
+  // prevent stale data on re-entry
+  useEffect(() => {
+    return () => clearAccounts();
+  }, [clearAccounts]);
 
   const handleAccountPress = useCallback(
     (account: VerifyAccountData) => {
@@ -54,35 +51,36 @@ export default function AccountVerifySuccessScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <BackButton />
-      <ScrollView className="flex-1 px-5">
-        <Header title="Accounts Linked" />
-        <FlatList
-          data={accounts}
-          keyExtractor={(item) => item.accountNumber}
-          renderItem={renderItem}
-          ListEmptyComponent={
-            <Text className="mt-10 text-center text-grey-500">
-              No accounts found.
+      <FlatList
+        data={accounts || []}
+        keyExtractor={(item) => item.accountNumber}
+        renderItem={renderItem}
+        ListHeaderComponent={
+          <Header title="Accounts Linked" />
+        }
+        ListFooterComponent={
+          <Button
+            size="lg"
+            className="mt-4 w-full"
+            onPress={() => router.push("/(tabs)/(home)")}
+          >
+            <Text className="text-sm font-interSemiBold text-primary-foreground">
+              Back to Home
             </Text>
-          }
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          removeClippedSubviews={true}
-          contentContainerStyle={{ paddingBottom: 24 }}
-        />
-        <Button
-          size="lg"
-          className="w-full"
-          onPress={() => router.push("/(tabs)/(home)")}
-        >
-          <Text className="text-sm font-interSemiBold text-primary-foreground">
-            Back to Home
+          </Button>
+        }
+        ListEmptyComponent={
+          <Text className="mt-10 text-center text-grey-500">
+            No accounts found.
           </Text>
-        </Button>
-      </ScrollView>
+        }
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews={true}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24 }}
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 }
