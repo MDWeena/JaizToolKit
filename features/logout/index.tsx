@@ -9,20 +9,21 @@ import { useAuthStore } from '@/store/auth.store';
 
 const LogoutBottomSheet = () => {
   const { hideBottomSheet } = useBottomSheet();
-  const { setUser, user } = useAuthStore();
+  const { setUser, user, clearReturnPath, clearAccessToken } = useAuthStore();
   const router = useRouter();
 
   const handleLogout = useCallback((): void => {
     // don't clear the last logged in user
     if (user) {
-      user.accessToken = undefined;
-      setUser(user);
+      clearAccessToken();
     }
+
+    clearReturnPath();
 
     hideBottomSheet();
     // Perform logout logic here
-    router.dismissTo('/(auth)/login');
-  }, [hideBottomSheet]);
+    router.replace('/(auth)/login');
+  }, [hideBottomSheet, user, setUser, clearReturnPath]);
 
   return (
     <>

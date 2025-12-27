@@ -28,7 +28,7 @@ export const BackButton: React.FC<BackButtonProps> = ({
       return;
     }
 
-    router.dismissAll();
+    router.replace("/(tabs)/(home)");
   };
 
   return (

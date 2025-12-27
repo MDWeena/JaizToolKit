@@ -26,27 +26,23 @@ export function useVerifyAccount() {
     mutationKey: ["verifyAccount"],
     mutationFn: verifyAccount,
     onSuccess: (response) => {
-      if (response.status === "Success" && response.data && response.data.length > 0) {
-        Keyboard.dismiss();
-
-        showToast({
-          message: "Account verified successfully",
-          type: "success",
-        });
-
-        setVerifiedAccounts(response.data);
-
-        router.push({
-          pathname: "/(app)/accounts/verify/success",
-        });
-
-        form.reset();
-      } else {
+      if (response.status !== "Success" || !response.data || response.data.length === 0) {
         showToast({
           message: "No accounts found.",
           type: "error",
         });
+        return;
       }
+      Keyboard.dismiss();
+      showToast({
+        message: "Account verified successfully",
+        type: "success",
+      });
+      setVerifiedAccounts(response.data);
+      router.push({
+        pathname: "/(app)/accounts/verify/success",
+      });
+      form.reset();
     },
     onError: (error: ApiError) => {
       showToast({
