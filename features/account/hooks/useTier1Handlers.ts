@@ -52,6 +52,7 @@ export const useTier1Handlers = () => {
     watch,
     setValue,
     trigger,
+    formState: { errors },
   } = form;
 
   const {
@@ -122,12 +123,26 @@ export const useTier1Handlers = () => {
 
   useEffect(() => {
     const idValue = idType === "bvn" ? bvnValue : ninValue;
+    const currentIdError = idType === "bvn" ? errors.bvn : errors.nin;
+    const canVerify = !!(prospectId && idValue && dobValue && emailValue && !currentIdError && !errors.email);
+
     debouncedVerify.cancel();
-    if (!idValue || idValue.length !== 11 || !emailValue || !dobValue || !prospectId) {
-      return;
+
+    if (canVerify) {
+      debouncedVerify(idType, idValue, dobValue, emailValue);
     }
-    debouncedVerify(idType, idValue, dobValue, emailValue);
-  }, [idType, bvnValue, ninValue, emailValue, dobValue, prospectId, debouncedVerify]);
+  }, [
+    idType,
+    bvnValue,
+    ninValue,
+    emailValue,
+    dobValue,
+    prospectId,
+    errors.email,
+    errors.bvn,
+    errors.nin,
+    debouncedVerify,
+  ]);
 
   const handleSendOTP = () => {
     const mobileNumber = form.getValues("mobileNumber");

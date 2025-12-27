@@ -177,10 +177,6 @@ export function useTier1Mutations({
       handleApiResponse(response, {
         onSuccess: async (data) => {
           if (data.responseCode === "00") {
-            // TODO: REMOVE MOCK DATA BEFORE PRODUCTION
-            // data.localGovernmentOfResidence = "Asa";
-            // data.localGovernmentOfOrigin = "Alkaleri";
-
             await populateFormFromVerification(data, true);
             showToast({ type: "success", message: "BVN verified!" });
           } else {
