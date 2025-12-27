@@ -1,30 +1,10 @@
-import { useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
-import { Controller } from "react-hook-form";
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  View,
-} from "react-native";
+import React from "react";
+import { FormProvider } from "react-hook-form";
+import { KeyboardAvoidingView, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { ICountry } from "react-native-international-phone-number";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BackButton, Header } from "@/components/shared";
-import {
-  Agreement,
-  Button,
-  DatePicker,
-  FileInput,
-  OtpField,
-  Text,
-  TextField,
-} from "@/components/ui";
-import CustomSelect from "@/components/ui/custom-select";
-import { OtpFieldHandle } from "@/components/ui/otp-field";
-import CustomPhoneInput from "@/components/ui/phone-input";
 import {
   Stepper,
   StepperContent,
@@ -32,288 +12,46 @@ import {
   StepperStepContent,
   StepperSteps,
 } from "@/components/ui/stepper";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import { GENDER_OPTIONS } from "@/constants/form-options";
-import { useBanksUssdCodes } from "@/features/account/hooks/useBanksUssdCodes";
-import { useDebounce } from "@/features/account/hooks/useDebounce";
-import { useLocation } from "@/features/account/hooks/useLocation";
-import { useTier1Mutations } from "@/features/account/hooks/useTier1Mutations";
-import { useTierForm } from "@/features/account/hooks/useTierForm";
-import {
-  getDefaultValues,
-  IndividualTier1FormData,
-  individualTier1Schema,
-  step1Fields,
-  step2Fields,
-  step3Fields,
-  step4Fields,
-} from "@/features/account/validation/individual-tier1";
-import { sanitizeBVN, sanitizeEmail, sanitizeName, sanitizeNIN, sanitizePhone } from "@/utils";
-import { isValidPhoneNumber } from "react-native-international-phone-number";
-
-const TOTAL_STEPS = 4;
+import { Step1Verification } from "@/features/account/components/Step1Verification";
+import { Step2PersonalDetails } from "@/features/account/components/Step2PersonalDetails";
+import { Step3Address } from "@/features/account/components/Step3Address";
+import { Step4Documents } from "@/features/account/components/Step4Documents";
+import { useTier1Handlers } from "@/features/account/hooks/useTier1Handlers";
 
 const Tier1Screen = () => {
-  const router = useRouter();
-  const [prospectId, setProspectId] = useState<string | null>(null);
-  const otpFieldRef = useRef<OtpFieldHandle>(null);
-  const { banks, getUssdCode, isLoading: isBanksLoading } = useBanksUssdCodes();
-
   const {
     form,
     activeStep,
     setActiveStep,
-    handleNext,
     handleBack,
     scrollViewRef,
-  } = useTierForm<IndividualTier1FormData>({
-    schema: individualTier1Schema,
-    defaultValues: getDefaultValues(),
-    totalSteps: TOTAL_STEPS,
-    stepFields: {
-      1: step1Fields as (keyof IndividualTier1FormData)[],
-      2: step2Fields as (keyof IndividualTier1FormData)[],
-      3: step3Fields as (keyof IndividualTier1FormData)[],
-      4: step4Fields as (keyof IndividualTier1FormData)[],
-    },
-  });
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-    trigger,
-  } = form;
-
-  const {
     states,
-    lgas: lgasOfOrigin,
-    handleStateChange: handleStateOfOriginChange,
-  } = useLocation();
-  const {
-    lgas: lgasOfResidence,
-    handleStateChange: handleStateOfResidenceChange,
-  } = useLocation();
-
-  const {
-    sendOTPMutation,
-    verifyOTPMutation,
-    verifyBVNMutation,
-    verifyNINMutation,
-    updateAddressMutation,
-    finalSubmitMutation,
-    pendingLgaValues,
-    clearPendingLga,
-  } = useTier1Mutations({ prospectId, setProspectId, form, handleNext, states });
-
-  const { mutate: doSendOTP, isPending: isSendingOTP } = sendOTPMutation;
-  const { mutate: doVerifyOTP, isPending: isVerifyingOTP } = verifyOTPMutation;
-  const { mutate: doVerifyBVN, isPending: isVerifyingBVN } = verifyBVNMutation;
-  const { mutate: doVerifyNIN, isPending: isVerifyingNIN } = verifyNINMutation;
-  const { mutate: doUpdateAddress, isPending: isUpdatingAddress } =
-    updateAddressMutation;
-  const { mutate: doFinalSubmit, isPending: isSubmitting } =
-    finalSubmitMutation;
-
-  const idType = watch("idType");
-  const activeTab = idType || "bvn";
-  const bvnValue = watch("bvn");
-  const ninValue = watch("nin");
-  const stateOfOrigin = watch("stateOfOrigin");
-  const stateOfResidence = watch("stateOfResidence");
-  const debouncedBvn = useDebounce(bvnValue, 1000);
-  const debouncedNin = useDebounce(ninValue, 1000);
-
-  const [selectedCountry, setSelectedCountry] = useState<undefined | ICountry>(
-    undefined
-  );
-
-  function handleSelectedCountry(country: ICountry) {
-    setSelectedCountry(country);
-    setValue("selectedCountry", country);
-    trigger("mobileNumber");
-  }
-
-  useEffect(() => {
-    setValue("lgaOfOrigin", "");
-    handleStateOfOriginChange(stateOfOrigin);
-  }, [stateOfOrigin]);
-
-  useEffect(() => {
-    setValue("lgaOfResidence", "");
-    handleStateOfResidenceChange(stateOfResidence);
-  }, [stateOfResidence]);
-
-  
- useEffect(() => {
-    if (pendingLgaValues.lgaOfOrigin && lgasOfOrigin.length > 0) {
-      // Find LGA code by matching the name from API response
-      const matchedLga = lgasOfOrigin.find(
-        (lga) => lga.name.toLowerCase() === pendingLgaValues.lgaOfOrigin?.toLowerCase()
-      );
-      if (matchedLga) {
-        setValue("lgaOfOrigin", matchedLga.code);
-      }
-      clearPendingLga("lgaOfOrigin");
-    }
-  }, [lgasOfOrigin, pendingLgaValues.lgaOfOrigin]);
-
-  useEffect(() => {
-    if (pendingLgaValues.lgaOfResidence && lgasOfResidence.length > 0) {
-      // Find LGA code by matching the name from API response
-      const matchedLga = lgasOfResidence.find(
-        (lga) => lga.name.toLowerCase() === pendingLgaValues.lgaOfResidence?.toLowerCase()
-      );
-      if (matchedLga) {
-        setValue("lgaOfResidence", matchedLga.code);
-      }
-      clearPendingLga("lgaOfResidence");
-    }
-  }, [lgasOfResidence, pendingLgaValues.lgaOfResidence]);
-
-  useEffect(() => {
-    if (debouncedBvn && debouncedBvn.length === 11 && idType === "bvn") {
-      const { dateOfBirth, email } = form.getValues();
-      if (dateOfBirth && email) {
-        doVerifyBVN({ bvn: debouncedBvn, dob: dateOfBirth, email });
-      }
-    }
-
-    if (debouncedNin && debouncedNin.length === 11 && idType === "nin") {
-      const { dateOfBirth, email } = form.getValues();
-      if (dateOfBirth && email) {
-        doVerifyNIN({ nin: debouncedNin, dob: dateOfBirth, email });
-      }
-    }
-  }, [debouncedNin, idType, debouncedBvn]);
-
-  const handleSendOTP = () => {
-    const mobileNumber = form.getValues("mobileNumber");
-    const country = form.getValues("selectedCountry");
-    setValue("otp", "");
-
-    if (!isValidPhoneNumber(mobileNumber, country as ICountry)) {
-      form.setError("mobileNumber", {
-        type: "manual",
-        message: "Please enter a valid phone number.",
-      });
-      return;
-    }
-    if (!form.getValues("agreement")) {
-      form.setError("agreement", {
-        type: "manual",
-        message: "You must agree to the Data Privacy Policy",
-      });
-      return;
-    }
-
-    const countryCode = country?.idd?.root ?? "";
-    const sanitizedPhoneNumber = sanitizePhone(mobileNumber);
-
-    doSendOTP(
-      {
-        prospectDetails: { type: "IND", tier: 1 },
-        phone: sanitizedPhoneNumber,
-        country: countryCode,
-      },
-      {
-        onSuccess: () => {
-          otpFieldRef.current?.clear();
-          otpFieldRef.current?.focus();
-        },
-      }
-    );
-  };
-
-  const handleStep1Next = async () => {
-    const isValid = await form.trigger(step1Fields);
-    if (!prospectId) {
-      form.setError("otp", {
-        type: "manual",
-        message: "Invalid OTP. Please send an OTP first.",
-      });
-      if (!isValid) {
-        return;
-      }
-      return;
-    }
-
-    if (isValid) {
-      doVerifyOTP({ otp: form.getValues("otp") });
-    }
-  };
-
-  const handleStep2Next = async () => {
-    const isValid = await form.trigger(step2Fields);
-    if (isValid) {
-      handleNext();
-    }
-  };
-
-  const handleStep3Next = async () => {
-    const isValid = await form.trigger(step3Fields);
-    if (isValid) {
-      const {
-        gender,
-        mothersMaidenName,
-        stateOfOrigin,
-        lgaOfOrigin,
-        residentialAddress,
-        stateOfResidence,
-        lgaOfResidence,
-      } = form.getValues();
-
-      const payload = {
-        gender: gender?.[0]?.toUpperCase(),
-        mothersmaidenname: mothersMaidenName,
-        origin: { state: stateOfOrigin, lga: lgaOfOrigin },
-        residence: {
-          addressline: residentialAddress,
-          state: stateOfResidence!,
-          lga: lgaOfResidence,
-        },
-      };
-      doUpdateAddress(payload);
-    }
-  };
-
-  const onSubmit = (data: IndividualTier1FormData) => {
-    doFinalSubmit(data, {
-      onSuccess: (response) => {
-        if (response.status === "Success" && response.data) {
-          const { accountname, accountnumber } = response.data.customer;
-
-          const bankName = data.bank;
-          const amount = data.amount;
-          const ussdString = bankName
-            ? getUssdCode(bankName, amount || "", accountnumber || "")
-            : "";
-
-          router.push({
-            pathname: "/(app)/accounts/open/success",
-            params: {
-              accountName: accountname!,
-              accountNumber: accountnumber!,
-              ussdString,
-            },
-          });
-        }
-      },
-    });
-  };
-
-  const handleTabChange = (value: "bvn" | "nin") => {
-    setValue("idType", value);
-    if (value === "bvn") {
-      setValue("nin", undefined);
-      trigger("bvn");
-    } else {
-      setValue("bvn", undefined);
-      trigger("nin");
-    }
-  };
+    lgasOfOrigin,
+    lgasOfResidence,
+    prospectId,
+    otpFieldRef,
+    banks,
+    isBanksLoading,
+    activeTab,
+    selectedCountry,
+    handleSelectedCountry,
+    handleSendOTP,
+    handleStep1Next,
+    handleStep2Next,
+    handleStep3Next,
+    onSubmit,
+    handleTabChange,
+    isSendingOTP,
+    isVerifyingOTP,
+    isVerifyingBVN,
+    isVerifyingNIN,
+    isUpdatingAddress,
+    isSubmitting,
+    handleStateOfOriginChange,
+    handleStateOfResidenceChange,
+    mobileNumber,
+    onPhoneNumberChange,
+  } = useTier1Handlers();
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -336,478 +74,55 @@ const Tier1Screen = () => {
             </StepperSteps>
             <Header title="Tier 1 Account" />
 
-            <StepperContent>
-              {/* Step 1: Verification */}
-              <StepperStepContent className="gap-6" step={1}>
-                <Controller
-                  control={control}
-                  name="agreement"
-                  render={({ field: { value, onChange } }) => (
-                    <Agreement agree={value} setAgree={onChange} />
-                  )}
-                />
-                {errors.agreement && (
-                  <Text className="ml-2 -mt-4 text-sm text-red-500">
-                    {String(errors.agreement.message)}
-                  </Text>
-                )}
-
-                <View>
-                  <CustomPhoneInput
-                    name="mobileNumber"
-                    control={control}
-                    error={errors.mobileNumber}
+            <FormProvider {...form}>
+              <StepperContent>
+                <StepperStepContent className="gap-6" step={1}>
+                  <Step1Verification
                     selectedCountry={selectedCountry}
-                    onChangeSelectedCountry={handleSelectedCountry}
-                    autoFocus={true}
-                    onPhoneNumberChange={() => {
-                      setProspectId(null);
-                    }}
+                    handleSelectedCountry={handleSelectedCountry}
+                    handleSendOTP={handleSendOTP}
+                    isSendingOTP={isSendingOTP}
+                    prospectId={prospectId}
+                    otpFieldRef={otpFieldRef}
+                    handleStep1Next={handleStep1Next}
+                    isVerifyingOTP={isVerifyingOTP}
+                    mobileNumber={mobileNumber}
+                    onPhoneNumberChange={onPhoneNumberChange}
                   />
-                  <Pressable
-                    onPress={handleSendOTP}
-                    disabled={isSendingOTP}
-                    className="mt-1 ml-auto"
-                  >
-                    <Text className="text-xs font-bold underline text-primary">
-                      {isSendingOTP ? "Sending..." : "Click to send OTP"}
-                    </Text>
-                  </Pressable>
-                </View>
+                </StepperStepContent>
 
-                <View>
-                  <Text className="font-[500] mb-2 text-text">OTP</Text>
-                  <Controller
-                    control={control}
-                    name="otp"
-                    render={({ field: { onChange } }) => (
-                      <OtpField
-                        ref={otpFieldRef}
-                        length={6}
-                        onOtpChange={onChange}
-                      />
-                    )}
+                <StepperStepContent className="gap-6" step={2}>
+                  <Step2PersonalDetails
+                    activeTab={activeTab}
+                    handleTabChange={handleTabChange}
+                    isVerifyingBVN={isVerifyingBVN}
+                    isVerifyingNIN={isVerifyingNIN}
+                    handleStep2Next={handleStep2Next}
                   />
-                  {errors.otp && (
-                    <Text className="mt-1 text-sm text-red-500">
-                      {String(errors.otp.message)}
-                    </Text>
-                  )}
-                  {prospectId && (
-                    <Text className="text-[.9rem] mt-3 text-grey-600">
-                      Enter 6-Digit code sent to {selectedCountry?.idd?.root}{" "}
-                      {form.getValues("mobileNumber")}
-                    </Text>
-                  )}
-                </View>
+                </StepperStepContent>
 
-                <Button
-                  size={"lg"}
-                  onPress={handleStep1Next}
-                  loading={isVerifyingOTP}
-                >
-                  <Text className="text-sm font-semibold text-primary-foreground">
-                    Next
-                  </Text>
-                </Button>
-              </StepperStepContent>
-
-              {/* Step 2: Personal Details */}
-              <StepperStepContent className="gap-6" step={2}>
-                <Tabs
-                  value={activeTab}
-                  onValueChange={(value) =>
-                    handleTabChange(value as "bvn" | "nin")
-                  }
-                  className="gap-6"
-                >
-                  <TabsList className="flex-row w-full">
-                    <TabsTrigger value="bvn" className="flex-1">
-                      <Text>BVN</Text>
-                    </TabsTrigger>
-                    <TabsTrigger value="nin" className="flex-1">
-                      <Text>NIN</Text>
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <Controller
-                    control={control}
-                    name="dateOfBirth"
-                    render={({ field: { value, onChange }, fieldState }) => (
-                      <View className="w-full">
-                        <DatePicker
-                          value={value}
-                          onChange={onChange}
-                          placeholder="Date of Birth"
-                          maximumDate={new Date()}
-                        />
-                        {fieldState.error && (
-                          <Text className="mt-1 text-sm text-red-500">
-                            {String(fieldState.error.message)}
-                          </Text>
-                        )}
-                      </View>
-                    )}
+                <StepperStepContent className="gap-6" step={3}>
+                  <Step3Address
+                    states={states}
+                    lgasOfOrigin={lgasOfOrigin}
+                    lgasOfResidence={lgasOfResidence}
+                    handleStep3Next={handleStep3Next}
+                    isUpdatingAddress={isUpdatingAddress}
+                    onStateOfOriginChange={handleStateOfOriginChange}
+                    onStateOfResidenceChange={handleStateOfResidenceChange}
                   />
+                </StepperStepContent>
 
-                  <Controller
-                    control={control}
-                    name="email"
-                    render={({ field: { value, onChange } }) => (
-                      <TextField
-                        InputProps={{
-                          placeholder: "Email Address",
-                          keyboardType: "email-address",
-                          value: value || "",
-                          onChangeText: (text) => onChange(sanitizeEmail(text)),
-                        }}
-                        helperText={errors.email?.message as string}
-                      />
-                    )}
+                <StepperStepContent className="gap-6" step={4}>
+                  <Step4Documents
+                    banks={banks}
+                    isBanksLoading={isBanksLoading}
+                    onSubmit={onSubmit}
+                    isSubmitting={isSubmitting}
                   />
-
-                  <TabsContent value="nin" className="mt-0">
-                    <Controller
-                      control={control}
-                      name="nin"
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          InputProps={{
-                            placeholder: "NIN",
-                            keyboardType: "numeric",
-                            value: value || "",
-                            onChangeText: (text) => onChange(sanitizeNIN(text)),
-                          }}
-                          inputSuffix={isVerifyingNIN && <ActivityIndicator />}
-                          helperText={errors.nin?.message as string}
-                        />
-                      )}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="bvn" className="mt-0">
-                    <Controller
-                      control={control}
-                      name="bvn"
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          InputProps={{
-                            placeholder: "BVN",
-                            keyboardType: "numeric",
-                            value: value || "",
-                            onChangeText: (text) => onChange(sanitizeBVN(text)),
-                          }}
-                          inputSuffix={isVerifyingBVN && <ActivityIndicator />}
-                          helperText={errors.bvn?.message as string}
-                        />
-                      )}
-                    />
-                  </TabsContent>
-                </Tabs>
-
-                <Controller
-                  control={control}
-                  name="firstName"
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      InputProps={{
-                        placeholder: "First Name",
-                        value: value || "",
-                        onChangeText: (text) => onChange(sanitizeName(text)),
-                        editable: false,
-                      }}
-                      helperText={errors.firstName?.message as string}
-                    />
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="middleName"
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      InputProps={{
-                        placeholder: "Middle Name",
-                        value: value || "",
-                        onChangeText: (text) => onChange(sanitizeName(text)),
-                        editable: false,
-                      }}
-                      helperText={errors.middleName?.message as string}
-                    />
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="lastName"
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      InputProps={{
-                        placeholder: "Last Name",
-                        value: value || "",
-                        onChangeText: (text) => onChange(sanitizeName(text)),
-                        editable: false,
-                      }}
-                      helperText={errors.lastName?.message as string}
-                    />
-                  )}
-                />
-
-                <Button
-                  size={"lg"}
-                  onPress={handleStep2Next}
-                  className="flex-1"
-                  loading={isVerifyingBVN || isVerifyingNIN}
-                >
-                  <Text className="text-sm font-semibold text-primary-foreground">
-                    Next
-                  </Text>
-                </Button>
-              </StepperStepContent>
-
-              {/* Step 3: Address and Additional Info */}
-              <StepperStepContent className="gap-6" step={3}>
-                <Controller
-                  control={control}
-                  name="gender"
-                  render={({ field: { value, onChange } }) => (
-                    <CustomSelect
-                      options={GENDER_OPTIONS}
-                      placeholder="Gender"
-                      value={value as string}
-                      onValueChange={onChange}
-                    />
-                  )}
-                />
-                {errors.gender && (
-                  <Text className="-mt-4 text-sm text-red-500">
-                    {String(errors.gender.message)}
-                  </Text>
-                )}
-
-                <Controller
-                  control={control}
-                  name="mothersMaidenName"
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      InputProps={{
-                        placeholder: "Mother's Maiden Name",
-                        value: value || "",
-                        onChangeText: (text) => onChange(sanitizeName(text)),
-                      }}
-                      helperText={errors.mothersMaidenName?.message as string}
-                    />
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="stateOfOrigin"
-                  render={({ field: { value, onChange } }) => (
-                    <CustomSelect
-                      options={states.map((state) => ({
-                        label: state.name,
-                        value: state.code,
-                      }))}
-                      placeholder="State of Origin"
-                      value={value as string}
-                      onValueChange={onChange}
-                    />
-                  )}
-                />
-                {errors.stateOfOrigin && (
-                  <Text className="-mt-4 text-sm text-red-500">
-                    {String(errors.stateOfOrigin.message)}
-                  </Text>
-                )}
-
-                <Controller
-                  control={control}
-                  name="lgaOfOrigin"
-                  render={({ field: { value, onChange } }) => (
-                    <CustomSelect
-                      options={lgasOfOrigin.map((lga) => ({
-                        label: lga.name,
-                        value: lga.code,
-                      }))}
-                      placeholder="LGA of Origin"
-                      value={value as string}
-                      onValueChange={onChange}
-                      disabled={!stateOfOrigin || lgasOfOrigin.length === 0}
-                    />
-                  )}
-                />
-                {errors.lgaOfOrigin && (
-                  <Text className="-mt-4 text-sm text-red-500">
-                    {String(errors.lgaOfOrigin.message)}
-                  </Text>
-                )}
-
-                <Controller
-                  control={control}
-                  name="residentialAddress"
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      InputProps={{
-                        placeholder: "Residential Address",
-                        multiline: true,
-                        numberOfLines: 3,
-                        value: value || "",
-                        onChangeText: onChange,
-                      }}
-                      helperText={errors.residentialAddress?.message as string}
-                    />
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="stateOfResidence"
-                  render={({ field: { value, onChange } }) => (
-                    <CustomSelect
-                      options={states.map((state) => ({
-                        label: state.name,
-                        value: state.code,
-                      }))}
-                      placeholder="State of Residence"
-                      value={value as string}
-                      onValueChange={onChange}
-                    />
-                  )}
-                />
-                {errors.stateOfResidence && (
-                  <Text className="-mt-4 text-sm text-red-500">
-                    {String(errors.stateOfResidence.message)}
-                  </Text>
-                )}
-
-                <Controller
-                  control={control}
-                  name="lgaOfResidence"
-                  render={({ field: { value, onChange } }) => (
-                    <CustomSelect
-                      options={lgasOfResidence.map((lga) => ({
-                        label: lga.name,
-                        value: lga.code,
-                      }))}
-                      placeholder="LGA of Residence"
-                      value={value as string}
-                      onValueChange={onChange}
-                      disabled={
-                        !stateOfResidence || lgasOfResidence.length === 0
-                      }
-                    />
-                  )}
-                />
-                {errors.lgaOfResidence && (
-                  <Text className="-mt-4 text-sm text-red-500">
-                    {String(errors.lgaOfResidence.message)}
-                  </Text>
-                )}
-
-                <Button
-                  size={"lg"}
-                  onPress={handleStep3Next}
-                  className="flex-1"
-                  loading={isUpdatingAddress}
-                >
-                  <Text className="text-sm font-semibold text-primary-foreground">
-                    Next
-                  </Text>
-                </Button>
-              </StepperStepContent>
-
-              {/* Step 4: Documents and Funding */}
-              <StepperStepContent className="gap-6" step={4}>
-                <Controller
-                  control={control}
-                  name="bank"
-                  render={({ field: { value, onChange } }) => (
-                    <CustomSelect
-                      label="Fund Account Instantly"
-                      options={banks.map((bank) => ({
-                        label: bank.bankName,
-                        value: bank.bankName,
-                      }))}
-                      placeholder="Select Bank"
-                      value={value as string}
-                      onValueChange={onChange}
-                      disabled={isBanksLoading}
-                    />
-                  )}
-                />
-                {errors.bank && (
-                  <Text className="-mt-4 text-sm text-red-500">
-                    {String(errors.bank.message)}
-                  </Text>
-                )}
-
-                <Controller
-                  control={control}
-                  name="amount"
-                  render={({ field: { value, onChange } }) => (
-                    <TextField
-                      InputProps={{
-                        placeholder: "Amount",
-                        keyboardType: "numeric",
-                        value: (value as string) || "",
-                        onChangeText: onChange,
-                      }}
-                      helperText={errors.amount?.message as string}
-                    />
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="passportPhotograph"
-                  render={({ field: { value, onChange } }) => (
-                    <View>
-                      <FileInput
-                        label="Passport Photograph"
-                        value={value as any}
-                        onFileSelect={(file) => onChange(file)}
-                      />
-                      {errors.passportPhotograph && (
-                        <Text className="-mt-2 text-sm text-red-500">
-                          {String(errors.passportPhotograph.message)}
-                        </Text>
-                      )}
-                    </View>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="signature"
-                  render={({ field: { value, onChange } }) => (
-                    <View>
-                      <FileInput
-                        label="Signature"
-                        value={value as any}
-                        onFileSelect={(file) => onChange(file)}
-                      />
-                      {errors.signature && (
-                        <Text className="-mt-2 text-sm text-red-500">
-                          {String(errors.signature.message)}
-                        </Text>
-                      )}
-                    </View>
-                  )}
-                />
-
-                <Button
-                  size={"lg"}
-                  className="flex-1"
-                  onPress={handleSubmit(onSubmit)}
-                  loading={isSubmitting}
-                >
-                  <Text className="text-sm font-semibold text-primary-foreground">
-                    Submit
-                  </Text>
-                </Button>
-              </StepperStepContent>
-            </StepperContent>
+                </StepperStepContent>
+              </StepperContent>
+            </FormProvider>
           </Stepper>
         </ScrollView>
       </KeyboardAvoidingView>

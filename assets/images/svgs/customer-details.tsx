@@ -71,3 +71,45 @@ export function BankIcon(props: SvgProps) {
     </Svg>
   );
 }
+export const AccountNameIcon = (props: SvgProps) => (
+  <Svg
+ width="16" height="16" viewBox="0 0 16 16"
+  fill="none"
+  {...props}
+  >
+    <Path
+      fill="#004081"
+      d="M14.667 2.666H9.333v2H6.667v-2H1.333A1.333 1.333 0 0 0 0 4v9.333a1.333 1.333 0 0 0 1.333 1.333h13.334A1.333 1.333 0 0 0 16 13.333V4a1.333 1.333 0 0 0-1.333-1.334ZM5.333 6a1.333 1.333 0 1 1 0 2.666 1.333 1.333 0 0 1 0-2.666ZM8 11.333H2.667v-.667c0-.886 1.78-1.333 2.666-1.333C6.22 9.333 8 9.78 8 10.666v.667Zm5.333.667h-4v-1.334h4V12Zm0-2.667h-4V8h4v1.333Zm0-2.667h-4V5.333h4v1.333ZM8.667 4H7.333V1.333h1.334V4Z"
+    />
+  </Svg>
+)
+
+export const AccountTypeIcon = (props: SvgProps) => (
+  <Svg
+    width={16}
+    height={16}
+    viewBox="0 0 16 16"
+    fill="none"
+    {...props}
+  >
+     <Path
+      fill="#004081"
+      d="M4 11.333C4 10 6.667 9.267 8 9.267c1.333 0 4 .733 4 2.066V12H4m6-6a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM2 3.333v9.334A1.333 1.333 0 0 0 3.333 14h9.334A1.334 1.334 0 0 0 14 12.667V3.333A1.334 1.334 0 0 0 12.667 2H3.333A1.333 1.333 0 0 0 2 3.333Z"
+    />
+  </Svg>
+)
+
+export const LocationIcon = (props: SvgProps) => (
+  <Svg
+    width={16}
+    height={16}
+    viewBox="0 0 16 16"
+    fill="none"
+    {...props}
+  >
+    <Path
+      fill="#004081"
+      d="M8 7.666a1.667 1.667 0 1 1 0-3.333 1.667 1.667 0 0 1 0 3.333Zm0-6.333A4.667 4.667 0 0 0 3.333 6C3.333 9.5 8 14.666 8 14.666S12.667 9.5 12.667 6A4.667 4.667 0 0 0 8 1.333Z"
+    />
+  </Svg>
+)

@@ -23,7 +23,7 @@ const IjaraMuntahiyaBittamlikScreen = () => {
           renderItem={({ item }) => (
             <Collapsible className="mb-3">
               <CollapsibleTrigger className="bg-white" iconLeft={item.icon}>
-                <Text className="text-lg font-semibold">{item.section}</Text>
+                <Text className="text-lg font-interSemiBold">{item.section}</Text>
               </CollapsibleTrigger>
 
               <CollapsibleContent className="px-5 pb-5 bg-white">

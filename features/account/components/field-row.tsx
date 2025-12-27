@@ -1,6 +1,8 @@
-import { Feather } from '@expo/vector-icons';
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Feather } from "@expo/vector-icons";
+import React from "react";
+import { Pressable, Text, View } from "react-native";
+
+import { CopyIcon } from "@/assets/images/svgs/account";
 
 type Props = {
   label: string;
@@ -20,13 +22,13 @@ export const FieldRow: React.FC<Props> = ({
   leadingIcon,
 }) => {
   return (
-    <View className="py-3 flex flex-row items-center gap-3">
+    <View className="flex flex-row items-center gap-3 py-3">
       {leadingIcon}
       <View className="flex-1">
-        <Text className="text-sm text-grey-600 mb-1">{label}</Text>
+        <Text className="mb-1 text-sm text-grey-600">{label}</Text>
         <View className="flex-row items-center justify-between">
           <Text
-            className="text-base font-semibold text-grey-900"
+            className="text-base text-grey-900"
             numberOfLines={1}
           >
             {value}
@@ -38,11 +40,11 @@ export const FieldRow: React.FC<Props> = ({
               accessibilityLabel={`Copy ${label}`}
               onPress={onCopy}
             >
-              <Feather
-                name={copied ? 'check' : 'copy'}
-                size={18}
-                color={copied ? '#10B981' : undefined}
-              />
+              {copied ? (
+                <Feather name="check" size={18} color="#10B981" />
+              ) : (
+                <CopyIcon color="#6B7280" />
+              )}
             </Pressable>
           ) : null}
         </View>

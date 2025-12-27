@@ -36,7 +36,7 @@ export const WebViewComponent: React.FC<WebViewComponentProps> = ({
       </View>
       {hasError ? (
         <View className="items-center justify-center flex-1 p-4">
-          <Text className="text-lg font-semibold text-center text-grey-900">
+          <Text className="text-lg text-center font-interSemiBold text-grey-900">
             {errorTitle}
           </Text>
           <Text className="mt-2 text-center text-grey-500">{errorMessage}</Text>
@@ -44,7 +44,7 @@ export const WebViewComponent: React.FC<WebViewComponentProps> = ({
             onPress={handleRetry}
             className="px-4 py-2 mt-4 rounded-lg bg-error"
           >
-            <Text className="font-medium text-white">Retry</Text>
+            <Text className="text-white font-interMedium">Retry</Text>
           </TouchableOpacity>
         </View>
       ) : (

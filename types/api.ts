@@ -1,4 +1,4 @@
-import { NameForm, PhoneForm } from "@/features/account/validation";
+import { PhoneForm } from "@/features/account/validation";
 
 export interface ApiResponse<T> {
   status: "Success" | "Failed";
@@ -9,6 +9,22 @@ export interface ApiResponse<T> {
   traceId: string;
 }
 
+export interface ApiError {
+  message: string;
+  status: number;
+  data?: unknown;
+}
+
+export interface LocationOption {
+  code: string;
+  name: string;
+}
+
+export interface BankOption {
+  bankName: string;
+  ussdTransferCode: string;
+}
+
 export interface SendProspectOTPRequest {
   prospectDetails: {
     type: "IND";
@@ -17,6 +33,7 @@ export interface SendProspectOTPRequest {
   country: string;
   phone: string;
 }
+
 export interface SendProspectOTPData {
   prospect: {
     id: string;
@@ -114,18 +131,20 @@ export interface SubmitProspectData {
   };
 }
 
-export type VerifyAccountRequest = NameForm | PhoneForm;
+export type VerifyAccountRequest = PhoneForm;
 
 export interface VerifyAccountData {
   accountName: string;
   accountNumber: string;
-  branchCodeCif: string; // e.g., "123/123456789"
+  cif: string;
+  branchCode: string;
   bvn: string;
   idType: string;
   branch: string;
   accountType: string;
   currency: string;
-  accountOfficer: string; // e.g., "FG000123 | MICHAEL JOHN"
+  accountOfficerId: string;
+  accountOfficerName: string;
 }
 
 export interface LoginData {

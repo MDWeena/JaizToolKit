@@ -35,7 +35,7 @@ const ThemeSelector: React.FC<{
   return (
     <View className="px-2 pt-2 pb-6">
       <View className="items-center mb-4">
-        <Text className="text-xl font-semibold text-grey-900">
+        <Text className="text-xl font-interSemiBold text-grey-900">
           Choose Theme
         </Text>
       </View>
@@ -49,7 +49,7 @@ const ThemeSelector: React.FC<{
             className="h-16"
           >
             <View className="flex-row items-center justify-between w-full px-4">
-              <Text className="text-lg font-bold text-text">
+              <Text className="text-lg font-interBold text-text">
                 {option.charAt(0).toUpperCase() + option.slice(1)}
               </Text>
               {selectedTheme === option ? (

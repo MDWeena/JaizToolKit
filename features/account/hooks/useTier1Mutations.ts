@@ -1,6 +1,10 @@
+import { useMutation } from "@tanstack/react-query";
+import { UseFormReturn } from "react-hook-form";
+
 import { useToast } from "@/components/shared";
 import { IndividualTier1FormData } from "@/features/account/validation/individual-tier1";
 import {
+  getLGAs,
   sendProspectOTP,
   submitProspect,
   updateAddressDetails,
@@ -10,62 +14,24 @@ import {
   verifyOTP,
 } from "@/services/account.service";
 import {
+  ApiError,
+  ApiResponse,
+  LocationOption,
   SendProspectOTPRequest,
   UpdateAddressDetailsRequest,
   VerifyBvnData,
   VerifyNinData,
 } from "@/types/api";
-import { FileUpload } from "@/types/file-upload";
-import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { UseFormReturn } from "react-hook-form";
-
-type StateOption = { code: string; name: string };
-
-const normalizeStateName = (stateName: string | null): string => {
-  if (!stateName) return "";
-  return stateName.replace(/\s*State$/i, "").trim();
-};
-
-const findStateCodeByName = (
-  stateName: string | null,
-  states: StateOption[]
-): string => {
-  if (!stateName || states.length === 0) return "";
-
-  const normalized = normalizeStateName(stateName).toLowerCase();
-  const state = states.find((s) => s.name.toLowerCase() === normalized);
-  return state?.code || "";
-};
-
-const base64ToFileUpload = (
-  base64String: string,
-  fileName: string = "passport.jpg"
-): FileUpload => {
-  if (!base64String) return null;
-
-  const uri = `data:image/jpeg;base64,${base64String}`;
-  // Estimate file size from base64 (base64 is ~33% larger than binary)
-  const estimatedSize = Math.round((base64String.length * 3) / 4);
-  return {
-    uri,
-    type: "image/jpeg",
-    name: fileName,
-    size: estimatedSize,
-  };
-};
+import { base64ToFileUpload, findStateCodeByName } from "@/utils";
 
 interface UseTier1MutationsProps {
   prospectId: string | null;
-  setProspectId: (id: string) => void;
+  setProspectId: (id: string | null) => void;
   form: UseFormReturn<IndividualTier1FormData>;
   handleNext: () => void;
-  states: StateOption[];
-}
-
-export interface PendingLgaValues {
-  lgaOfOrigin: string | null;
-  lgaOfResidence: string | null;
+  states: LocationOption[];
+  onStateOfOriginChange: (stateCode: string) => void;
+  onStateOfResidenceChange: (stateCode: string) => void;
 }
 
 export function useTier1Mutations({
@@ -74,259 +40,200 @@ export function useTier1Mutations({
   form,
   handleNext,
   states,
+  onStateOfOriginChange,
+  onStateOfResidenceChange,
 }: UseTier1MutationsProps) {
   const { showToast } = useToast();
   const { setValue } = form;
 
-  // Store pending LGA values to be set after LGAs are fetched
-  const [pendingLgaValues, setPendingLgaValues] = useState<PendingLgaValues>({
-    lgaOfOrigin: null,
-    lgaOfResidence: null,
-  });
+  /**
+   * Centralized mutation response handler
+   */
+  const handleApiResponse = <T>(
+    response: ApiResponse<T>,
+    options: {
+      successMessage?: string;
+      onSuccess?: (data: T) => void;
+      onError?: (message: string) => void;
+    } = {}
+  ) => {
+    if (response.status === "Success" || response.code === 204) {
+      if (options.successMessage) {
+        showToast({ type: "success", message: options.successMessage });
+      }
+      options.onSuccess?.(response.data as T);
+      return true;
+    } else {
+      const errorMsg = response.message || "An error occurred";
+      if (options.onError) {
+        options.onError(errorMsg);
+      } else {
+        showToast({ type: "error", message: errorMsg });
+      }
+      return false;
+    }
+  };
 
-  const clearPendingLga = (field: keyof PendingLgaValues) => {
-    setPendingLgaValues((prev) => ({ ...prev, [field]: null }));
+  const syncLocation = async (
+    stateName: string | undefined,
+    lgaName: string | undefined,
+    fieldPrefix: "Origin" | "Residence"
+  ) => {
+    if (!stateName) return;
+
+    const stateCode = findStateCodeByName(stateName, states);
+    if (!stateCode) return;
+
+    const stateField = `stateOf${fieldPrefix}` as "stateOfOrigin" | "stateOfResidence";
+    const lgaField = `lgaOf${fieldPrefix}` as "lgaOfOrigin" | "lgaOfResidence";
+
+    setValue(stateField, stateCode);
+
+    if (fieldPrefix === "Origin") {
+      onStateOfOriginChange(stateCode);
+    } else {
+      onStateOfResidenceChange(stateCode);
+    }
+
+    // Reset LGA field before trying to sync new value
+    setValue(lgaField, "");
+
+    if (lgaName) {
+      const lgaResponse = await getLGAs(stateCode);
+      if (lgaResponse.status === "Success" && lgaResponse.data) {
+        const matchedLga = lgaResponse.data.find(
+          (l) => l.lga_name.toLowerCase() === lgaName.toLowerCase()
+        );
+        if (matchedLga) {
+          setValue(lgaField, matchedLga.lga_code);
+        }
+      }
+    }
+  };
+
+  const populateFormFromVerification = async (
+    data: VerifyBvnData | VerifyNinData,
+    isBvn: boolean
+  ) => {
+    if (data.firstName) setValue("firstName", data.firstName);
+    if (data.middleName) setValue("middleName", data.middleName);
+
+    const lastName = isBvn ? (data as VerifyBvnData).lastName : (data as VerifyNinData).surName;
+    if (lastName) setValue("lastName", lastName);
+
+    if (data.gender) setValue("gender", data.gender.toLowerCase());
+
+    const address = isBvn
+      ? (data as VerifyBvnData).residentialAddress
+      : (data as VerifyNinData).residenceAddressLine1;
+    if (address) setValue("residentialAddress", address);
+
+    // Direct Location Syncing
+    if (isBvn) {
+      const bvnData = data as VerifyBvnData;
+      await Promise.all([
+        syncLocation(bvnData.stateOfOrigin || undefined, bvnData.localGovernmentOfOrigin || undefined, "Origin"),
+        syncLocation(bvnData.stateOfResidence || undefined, bvnData.localGovernmentOfResidence || undefined, "Residence"),
+      ]);
+
+      if (bvnData.base64Image) {
+        const passportFile = base64ToFileUpload(bvnData.base64Image, "bvn_passport.jpg");
+        if (passportFile) setValue("passportPhotograph", passportFile);
+      }
+    } else {
+      const ninData = data as VerifyNinData;
+      if (ninData.photoBase64) {
+        const passportFile = base64ToFileUpload(ninData.photoBase64, "nin_passport.jpg");
+        if (passportFile) setValue("passportPhotograph", passportFile);
+      }
+    }
   };
 
   const sendOTPMutation = useMutation({
     mutationFn: (data: SendProspectOTPRequest) =>
       sendProspectOTP(data.prospectDetails, data.phone, data.country),
-    onSuccess: (response) => {
-      if (response.status === "Success" && response.data) {
-        setProspectId(response.data.prospect.id);
-        showToast({ type: "success", message: "OTP sent successfully!" });
-      } else {
-        showToast({
-          type: "error",
-          message: response.message || "Failed to send OTP.",
-        });
-      }
-    },
-    onError: (error: any) => {
-      showToast({
-        type: "error",
-        message: error.message || "An unexpected error occurred.",
-      });
-    },
+    onSuccess: (response) =>
+      handleApiResponse(response, {
+        successMessage: "OTP sent successfully!",
+        onSuccess: (data) => setProspectId(data.prospect.id),
+      }),
+    onError: (error: ApiError) => showToast({ type: "error", message: error.message }),
   });
 
   const verifyOTPMutation = useMutation({
     mutationFn: (data: { otp: string }) => verifyOTP(prospectId!, data.otp),
-    onSuccess: (response) => {
-      if (response.status === "Success") {
-        showToast({ type: "success", message: "OTP verified successfully!" });
-        handleNext();
-      } else {
-        showToast({
-          type: "error",
-          message: response.message || "OTP verification failed.",
-        });
-      }
-    },
-    onError: (error: any) => {
-      showToast({
-        type: "error",
-        message: error.message || "An unexpected error occurred.",
-      });
-    },
+    onSuccess: (response) =>
+      handleApiResponse(response, {
+        successMessage: "OTP verified successfully!",
+        onSuccess: () => handleNext(),
+      }),
+    onError: (error: ApiError) => showToast({ type: "error", message: error.message }),
   });
 
   const verifyBVNMutation = useMutation({
     mutationFn: (data: { bvn: string; dob: Date; email: string }) =>
-      verifyBVN({
-        prospectId: prospectId!,
-        bvn: data.bvn,
-        dob: data.dob,
-        email: data.email,
+      verifyBVN({ prospectId: prospectId!, ...data }),
+    onSuccess: (response) =>
+      handleApiResponse(response, {
+        onSuccess: async (data) => {
+          if (data.responseCode === "00") {
+            await populateFormFromVerification(data, true);
+            showToast({ type: "success", message: "BVN verified!" });
+          } else {
+            showToast({ type: "error", message: data.responseMessage || "Verification failed" });
+          }
+        },
       }),
-    onSuccess: (response) => {
-      if (response.status === "Success" && response.data) {
-        const data: VerifyBvnData = response.data;
-
-        // Guard: Check if response is valid
-        if (!data.responseCode || data.responseCode !== "00") {
-          showToast({
-            type: "error",
-            message: data.responseMessage || "BVN verification failed.",
-          });
-          return;
-        }
-
-        // Auto-populate personal details (Step 2)
-        if (data.firstName) setValue("firstName", data.firstName);
-        if (data.middleName) setValue("middleName", data.middleName);
-        if (data.lastName) setValue("lastName", data.lastName);
-
-        // Auto-populate address details (Step 3)
-        if (data.gender) {
-          setValue("gender", data.gender.toLowerCase());
-        }
-        if (data.residentialAddress)
-          setValue("residentialAddress", data.residentialAddress);
-
-        if (data.stateOfOrigin) {
-          const stateCode = findStateCodeByName(data.stateOfOrigin, states);
-          if (stateCode) {
-            setValue("stateOfOrigin", stateCode);
-            if (data.localGovernmentOfOrigin) {
-              setPendingLgaValues((prev) => ({
-                ...prev,
-                lgaOfOrigin: data.localGovernmentOfOrigin,
-              }));
-            }
-          }
-        }
-        if (data.stateOfResidence) {
-          const stateCode = findStateCodeByName(data.stateOfResidence, states);
-          if (stateCode) {
-            setValue("stateOfResidence", stateCode);
-            if (data.localGovernmentOfResidence) {
-              setPendingLgaValues((prev) => ({
-                ...prev,
-                lgaOfResidence: data.localGovernmentOfResidence,
-              }));
-            }
-          }
-        }
-
-        if (data.base64Image) {
-          const passportFile = base64ToFileUpload(
-            data.base64Image,
-            "bvn_passport.jpg"
-          );
-          if (passportFile) {
-            setValue("passportPhotograph", passportFile);
-          }
-        }
-
-        showToast({ type: "success", message: "BVN verified!" });
-      } else {
-        showToast({
-          type: "error",
-          message: response.message || "BVN verification failed.",
-        });
-      }
-    },
-    onError: (error: any) => {
-      showToast({
-        type: "error",
-        message: error.message || "An unexpected error occurred.",
-      });
-    },
+    onError: (error: ApiError) => showToast({ type: "error", message: error.message }),
   });
 
   const verifyNINMutation = useMutation({
     mutationFn: (data: { nin: string; dob: Date; email: string }) =>
-      verifyNIN({
-        prospectId: prospectId!,
-        nin: data.nin,
-        dob: data.dob,
-        email: data.email,
-      }),
-    onSuccess: (response) => {
-      if (response.status === "Success" && response.data) {
-        const data: VerifyNinData = response.data;
-
-        // Guard: Check if response is valid
-        if (!data.responseCode || data.responseCode !== "00") {
-          showToast({
-            type: "error",
-            message: data.responseMessage || "NIN verification failed.",
-          });
-          return;
-        }
-
-        if (data.firstName) setValue("firstName", data.firstName);
-        if (data.middleName) setValue("middleName", data.middleName);
-        if (data.surName) setValue("lastName", data.surName);
-
-        if (data.gender) {
-          setValue("gender", data.gender.toLowerCase());
-        }
-        if (data.residenceAddressLine1)
-          setValue("residentialAddress", data.residenceAddressLine1);
-
-        if (data.photoBase64) {
-          const passportFile = base64ToFileUpload(
-            data.photoBase64,
-            "nin_passport.jpg"
-          );
-
-          if (passportFile) {
-            setValue("passportPhotograph", passportFile);
+      verifyNIN({ prospectId: prospectId!, ...data }),
+    onSuccess: (response) =>
+      handleApiResponse(response, {
+        onSuccess: async (data) => {
+          if (data.responseCode === "00") {
+            await populateFormFromVerification(data, false);
+            showToast({ type: "success", message: "NIN verified!" });
+          } else {
+            showToast({ type: "error", message: data.responseMessage || "Verification failed" });
           }
-        }
-
-        showToast({ type: "success", message: "NIN verified!" });
-      } else {
-        showToast({
-          type: "error",
-          message: response.message || "NIN verification failed.",
-        });
-      }
-    },
-    onError: (error: any) => {
-      showToast({
-        type: "error",
-        message: error.message || "An unexpected error occurred.",
-      });
-    },
+        },
+      }),
+    onError: (error: ApiError) => showToast({ type: "error", message: error.message }),
   });
 
   const updateAddressMutation = useMutation({
-    mutationFn: (data: UpdateAddressDetailsRequest) =>
-      updateAddressDetails(prospectId!, data),
-    onSuccess: (response) => {
-      if (response.code === 204 || response.status === "Success") {
-        showToast({
-          type: "success",
-          message: "Address details updated!",
-        });
-        handleNext();
-      } else {
-        showToast({
-          type: "error",
-          message: response.message || "Failed to update address details.",
-        });
-      }
-    },
-    onError: (error: any) => {
-      showToast({
-        type: "error",
-        message: error.message || "An unexpected error occurred.",
-      });
-    },
+    mutationFn: (data: UpdateAddressDetailsRequest) => updateAddressDetails(prospectId!, data),
+    onSuccess: (response) =>
+      handleApiResponse(response, {
+        successMessage: "Address details updated!",
+        onSuccess: () => handleNext(),
+      }),
+    onError: (error: ApiError) => showToast({ type: "error", message: error.message }),
   });
 
   const finalSubmitMutation = useMutation({
     mutationFn: async (data: IndividualTier1FormData) => {
-      await updateFile(prospectId!, data.passportPhotograph as any, "passport");
-      await updateFile(prospectId!, data.signature as any, "signature");
-      const finalResponse = await submitProspect(prospectId!);
-      // console.log("Final submission response:", finalResponse);
-      return finalResponse;
-    },
-    onSuccess: (response) => {
-      if (response.status === "Success" && response.data) {
-        showToast({
-          type: "success",
-          message: `Account for ${response.data.customer.accountname} created!`,
-        });
-      } else {
-        showToast({
-          type: "error",
-          message: response.message || "Final submission failed.",
-        });
+      if (data.passportPhotograph) {
+        await updateFile(prospectId!, data.passportPhotograph, "passport");
       }
+      if (data.signature) {
+        await updateFile(prospectId!, data.signature, "signature");
+      }
+      return await submitProspect(prospectId!);
     },
-    onError: (error: any) => {
-      showToast({
-        type: "error",
-        message:
-          error.message ||
-          "An unexpected error occurred during final submission.",
-      });
-    },
+    onSuccess: (response) =>
+      handleApiResponse(response, {
+        onSuccess: (data) => {
+          showToast({
+            type: "success",
+            message: `Account for ${data.customer.accountname} created!`,
+          });
+        },
+      }),
+    onError: (error: ApiError) => showToast({ type: "error", message: error.message }),
   });
 
   return {
@@ -336,7 +243,5 @@ export function useTier1Mutations({
     verifyNINMutation,
     updateAddressMutation,
     finalSubmitMutation,
-    pendingLgaValues,
-    clearPendingLga,
   };
 }

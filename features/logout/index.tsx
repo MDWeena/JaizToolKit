@@ -9,20 +9,21 @@ import { useAuthStore } from '@/store/auth.store';
 
 const LogoutBottomSheet = () => {
   const { hideBottomSheet } = useBottomSheet();
-  const { setUser, user } = useAuthStore();
+  const { setUser, user, clearReturnPath, clearAccessToken } = useAuthStore();
   const router = useRouter();
 
   const handleLogout = useCallback((): void => {
     // don't clear the last logged in user
     if (user) {
-      user.accessToken = undefined;
-      setUser(user);
+      clearAccessToken();
     }
+
+    clearReturnPath();
 
     hideBottomSheet();
     // Perform logout logic here
-    router.dismissTo('/(auth)/login');
-  }, [hideBottomSheet]);
+    router.replace('/(auth)/login');
+  }, [hideBottomSheet, user, setUser, clearReturnPath]);
 
   return (
     <>
@@ -30,7 +31,7 @@ const LogoutBottomSheet = () => {
         <View className="p-5 mb-6 border rounded-xl border-error/20 bg-error/10">
           <WarningIcon />
         </View>
-        <Text className="text-2xl font-semibold text-center text-grey-900">
+        <Text className="text-2xl text-center font-interSemiBold text-grey-900">
           Logout?
         </Text>
         <Text className="text-base text-center text-grey-600">
@@ -39,13 +40,13 @@ const LogoutBottomSheet = () => {
       </View>
       <View className="gap-4">
         <Button size="lg" onPress={handleLogout}>
-          <Text className="text-base font-semibold text-primary-foreground">
+          <Text className="text-base font-interSemiBold text-primary-foreground">
             Logout
           </Text>
         </Button>
 
         <Button variant="outline" size="lg" onPress={hideBottomSheet}>
-          <Text className="text-base font-semibold text-grey-900">Cancel</Text>
+          <Text className="text-base font-interSemiBold text-grey-900">Cancel</Text>
         </Button>
       </View>
     </>

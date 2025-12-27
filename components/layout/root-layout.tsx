@@ -13,6 +13,7 @@ import { ToastProvider } from '@/components/shared/toast';
 import { BottomSheetProvider } from '@/contexts/BottomSheetContext';
 import { StarredProvider } from '@/contexts/StarredContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { useTrackActivity } from '@/hooks/useTrackActivity';
 import { useAuthStore, useLoginState } from '@/store/auth.store';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -54,6 +55,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  useTrackActivity();
   const { user } = useAuthStore();
   const { hasLoggedIn } = useLoginState();
 

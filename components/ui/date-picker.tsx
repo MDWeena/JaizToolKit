@@ -53,7 +53,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   return (
     <View className={`${className}`}>
       {/* Label */}
-      {label && <Text className="mb-2 font-medium">{label}</Text>}
+      {label && <Text className="mb-2 font-interMedium">{label}</Text>}
       {/* Date Input */}
       <Pressable
         onPress={showDatePicker}

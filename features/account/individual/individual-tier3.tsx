@@ -195,14 +195,14 @@ const Tier3Screen = () => {
                     }}
                   />
                   <Pressable className="mt-1 ml-auto">
-                    <Text className="text-xs font-bold underline text-primary">
+                    <Text className="text-xs underline font-interBold text-primary">
                       Click to send OTP
                     </Text>
                   </Pressable>
                 </View>
 
                 <View>
-                  <Text className="font-[500] mb-2 text-text">OTP</Text>
+                  <Text className="mb-2 font-interMedium text-text">OTP</Text>
                   <Controller
                     control={control}
                     name="otp"
@@ -225,7 +225,7 @@ const Tier3Screen = () => {
                 </View>
 
                 <Button size={"lg"} onPress={handleNext}>
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Next
                   </Text>
                 </Button>
@@ -326,7 +326,7 @@ const Tier3Screen = () => {
                 />
 
                 <Button size={"lg"} onPress={handleNext}>
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Next
                   </Text>
                 </Button>
@@ -412,8 +412,8 @@ const Tier3Screen = () => {
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
                       options={lgasOfOrigin.map((lga) => ({
-                        label: lga,
-                        value: lga,
+                        label: lga.name,
+                        value: lga.code,
                       }))}
                       placeholder="LGA of Origin"
                       value={value as string}
@@ -472,8 +472,8 @@ const Tier3Screen = () => {
                   render={({ field: { value, onChange } }) => (
                     <CustomSelect
                       options={lgasOfResidence.map((lga) => ({
-                        label: lga,
-                        value: lga,
+                        label: lga.name,
+                        value: lga.code,
                       }))}
                       placeholder="LGA of Residence"
                       value={value as string}
@@ -491,7 +491,7 @@ const Tier3Screen = () => {
                 )}
 
                 <Button size={"lg"} onPress={handleNext} className="flex-1">
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Next
                   </Text>
                 </Button>
@@ -608,7 +608,7 @@ const Tier3Screen = () => {
                 />
 
                 <Button size={"lg"} onPress={handleNext} className="flex-1">
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Next
                   </Text>
                 </Button>
@@ -734,7 +734,7 @@ const Tier3Screen = () => {
                   disabled={isSubmitting || !isValid}
                   loading={isSubmitting}
                 >
-                  <Text className="text-sm font-semibold text-primary-foreground">
+                  <Text className="text-sm font-interSemiBold text-primary-foreground">
                     Submit
                   </Text>
                 </Button>

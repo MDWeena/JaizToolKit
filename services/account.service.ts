@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/utils";
 import {
   ApiResponse,
   SendProspectOTPData,
@@ -13,11 +14,6 @@ import {
 } from "@/types/api";
 import { FileUpload } from "@/types/file-upload";
 import { ApiService } from ".";
-import { formatDate } from "@/lib/utils";
-
-const USE_MOCK_API = true;
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const getStates = async (): Promise<
   ApiResponse<{ state_code: string; state_name: string }[]>
@@ -45,7 +41,7 @@ export const getLGAs = async (
 
 export const getBanksUssdCodes = async (): Promise<
   ApiResponse<{ ussdTransferCode: string; bankName: string }[]>
-> => { 
+> => {
   try {
     const response = await ApiService.get("/static/banks/ussdcodes");
     return response.data;
@@ -151,11 +147,11 @@ export const updateAddressDetails = async (
 
 export const updateFile = async (
   prospectId: string,
-  file: NonNullable<FileUpload> & { mimeType?: string },
+  file: NonNullable<FileUpload>,
   fileName: string
 ): Promise<ApiResponse<null>> => {
   try {
-    const formData = new FormData();    
+    const formData = new FormData();
     formData.append("formFile", {
       uri: file.uri,
       name: file.name,
@@ -192,31 +188,9 @@ export const submitProspect = async (
 
 export const verifyAccount = async (
   data: VerifyAccountRequest
-): Promise<ApiResponse<VerifyAccountData>> => {
-  if (USE_MOCK_API) {
-    await sleep(1000);
-    console.log("MOCK API: Verifying account for prospect:", { data });
-    return {
-      status: "Success",
-      message: "Account verified successfully",
-      code: 200,
-      data: {
-        accountName: "John Doe",
-        accountNumber: "0123456789",
-        branchCodeCif: "123/123456789",
-        bvn: "1234567890",
-        idType: "NIN",
-        branch: "Lagos",
-        accountType: "Current",
-        currency: "Naira",
-        accountOfficer: "FG000123 | MICHAEL JOHN",
-      },
-      timestamp: new Date().toISOString(),
-      traceId: "xyz789abc",
-    };
-  }
+): Promise<ApiResponse<VerifyAccountData[]>> => {
   try {
-    const response = await ApiService.post(`/prospect/verify`, data);
+    const response = await ApiService.get(`/customer/${data.phoneNumber}/verifyaccount`);
     return response.data;
   } catch (error) {
     console.error("Error verifying account:", error);

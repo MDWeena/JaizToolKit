@@ -156,7 +156,7 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
   return (
     <View className={`${typeof style === "string" ? style : ""}`}>
       {label && (
-        <Text className='mb-2 text-base font-medium text-black'>
+        <Text className='mb-2 text-base text-black font-interMedium'>
           {label}
           {required && <Text className='text-red-500'> *</Text>}
         </Text>
@@ -183,7 +183,7 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
           <View>
             <Text
               className={`
-              text-base text-center mb-1 font-medium
+              text-base text-center mb-1 font-interMedium
               ${
                 isSelected
                   ? "text-green-600"
@@ -212,7 +212,7 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
             {isSelected && selectedFile && (
               <View className='mt-2'>
                 <Text
-                  className='mb-1 text-sm font-medium text-green-600'
+                  className='mb-1 text-sm text-green-600 font-interMedium'
                   numberOfLines={1}
                 >
                  {selectedFile.name}
@@ -230,7 +230,7 @@ const FileInput: React.FC<DocumentUploadInputProps> = ({
               onPress={handleRemoveFile}
               activeOpacity={0.7}
             >
-              <Text className='text-base font-bold text-white'>×</Text>
+              <Text className='text-base text-white font-interBold'>×</Text>
             </TouchableOpacity>
           )}
         </View>

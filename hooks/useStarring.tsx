@@ -36,7 +36,7 @@ export const useStarring = ({
     showBottomSheet(
       <View>
         <View className="items-center pb-4 mb-4 border-b border-b-secondary-foreground/10">
-          <Text className="text-xl font-semibold text-grey-900">
+          <Text className="text-xl font-interSemiBold text-grey-900">
             {starredItem.text}
           </Text>
         </View>

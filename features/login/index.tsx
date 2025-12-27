@@ -11,11 +11,12 @@ import { useAuthStore, useLoginState } from "@/store/auth.store";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
 import * as LocalAuthentication from "expo-local-authentication";
-import { useRouter } from "expo-router";
+import { Href, useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Dimensions,
+  KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
@@ -24,7 +25,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BiometricsBottomSheet from "./components/biometrics-bottom-sheet";
-import { KeyboardAvoidingView } from "react-native";
 
 const { height } = Dimensions.get("screen");
 
@@ -40,7 +40,7 @@ const LoginScreen = () => {
     useState(false);
 
   const { authMethods, bioAuth, isConfigured } = useBiometrics();
-  const { setUser, user, biometricsEnabled } = useAuthStore();
+  const { setUser, user, biometricsEnabled, returnPath, clearReturnPath } = useAuthStore();
   const isUserLoggedIn = useMemo(() => !!user, [user]);
   const { setLoginState } = useLoginState();
   const { showBottomSheet } = useBottomSheet();
@@ -63,8 +63,12 @@ const LoginScreen = () => {
   const [password] = watch(["password"]);
 
   const onSuccess = () => {
-    router.push("/(tabs)/(home)");
+    const destination = returnPath ? returnPath : "/(tabs)/(home)";
+    
+    router.replace(destination as Href);
+
     setLoginState(true);
+    clearReturnPath();
     reset();
   };
 
@@ -75,8 +79,6 @@ const LoginScreen = () => {
       if (!response?.success) {
         showToast({
           message: response?.message ?? "Login failed. Please try again.",
-          linkText: "",
-          onLinkPress: () => {},
           type: "error",
           icon: true,
         });
@@ -87,8 +89,6 @@ const LoginScreen = () => {
       if (!payload?.user || !payload?.token) {
         showToast({
           message: "Unable to complete login.",
-          linkText: "",
-          onLinkPress: () => {},
           type: "error",
           icon: true,
         });
@@ -99,8 +99,6 @@ const LoginScreen = () => {
 
       showToast({
         message: "Logged in successfully!",
-        linkText: "",
-        onLinkPress: () => {},
         type: "success",
         icon: true,
       });
@@ -260,32 +258,32 @@ const LoginScreen = () => {
                   {authMethods.includes(
                     LocalAuthentication.AuthenticationType.FINGERPRINT
                   ) && (
-                    <View>
-                      <Pressable onPress={onBiometricClick}>
-                        <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
-                          <Ionicons name="finger-print-outline" size={25} />
-                        </View>
-                      </Pressable>
-                      <Text className="mt-2 text-center text-gray-500">
-                        Touch ID
-                      </Text>
-                    </View>
-                  )}
+                      <View>
+                        <Pressable onPress={onBiometricClick}>
+                          <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
+                            <Ionicons name="finger-print-outline" size={25} />
+                          </View>
+                        </Pressable>
+                        <Text className="mt-2 text-center text-gray-500">
+                          Touch ID
+                        </Text>
+                      </View>
+                    )}
 
                   {authMethods.includes(
                     LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
                   ) && (
-                    <View>
-                      <Pressable onPress={onBiometricClick}>
-                        <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
-                          <FaceIdIcon />
-                        </View>
-                      </Pressable>
-                      <Text className="mt-2 text-center text-gray-500">
-                        Face ID
-                      </Text>
-                    </View>
-                  )}
+                      <View>
+                        <Pressable onPress={onBiometricClick}>
+                          <View className="w-[60px] h-[60px] border bg-white border-gray-300 rounded-md flex items-center justify-center">
+                            <FaceIdIcon />
+                          </View>
+                        </Pressable>
+                        <Text className="mt-2 text-center text-gray-500">
+                          Face ID
+                        </Text>
+                      </View>
+                    )}
                 </View>
               </>
             )}

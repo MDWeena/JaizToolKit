@@ -79,3 +79,23 @@ export function groupTransactionsByDay(
       };
     });
 }
+
+const CURRENCY_OVERRIDES = {
+  NGN: "Naira",
+} as Record<string, string>;
+
+export function getCurrencyName(currencyCode: string): string {
+  if (CURRENCY_OVERRIDES[currencyCode]) {
+    return CURRENCY_OVERRIDES[currencyCode];
+  }
+  
+  const parts = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currencyCode,
+    currencyDisplay: "name",
+  }).formatToParts(0);
+
+  const currencyPart = parts.find((p) => p.type === "currency");
+  const currencyName = currencyPart?.value ?? currencyCode;
+  return currencyName.replace(/s$/, "");
+}

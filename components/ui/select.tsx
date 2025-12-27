@@ -253,7 +253,7 @@ const SelectItem = React.forwardRef<typeof Pressable, SelectItemProps>(
           className={cn(
             'text-base',
             isSelected
-              ? 'text-grey-900 font-medium'
+              ? 'text-grey-900 font-interMedium'
               : 'text-grey-600'
           )}
         >
@@ -274,7 +274,7 @@ const SelectLabel = React.forwardRef<Text, SelectLabelProps>(
       <Text
         ref={ref}
         className={cn(
-          'px-4 py-2 text-xl font-semibold text-red-500',
+          'px-4 py-2 text-xl font-interSemiBold text-red-500',
           className
         )}
         {...props}

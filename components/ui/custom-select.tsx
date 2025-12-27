@@ -37,7 +37,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   return (
     <View className={`mb-4 ${className}`}>
       {/* Label */}
-      {label && <SelectLabel className="mb-2 font-medium text-gray-700">{label}</SelectLabel>}
+      {label && <SelectLabel className="mb-2 text-gray-700 font-interMedium">{label}</SelectLabel>}
 
       {/* Select Component */}
       <Select

@@ -75,7 +75,7 @@ const Tier1Screen = () => {
                 />
 
                 <View>
-                  <Text className="font-[500] mb-2">OTP</Text>
+                  <Text className="mb-2 font-interMedium">OTP</Text>
                   <OtpField length={6} />
                   <Text className="text-[.9rem] mt-3 text-grey-600">
                     Enter 6-Digit code sent to +234 123 456 7890

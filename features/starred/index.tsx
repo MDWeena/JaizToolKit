@@ -178,7 +178,7 @@ const StarredScreen = () => {
             {/* Empty state */}
             <View className="items-center justify-center flex-1 py-20">
               <Ionicons name="star-outline" size={80} color="#D1D5DB" />
-              <Text className="mt-4 text-xl font-semibold text-grey-900">
+              <Text className="mt-4 text-xl font-interSemiBold text-grey-900">
                 No Starred Items
               </Text>
               <Text className="px-10 mt-2 text-sm text-center text-grey-600">

@@ -109,7 +109,7 @@ const Button = React.forwardRef<View, ButtonProps>(
             ) : (
               <>
                 {typeof children === 'string' ? (
-                  <Text className="text-text-foreground font-[500]">{children}</Text>
+                  <Text className="text-text-foreground font-interMedium">{children}</Text>
                 ) : typeof children === 'function' ? (
                   children(state)
                 ) : (
