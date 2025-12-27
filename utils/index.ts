@@ -1,5 +1,5 @@
 import { FileUpload } from "@/types/file-upload";
-import { StateOption } from "@/types/api";
+import { LocationOption } from "@/types/api";
 
 export const normalizeStateName = (stateName: string | null): string => {
   if (!stateName) return "";
@@ -8,7 +8,7 @@ export const normalizeStateName = (stateName: string | null): string => {
 
 export const findStateCodeByName = (
   stateName: string | null,
-  states: StateOption[]
+  states: LocationOption[]
 ): string => {
   if (!stateName || states.length === 0) return "";
 
@@ -30,6 +30,7 @@ export const base64ToFileUpload = (
     type: "image/jpeg",
     name: fileName,
     size: estimatedSize,
+    mimeType: "image/jpeg",
   };
 };
 

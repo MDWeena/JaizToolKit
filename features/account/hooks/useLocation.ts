@@ -8,12 +8,10 @@ export const useLocation = () => {
   );
   const [cities, setCities] = useState<string[]>([]);
 
-  // Fetch States
   const { data: states = [] } = useQuery({
     queryKey: ["states"],
     queryFn: async () => {
       const response =  await getStates();
-      console.log("States response:", response);
       if (response.status === "Success" && response.data) {
         return response.data.map((s) => ({
           code: s.state_code,
@@ -22,7 +20,7 @@ export const useLocation = () => {
       }
       return [];
     },
-    // staleTime: ,
+    staleTime: Infinity,
   });
 
   const { data: lgas = [] } = useQuery({
@@ -39,7 +37,7 @@ export const useLocation = () => {
       return [];
     },
     enabled: !!selectedStateCode,
-    // staleTime: Infinity,
+    staleTime: Infinity,
   });
 
   const handleStateChange = (stateCode: string) => {

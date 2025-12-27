@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   useForm,
   type DefaultValues,
@@ -40,10 +40,6 @@ export function useTierForm<T extends FieldValues>(
 
   const [activeStep, setActiveStep] = useState(1);
   const scrollViewRef = useRef<ScrollView | null>(null);
-
-  useEffect(() => {
-    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-  }, [activeStep]);
 
   const getFieldsForStep = (step: number): Path<T>[] => {
     return stepFields[step] || [];

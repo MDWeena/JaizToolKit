@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert, Image, Linking, Pressable, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,23 +10,27 @@ import { CopyIcon } from "@/assets/images/svgs/account";
 import { Button } from "@/components/ui/button";
 import Images from "@/constants/Images";
 import { useClipboard } from "@/hooks/useClipboard";
+import { useAccountStore } from "./hooks/useAccountStore";
 
 const AccountSuccessScreen = () => {
   const router = useRouter();
-  const { accountName, accountNumber, ussdString } = useLocalSearchParams<{
-    accountName: string;
-    accountNumber: string;
-    ussdString: string;
-  }>();
+  const { openedAccount, clearOpenedAccount } = useAccountStore();
   const { copyToClipboard, copiedKey } = useClipboard();
+
+  const accountName = openedAccount?.accountName;
+  const accountNumber = openedAccount?.accountNumber;
+  const ussdString = openedAccount?.ussdString;
+  const copied = copiedKey === 'accountNumber';
+
+  useEffect(() => {
+    return () => clearOpenedAccount();
+  }, [clearOpenedAccount]);
 
   const handleCopy = async () => {
     if (accountNumber) {
       await copyToClipboard('accountNumber', accountNumber);
     }
   };
-
-  const copied = copiedKey === 'accountNumber';
 
   const handleDial = () => {
     if (ussdString) {

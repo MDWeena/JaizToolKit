@@ -15,9 +15,14 @@ export interface ApiError {
   data?: unknown;
 }
 
-export interface StateOption {
+export interface LocationOption {
   code: string;
   name: string;
+}
+
+export interface BankOption {
+  bankName: string;
+  ussdTransferCode: string;
 }
 
 export interface SendProspectOTPRequest {

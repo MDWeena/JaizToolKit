@@ -3,5 +3,6 @@ export type FileUpload = {
   type: string;
   name: string;
   size: number;
+  mimeType: string;
 } | null;
 

@@ -147,7 +147,7 @@ export const updateAddressDetails = async (
 
 export const updateFile = async (
   prospectId: string,
-  file: NonNullable<FileUpload> & { mimeType?: string },
+  file: NonNullable<FileUpload>,
   fileName: string
 ): Promise<ApiResponse<null>> => {
   try {
